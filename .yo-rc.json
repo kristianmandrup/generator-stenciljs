@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Kristian Mandrup",
+      "authorEmail": "kmandrup@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}

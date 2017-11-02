@@ -1,0 +1,4 @@
+
+<%= tagName %> {
+  font-weight: bold;
+}
