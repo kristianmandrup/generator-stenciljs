@@ -1,6 +1,12 @@
 # generator-stenciljs [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 > StencilJS generators
 
+## Status
+
+WIP: untested
+
+Please help make it better!
+
 ## Installation
 
 First, install [Yeoman](http://yeoman.io) and generator-stenciljs using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
