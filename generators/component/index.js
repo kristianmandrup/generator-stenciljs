@@ -31,48 +31,28 @@ module.exports = class extends Generator {
       type: 'list',
       required: false,
       default: 'type',
-      choices: [
-        'Name',
-        'Type'
-      ],
       desc: 'Naming convention to use',
-      store: true
     });
 
     this.option('testLib', {
       type: String,
       required: false,
       default: 'scss',
-      choices: [
-        'jest'
-      ],
       desc: 'Testing lib',
-      store: true
     });
 
     this.option('styleFileExt', {
       type: String,
       required: false,
       default: 'scss',
-      choices: [
-        'scss',
-        'styl',
-        'css'
-      ],
       desc: 'Style file extension',
-      store: true
     });
 
     this.option('testFileExt', {
       type: String,
       required: false,
       default: 'scss',
-      choices: [
-        'spec.ts',
-        'test.ts'
-      ],
       desc: 'Test file extension',
-      store: true
     });
   }
 
