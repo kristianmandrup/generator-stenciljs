@@ -14,7 +14,7 @@ module.exports = class extends Generator {
       type: String,
       required: false,
       // default: 'ionic-team/stencil-app-starter',
-      desc: 'Project (repo) source'
+      desc: 'Boilerplate repo source'
     });
 
     this.option('targetPath', {
@@ -76,7 +76,7 @@ module.exports = class extends Generator {
           target: targetPath
         })
         .then(() => {
-          console.log(`done: cd ${targetPath}`)
+          console.log(`cd ${targetPath}`)
           done()
         })
     })

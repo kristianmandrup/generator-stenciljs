@@ -66,9 +66,9 @@ module.exports = class extends Generator {
 
   _byConvention() {
     let method = `_by${capitalize(this.props.convention)}`
-    console.log({
-      method
-    })
+    // console.log({
+    //   method
+    // })
     return this[method]()
   }
 
@@ -82,10 +82,10 @@ module.exports = class extends Generator {
       styleFileName: name,
       testFileName: name
     }
-    console.log({
-      name,
-      nameMap
-    })
+    // console.log({
+    //   name,
+    //   nameMap
+    // })
     return nameMap
   }
 
@@ -99,10 +99,10 @@ module.exports = class extends Generator {
       styleFileName: 'styles',
       testFileName: 'unit'
     }
-    console.log({
-      name,
-      nameMap
-    })
+    // console.log({
+    //   name,
+    //   nameMap
+    // })
     return nameMap
   }
 
@@ -179,7 +179,7 @@ module.exports = class extends Generator {
     let templatePath = path.join(__dirname, 'templates', template)
     let templateContent = fs.readFileSync(templatePath, 'utf-8')
     let result = ejsLint(templateContent, options)
-    console.log(result)
+    // console.log(result)
   }
 
 
@@ -241,22 +241,22 @@ module.exports = class extends Generator {
     // this._lintEJS('component.tsx.tpl')
     let componentDest = this.destinationPath(`${componentDir}/${componentFileName}.tsx`)
 
-    console.log({
-      propList,
-      propMap,
-      componentDest,
-      componentDir,
-      componentFileName,
-      tagName,
-      className,
-      styleFileExt,
-      styleFileName,
-      declareProps,
-      displayProps,
-      wrapperTagName,
-      openTag,
-      closeTag
-    })
+    // console.log({
+    //   propList,
+    //   propMap,
+    //   componentDest,
+    //   componentDir,
+    //   componentFileName,
+    //   tagName,
+    //   className,
+    //   styleFileExt,
+    //   styleFileName,
+    //   declareProps,
+    //   displayProps,
+    //   wrapperTagName,
+    //   openTag,
+    //   closeTag
+    // })
 
     this.fs.copyTpl(
       this.templatePath('component.tsx.tpl'),
@@ -285,9 +285,9 @@ module.exports = class extends Generator {
       return `@Prop() ${name}?: any;`
     })
 
-    console.log({
-      interfaceProps
-    })
+    // console.log({
+    //   interfaceProps
+    // })
 
     this.fs.copyTpl(
       this.templatePath('interface.ts.tpl'),
@@ -315,9 +315,9 @@ module.exports = class extends Generator {
       });`
     })
 
-    console.log({
-      propTests
-    })
+    // console.log({
+    //   propTests
+    // })
 
     this.fs.copyTpl(
       this.templatePath(`test/${testLib}.spec.ts.tpl`),

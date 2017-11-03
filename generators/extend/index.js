@@ -41,31 +41,25 @@ module.exports = class extends Generator {
 
   default () {
     // More fine tuning
-    // if (this.options.travis) {
-    //   const options = {
-    //     config: {}
-    //   };
-    //   if (this.props.includeCoveralls) {
-    //     options.config.after_script = 'cat ./coverage/lcov.info | coveralls'; // eslint-disable-line camelcase
-    //   }
-    //   this.composeWith(require.resolve('generator-travis/generators/app'), options);
-    // }
+    if (this.options.travis) {
+      const options = {
+        config: {}
+      };
+      if (this.props.includeCoveralls) {
+        options.config.after_script = 'cat ./coverage/lcov.info | coveralls'; // eslint-disable-line camelcase
+      }
+      this.composeWith(require.resolve('generator-travis/generators/app'), options);
+    }
 
     // if (this.options.editorconfig) {
     //   this.composeWith(require.resolve('../editorconfig'));
     // }
 
-    // this.composeWith(require.resolve('../nsp'));
     // this.composeWith(require.resolve('../eslint'));
 
     // this.composeWith(require.resolve('../git'), {
     //   name: this.props.name,
     //   githubAccount: this.props.githubAccount
-    // });
-
-    // this.composeWith(require.resolve('generator-jest/generators/app'), {
-    //   testEnvironment: 'node',
-    //   coveralls: false
     // });
 
     // if (this.options.license && !this.pkg.license) {

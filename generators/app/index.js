@@ -27,6 +27,14 @@ module.exports = class extends Generator {
       default: true,
       desc: 'Include boilerplate files'
     });
+
+    this.option('extend', {
+      type: Boolean,
+      required: false,
+      default: true,
+      desc: 'Extend boilerplate'
+    });
+
     this.option('name', {
       type: String,
       required: false,
@@ -183,11 +191,11 @@ module.exports = class extends Generator {
     }
 
     // extend boilerplate, such as updating package.json, Readme etc
-    if (this.options.extend) {
-      this.composeWith(require.resolve('../extend'), {
-        name: this.props.name
-      });
-    }
+    // if (this.options.extend) {
+    //   this.composeWith(require.resolve('../extend'), {
+    //     name: this.props.name
+    //   });
+    // }
   }
 
   end() {
