@@ -5,12 +5,12 @@
   styleUrl: '<%= styleFileName %>.<%= styleFileExt %>'
 })
 export class <%= className %> {
-<%= declarations %>
+<%- declarations %>
 
   render() {
     return (
       <%- openTag %>
-        <%= displayBlocks %>
+        <%- displayBlocks %>
       <%- closeTag %>
     )
   }

@@ -1,6 +1,6 @@
 {
   "name": "generator-stenciljs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "StencilJS generators: app and component",
   "homepage": "",
   "author": {
@@ -38,8 +38,10 @@
     "git-remote-origin-url": "^2.0.0",
     "github-username": "^4.1.0",
     "inquirer-npm-name": "^2.0.0",
+    "json-beautify": "^1.0.1",
     "lodash": "^4.17.4",
     "parse-author": "^2.0.0",
+    "pretty-format": "^21.2.1",
     "sao": "^0.22.9",
     "sugar": "^2.0.4",
     "yeoman-generator": "^2.0.1",

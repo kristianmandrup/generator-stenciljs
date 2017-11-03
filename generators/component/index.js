@@ -8,6 +8,7 @@ const Sugar = require('sugar');
 const path = require('path');
 const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
+const beautify = require('json-beautify')
 
 // extend String with sugarjs API
 Sugar.String.extend()
@@ -136,6 +137,19 @@ module.exports = class extends Generator {
       default: this.options.listeners,
       message: 'Event listeners (open,run, ...)',
     }, {
+      name: 'lifeCycleEvents',
+      type: 'checkbox',
+      default: ['DidLoad', 'DidUnload'],
+      choices: [
+        'WillLoad',
+        'DidLoad',
+        'WillUpdate',
+        'DidUpdate',
+        'DidUnload'
+      ],
+      message: 'Lifecycle event handlers',
+      store: true
+    }, {
       name: 'wrapperFileTag',
       type: 'input',
       default: this.options.wrapperTag || 'div',
@@ -237,6 +251,11 @@ module.exports = class extends Generator {
 
     let {
       propStr,
+      stateStr,
+      listenStr,
+      eventStr,
+      eventEmitStr,
+      lifeCycleEvents,
       styleFileExt,
       testFileExt,
       wrapperTagName,
@@ -267,7 +286,7 @@ module.exports = class extends Generator {
       }, {})
     }
 
-    let states = []
+    let states = ''
     if (stateStr) {
       let stateNames = stateStr.split(',').filter(name => !name.isBlank())
       states = stateNames.reduce((acc, prop) => {
@@ -279,7 +298,7 @@ module.exports = class extends Generator {
       }).join('\n')
     }
 
-    let listeners = []
+    let listeners = ''
     if (listenStr) {
       let listenNames = listenStr.split(',').filter(name => !name.isBlank())
       listeners = listenNames.reduce((acc, prop) => {
@@ -349,14 +368,38 @@ module.exports = class extends Generator {
       }`
     }).join('\n')
 
+    const lifecycleExplainMap = {
+      WillLoad: 'is about to be rendered',
+      DidLoad: 'has been rendered',
+      WillUpdate: 'will update',
+      DidUpdate: 'did update',
+      DidUnload: 'tag has been removed from the DOM'
+    }
+
+    let lifecycleEventHandlers = lifeCycleEvents.map(name => {
+      let lifecycleName = name.camelize()
+      let explanation = lifecycleExplainMap[lifecycleName]
+      return `  component${lifecycleName}() {
+    console.log('The component ${explanation}');
+  }`
+    }).join('\n')
+
+
     // this._lintEJS('component.tsx.tpl')
     let componentDest = this.destinationPath(`${componentDir}/${componentFileName}.tsx`)
 
-    let blocks = [states, declareProps, eventHandlers, changeHandlers, eventEmitters, listeners, componentConnectBlock]
-    let declarations = blocks.filter(txt => txt).join('\n')
+    let blocks = [states, declareProps, eventHandlers, changeHandlers, lifecycleEventHandlers, eventEmitters, listeners, componentConnectBlock]
+    let declarations = blocks
+      .map(block => {
+        return Array.isArray(block) ? block.join('\n') : block;
+      })
+      .filter(txt => {
+        console.log('filter', txt)
+        return txt && !txt.isBlank()
+      }).join('\n')
 
     // inside render
-    let displayBlocks = [className, displayProps].filter(txt => txt && txt !== '').join('\n')
+    let displayBlocks = [className, displayProps].filter(txt => !txt.isBlank()).join('\n')
 
     this.fs.copyTpl(
       this.templatePath('component.tsx.tpl'),
@@ -405,7 +448,7 @@ module.exports = class extends Generator {
     );
 
     const propTests = propNames.map(name => {
-      return `    it('should display the first ${name}', async () => {
+      return `    it('should display the ${name}', async () => {
       element.${name} = '${name}';
       await flush(element);
       expect(element.textContent).toMatch(/${name}/);
@@ -431,5 +474,69 @@ module.exports = class extends Generator {
           className,
         })
     }
+
+    const jsonStringify = beautify // JSON.stringify
+
+    function pretty(json, opts) {
+      return jsonStringify(json, null, 2, 80)
+    }
+
+    this._info(`${tagName} with Stencil`, {
+      label: 'register',
+      modifier: 'bold'
+    })
+
+    const bundleEntry = {
+      components: [tagName]
+    }
+    let stencilCfgFilePath = this.destinationPath('stencil.config.js')
+
+    let stencilCfg = require(stencilCfgFilePath).config
+
+    if (stencilCfg.bundles.find(bundle => {
+        return bundle.components.find(component => {
+          // console.log('compare', {
+          //   component,
+          //   tagName
+          // })
+          return component == tagName
+        })
+      })) {
+      this._info(`${tagName} already registered in bundle.`, {
+        label: 'skipped',
+        format: 'yellow',
+        modifier: 'bold'
+      })
+      return
+    }
+
+    let xBundles = stencilCfg.bundles.concat(bundleEntry)
+    stencilCfg.bundles = xBundles
+
+    this.log(pretty(xBundles, {
+      highlight: true
+    }))
+
+    let jsonStr = pretty(stencilCfg)
+    let content = `exports.config = ${jsonStr}`
+    this.fs.write(stencilCfgFilePath, content)
+
+    this.log(`${tagName} registration complete`, {
+      label: 'success',
+      format: 'green',
+      modifier: 'bold'
+    })
+  }
+
+  _info(msg, opts = {}) {
+    let {
+      label = 'info',
+        format = 'white',
+        modifier
+    } = opts
+    let write = chalk[format]
+    write = modifier ? write[modifier] : write
+    let formatLabel = write(label)
+    this.log(`${formatLabel} ${msg}`)
   }
 };
