@@ -528,6 +528,8 @@ module.exports = class extends Generator {
     })
   }
 
+  // move to base class
+  // add success, warning, info utility methods
   _info(msg, opts = {}) {
     let {
       label = 'info',
@@ -538,5 +540,10 @@ module.exports = class extends Generator {
     write = modifier ? write[modifier] : write
     let formatLabel = write(label)
     this.log(`${formatLabel} ${msg}`)
+  }
+
+  // TODO: use success utility method
+  end() {
+    this.log('Component created :)')
   }
 };
