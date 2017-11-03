@@ -4,12 +4,13 @@ const _ = require('lodash');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const extend = _.merge;
-const dasherize = require('sugar/string/dasherize');
-const camelize = require('sugar/string/camelize');
-const capitalize = require('sugar/string/capitalize');
+const Sugar = require('sugar');
 const path = require('path');
 const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
+
+// extend String with sugarjs API
+Sugar.String.extend()
 module.exports = class extends Generator {
   constructor(args, options) {
     super(args, options);
@@ -25,7 +26,14 @@ module.exports = class extends Generator {
       type: String,
       required: false,
       default: '',
-      desc: 'Comma separated Prop list',
+      desc: 'Comma separated Props',
+    });
+
+    this.option('events', {
+      type: String,
+      required: false,
+      default: '',
+      desc: 'Comma separated Event handlers',
     });
 
     this.option('wrapperTagName', {
@@ -65,7 +73,7 @@ module.exports = class extends Generator {
   }
 
   _byConvention() {
-    let method = `_by${capitalize(this.props.convention)}`
+    let method = `_by${this.props.convention.capitalize()}`
     return this[method]()
   }
 
@@ -111,7 +119,22 @@ module.exports = class extends Generator {
       name: 'propStr',
       type: 'input',
       default: this.options.props,
-      message: 'Prop list , ',
+      message: 'Props (name:string,age:number ...)',
+    }, {
+      name: 'eventStr',
+      type: 'input',
+      default: this.options.events,
+      message: 'Event handlers (activate,execute, ...)',
+    }, {
+      name: 'eventEmitStr',
+      type: 'input',
+      default: this.options.eventEmitters,
+      message: 'Event emitters (start,stop, ...)',
+    }, {
+      name: 'listenStr',
+      type: 'input',
+      default: this.options.listeners,
+      message: 'Event listeners (open,run, ...)',
     }, {
       name: 'wrapperFileTag',
       type: 'input',
@@ -157,6 +180,11 @@ module.exports = class extends Generator {
       ],
       message: 'Test file',
       store: true
+    }, {
+      name: 'useDataService',
+      type: 'confirm',
+      default: false,
+      message: 'Connect to a data service'
     }]
 
     return this.prompt(prompts).then(props => {
@@ -173,12 +201,30 @@ module.exports = class extends Generator {
 
   writing() {
     const name = this.props.name
-    const tagName = dasherize(name);
-    const className = camelize(name);
+    const tagName = name.dasherize();
+    const className = name.camelize();
 
     this.name = name
     this.tagName = tagName
     this.className = className
+
+    let componentConnectBlock = ''
+    if (this.props.useDataService) {
+      componentConnectBlock = ` @Prop({connect: '${tagName}-data-service-injector'}) injector: I${className}DataServiceInjector;
+      private dataService: ${className}DataService;
+
+      componentWillLoad() {
+          this.injector.create().then(dataService => {
+              this.dataService = dataService;
+              console.log(this.dataService.getData());
+          });
+      }\n`
+    }
+
+    let dataServiceImports
+    if (this.props.useDataService) {
+      dataServiceImports = `import { ${className}DataService, I${className}DataServiceInjector } from './data-service'\n`
+    }
 
     const {
       componentName,
@@ -203,14 +249,75 @@ module.exports = class extends Generator {
 
     let propList = []
     let propMap = {}
+    let changeList = []
 
     if (propStr) {
-      propList = propStr.split(',')
+      propList = propStr.split(',').filter(name => !name.isBlank())
       propMap = propList.reduce((acc, prop) => {
-        let [key, val] = prop.split(':')
-        acc[key] = val || 'string'
+        let [name, type, when] = prop.split(':')
+        if (when) {
+          changeList.push({
+            name,
+            type,
+            when
+          })
+        }
+        acc[name] = type || 'string'
         return acc
       }, {})
+    }
+
+    let states = []
+    if (stateStr) {
+      let stateNames = stateStr.split(',').filter(name => !name.isBlank())
+      states = stateNames.reduce((acc, prop) => {
+        let [name, type] = prop.split(':')
+        type = type || 'any'
+        let stateName = name.camelize(false)
+        acc[key] = `  @State() ${stateName}: ${type};`
+        return acc
+      }).join('\n')
+    }
+
+    let listeners = []
+    if (listenStr) {
+      let listenNames = listenStr.split(',').filter(name => !name.isBlank())
+      listeners = listenNames.reduce((acc, prop) => {
+        let [name, type] = prop.split(':')
+        let eventType = type || 'CustomEvent'
+        let eventName = name.camelize(false)
+        acc[key] = `      @Listen('${eventName}')
+        ${eventName}Handler(event: ${eventType}) {
+          console.log('Received the custom ${eventName} event: ', event.detail);
+        }`
+        return acc
+      }).join('\n')
+    }
+
+
+    let changeHandlers = changeList.map(changeObj => {
+      let {
+        name,
+        type,
+        when
+      } = changeObj
+      const propClassName = name.camelize()
+      when = when || 'did'
+      return `  @PropWillChange('${name}')
+  ${when}Change${propClassName}(newValue: ${type}) {
+    console.log('${propClassName} will change', newValue)
+  }`
+    }).join('\n')
+
+
+    let eventNames = []
+    if (eventStr) {
+      eventNames = eventStr.split(',').filter(name => !name.isBlank())
+    }
+
+    let eventEmitNames = []
+    if (eventEmitStr) {
+      eventEmitNames = eventEmitStr.split(',').filter(name => !name.isBlank())
     }
 
     const propNames = Object.keys(propMap)
@@ -226,8 +333,30 @@ module.exports = class extends Generator {
       return '        {this.' + name + '}'
     }).join('\n')
 
+
+    const eventEmitters = eventEmitNames.map(eventName => {
+      eventName = eventName.camelize();
+      return `@Event() ${eventName}: EventEmitter`
+    }).join('\n')
+
+
+    const eventHandlers = eventNames.map(eventName => {
+      eventName = eventName.camelize();
+      return `  handle${eventName}(event: UIEvent) {
+        console.log('Received the ${eventName}', {
+          event
+        });
+      }`
+    }).join('\n')
+
     // this._lintEJS('component.tsx.tpl')
     let componentDest = this.destinationPath(`${componentDir}/${componentFileName}.tsx`)
+
+    let blocks = [states, declareProps, eventHandlers, changeHandlers, eventEmitters, listeners, componentConnectBlock]
+    let declarations = blocks.filter(txt => txt).join('\n')
+
+    // inside render
+    let displayBlocks = [className, displayProps].filter(txt => txt && txt !== '').join('\n')
 
     this.fs.copyTpl(
       this.templatePath('component.tsx.tpl'),
@@ -236,11 +365,12 @@ module.exports = class extends Generator {
         className,
         styleFileExt,
         styleFileName,
-        declareProps,
-        displayProps,
         wrapperTagName,
         openTag,
-        closeTag
+        closeTag,
+        declarations,
+        displayBlocks,
+        dataServiceImports
       }
     );
 
@@ -293,5 +423,13 @@ module.exports = class extends Generator {
         componentFileName
       }
     );
+
+    if (this.props.useDataService) {
+      this.fs.copyTpl(
+        this.templatePath(`data-service.ts.tpl`),
+        this.destinationPath(`${componentDir}/data-service.ts`), {
+          className,
+        })
+    }
   }
 };

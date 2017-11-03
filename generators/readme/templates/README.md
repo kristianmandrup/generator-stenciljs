@@ -84,11 +84,21 @@ In particular, select a naming convention that suits you (by `name` or `type`)
 - By `name`, will generate all component files with the tag name of the component.
 - By `type`, will generate component files with the type of file as the name.
 
-For `Prop list`, you can type in multiple properties of the form:
+For `Props (name:string,age:number ...)`, you can type in multiple properties of the form:
 
 `name:string,age:number`
 
 The generator will then insert `@Prop()` decorated properties in the component and have skeleton tests etc. generated for them as well ;)
+
+For `Event handlers (activate,execute, ...)`, you can type list of events to handle:
+
+`activate,execute`
+
+For `Event emitters (start,stop, ...)`
+
+For `Event listeners (open,run, ...)`
+
+For `Connect to a data service` it will generate a data service as per the post [creating shared state in stencil](https://medium.com/@gilfink/creating-shared-state-in-stencil-3beac77477e8)
 
 Note: We will extend this feature further if there is community interest.
 

@@ -1,17 +1,16 @@
-import { Component, Prop } from '@stencil/core'
+<% if (dataServiceImports) { %><%= dataServiceImports %><% } %>import { Component, Prop } from '@stencil/core'
 
 @Component({
   tag: '<%= tagName %>',
   styleUrl: '<%= styleFileName %>.<%= styleFileExt %>'
 })
 export class <%= className %> {
-<%= declareProps %>
+<%= declarations %>
 
   render() {
     return (
       <%- openTag %>
-        <%= className %>
-<%= displayProps %>
+        <%= displayBlocks %>
       <%- closeTag %>
     )
   }
