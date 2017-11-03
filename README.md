@@ -7,6 +7,17 @@ WIP: untested
 
 Please help make it better!
 
+## Tricky Behavior
+
+The generator changes project root if it find a `.yo-rc.json` file in a parent directory.
+
+```bash
+Just found a `.yo-rc.json` in a parent directory.
+Setting the project root at: /Users/kristianmandrup/repos/tecla5
+```
+
+This causes `process.cwd()` to change.
+
 ## Installation
 
 First, install [Yeoman](http://yeoman.io) and generator-stenciljs using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).

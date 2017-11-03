@@ -31,15 +31,25 @@
     "yeoman-test": "^1.7.0"
   },
   "dependencies": {
-    "yeoman-generator": "^2.0.1",
     "chalk": "^2.1.0",
+    "download-repo": "^1.0.2",
+    "ejs-lint": "^0.3.0",
+    "extend": "^3.0.1",
+    "fs-extra": "^4.0.2",
+    "github-username": "^4.1.0",
+    "inquirer-npm-name": "^2.0.0",
+    "lodash": "^4.17.4",
+    "parse-author": "^2.0.0",
+    "sugar": "^2.0.4",
+    "yeoman-generator": "^2.0.1",
+    "yeoman-option-or-prompt": "^2.0.0",
     "yosay": "^2.0.1"
   },
   "jest": {
     "testEnvironment": "node"
   },
   "scripts": {
-    "prepublish": "nsp check",
+    "prepare": "nsp check",
     "pretest": "eslint .",
     "precommit": "lint-staged",
     "test": "jest"

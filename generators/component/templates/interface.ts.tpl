@@ -20,9 +20,7 @@ declare global {
   }
   namespace JSXElements {
     export interface <%= className %>Attributes extends HTMLAttributes {
-      <% for (name of propNames) { %>
-        @Prop() <%= name%>?: any;
-        <% }  %>
+      <%= interfaceProps %>
     }
   }
 }

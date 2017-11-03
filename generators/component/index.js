@@ -1,7 +1,15 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const _ = require('lodash');
-
+const chalk = require('chalk');
+const yosay = require('yosay');
+const extend = _.merge;
+const dasherize = require('sugar/string/dasherize');
+const camelize = require('sugar/string/camelize');
+const capitalize = require('sugar/string/capitalize');
+const path = require('path');
+const ejsLint = require('ejs-lint')
+const fs = require('fs-extra');
 module.exports = class extends Generator {
   constructor(args, options) {
     super(args, options);
@@ -16,7 +24,7 @@ module.exports = class extends Generator {
     this.option('props', {
       type: String,
       required: false,
-      default: null,
+      default: '',
       desc: 'Comma separated Prop list',
     });
 
@@ -28,7 +36,7 @@ module.exports = class extends Generator {
     });
 
     this.option('convention', {
-      type: 'list',
+      type: String,
       required: false,
       default: 'type',
       desc: 'Naming convention to use',
@@ -37,7 +45,7 @@ module.exports = class extends Generator {
     this.option('testLib', {
       type: String,
       required: false,
-      default: 'scss',
+      default: 'jest',
       desc: 'Testing lib',
     });
 
@@ -51,19 +59,22 @@ module.exports = class extends Generator {
     this.option('testFileExt', {
       type: String,
       required: false,
-      default: 'scss',
+      default: 'spec.ts',
       desc: 'Test file extension',
     });
   }
 
   _byConvention() {
-    let method = `_by${_.capitalize(this.options.convention)}`
-    return this[method]
+    let method = `_by${capitalize(this.props.convention)}`
+    console.log({
+      method
+    })
+    return this[method]()
   }
 
   _byName() {
     const name = this.tagName
-    return {
+    const nameMap = {
       componentName: name,
       componentFileName: name,
       dtsFileName: name,
@@ -71,11 +82,16 @@ module.exports = class extends Generator {
       styleFileName: name,
       testFileName: name
     }
+    console.log({
+      name,
+      nameMap
+    })
+    return nameMap
   }
 
   _byType() {
     const name = this.tagName
-    return {
+    const nameMap = {
       componentName: name,
       componentFileName: 'component',
       dtsFileName: 'definition',
@@ -83,6 +99,11 @@ module.exports = class extends Generator {
       styleFileName: 'styles',
       testFileName: 'unit'
     }
+    console.log({
+      name,
+      nameMap
+    })
+    return nameMap
   }
 
   initializing() {}
@@ -94,65 +115,58 @@ module.exports = class extends Generator {
 
     const prompts = [{
       name: 'name',
-      type: String,
-      required: false,
+      type: 'input',
       default: this.options.name || 'my-component',
-      desc: 'Name of your component'
+      message: 'Name of your component'
     }, {
       name: 'propStr',
-      type: String,
-      required: false,
+      type: 'input',
       default: this.options.props,
-      desc: 'Prop list , ',
+      message: 'Prop list , ',
     }, {
       name: 'wrapperFileTag',
-      type: String,
-      required: false,
+      type: 'input',
       default: this.options.wrapperTag || 'div',
-      desc: 'Wrapper tag name'
+      message: 'Wrapper tag name'
     }, {
       name: 'convention',
       type: 'list',
-      required: false,
-      default: this.options.convention || 'type',
+      default: 'type', // this.options.convention ||
       choices: [
-        'Name',
-        'Type'
+        'name',
+        'type'
       ],
-      desc: 'File naming by',
+      message: 'File naming by',
       store: true
     }, {
       name: 'testLib',
-      type: String,
-      required: false,
+      type: 'radio',
       default: this.options.testLib || 'jest',
       choices: [
         'jest'
       ],
-      desc: 'Testing lib',
+      message: 'Testing lib',
       store: true
     }, {
       name: 'styleFileExt',
-      type: String,
-      required: false,
+      type: 'radio',
       default: this.options.styleExt || 'scss',
       choices: [
         'scss',
         'styl',
         'css'
       ],
-      desc: 'Style file',
+      message: 'Style file',
       store: true
     }, {
       name: 'testFileExt',
-      type: String,
-      required: false,
-      default: this.options.testExt || 'scss',
+      type: 'radio',
+      default: this.options.testExt || 'spec.ts',
       choices: [
         'spec.ts',
         'test.ts'
       ],
-      desc: 'Test file',
+      message: 'Test file',
       store: true
     }]
 
@@ -161,11 +175,18 @@ module.exports = class extends Generator {
     });
   }
 
+  _lintEJS(template, options = {}) {
+    let templatePath = path.join(__dirname, 'templates', template)
+    let templateContent = fs.readFileSync(templatePath, 'utf-8')
+    let result = ejsLint(templateContent, options)
+    console.log(result)
+  }
+
 
   writing() {
     const name = this.props.name
-    const tagName = _.dasherize(name);
-    const className = _.camelize(name);
+    const tagName = dasherize(name);
+    const className = camelize(name);
 
     this.name = name
     this.tagName = tagName
@@ -178,68 +199,134 @@ module.exports = class extends Generator {
       interfaceFileName,
       styleFileName,
       testFileName
-    } = this.byConvention();
+    } = this._byConvention();
 
-    const {
+    let {
       propStr,
-      styleExt,
-      wrapperTagName
+      styleFileExt,
+      testFileExt,
+      wrapperTagName,
+      testLib
     } = this.props
 
-    const propList = propStr.split(',')
-    const propMap = propList.reduce((acc, prop) => {
-      let [key, val] = prop.split(':')
-      acc[key] = val || 'string'
-    }, {})
+    wrapperTagName = wrapperTagName || 'div'
+    let openTag = `<${wrapperTagName}>`
+    let closeTag = `</${wrapperTagName}>`
+
+    let propList = []
+    let propMap = {}
+
+    if (propStr) {
+      propList = propStr.split(',')
+      propMap = propList.reduce((acc, prop) => {
+        let [key, val] = prop.split(':')
+        acc[key] = val || 'string'
+        return acc
+      }, {})
+    }
 
     const propNames = Object.keys(propMap)
     const htmlElementName = `HTML${className}Element`
 
     const componentDir = `components/${componentName}`
 
+    const declareProps = propNames.map(name => {
+      return `@Prop() ${name}: ${propMap[name]}\n`
+    })
+
+    const displayProps = propNames.map(name => {
+      return '{this.' + name + '}'
+    })
+
+    // this._lintEJS('component.tsx.tpl')
+    let componentDest = this.destinationPath(`${componentDir}/${componentFileName}.tsx`)
+
+    console.log({
+      propList,
+      propMap,
+      componentDest,
+      componentDir,
+      componentFileName,
+      tagName,
+      className,
+      styleFileExt,
+      styleFileName,
+      declareProps,
+      displayProps,
+      wrapperTagName,
+      openTag,
+      closeTag
+    })
+
     this.fs.copyTpl(
-      this.templatePath('templates/component.tsx.tpl'),
+      this.templatePath('component.tsx.tpl'),
       this.destinationPath(`${componentDir}/${componentFileName}.tsx`), {
         tagName,
         className,
+        styleFileExt,
         styleFileName,
-        propMap,
-        propNames,
-        wrapperTagName
+        declareProps,
+        displayProps,
+        wrapperTagName,
+        openTag,
+        closeTag
       }
     );
 
     this.fs.copyTpl(
-      this.templatePath('templates/definition.d.ts.tpl'),
+      this.templatePath('definition.d.ts.tpl'),
       this.destinationPath(`${componentDir}/${dtsFileName}.d.ts`), {
         className,
         interfaceFileName
       }
     );
 
+    const interfaceProps = propNames.map(name => {
+      return `@Prop() ${name}?: any;`
+    })
+
+    console.log({
+      interfaceProps
+    })
+
     this.fs.copyTpl(
-      this.templatePath('templates/interface.d.ts.tpl'),
-      this.destinationPath(`${componentDir}/${interfaceFileName}.d.ts`), {
+      this.templatePath('interface.ts.tpl'),
+      this.destinationPath(`${componentDir}/${interfaceFileName}.ts`), {
         className,
         interfaceFileName,
-        htmlElementName
+        htmlElementName,
+        interfaceProps,
+        componentFileName
       }
     );
 
     this.fs.copyTpl(
-      this.templatePath(`templates/styles/styles.${styleFileExt}.tpl`),
-      this.destinationPath(`${componentDir}/${styleFileName}.${styleFileExt}`), {
+      this.templatePath(`styles/styles.${styleFileExt}.tpl`),
+      this.destinationPath(`${componentDir}/styles/${styleFileName}.${styleFileExt}`), {
         tagName,
       }
     );
 
+    const propTests = propNames.map(name => {
+      `it('should display the first ${name}', async () => {
+        element.${name} = '${name}';
+        await flush(element);
+        expect(element.textContent).toMatch(/${name}/);
+      });`
+    })
+
+    console.log({
+      propTests
+    })
+
     this.fs.copyTpl(
-      this.templatePath(`templates/test/${testLib}.spec.ts.tpl`),
-      this.destinationPath(`${componentDir}/${testFileName}.${testFileExt}`), {
+      this.templatePath(`test/${testLib}.spec.ts.tpl`),
+      this.destinationPath(`${componentDir}/test/${testFileName}.${testFileExt}`), {
         tagName,
         className,
         propMap,
         propNames,
+        propTests,
         componentFileName
       }
     );

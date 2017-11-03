@@ -8,6 +8,7 @@ const parseAuthor = require('parse-author');
 const githubUsername = require('github-username');
 const path = require('path');
 const askName = require('inquirer-npm-name');
+const optionOrPrompt = require('yeoman-option-or-prompt');
 
 module.exports = class extends Generator {
   constructor(args, options) {
@@ -38,18 +39,23 @@ module.exports = class extends Generator {
       desc: 'GitHub username or organization'
     });
 
-    this.option('projectRoot', {
-      type: String,
-      required: false,
-      default: 'lib',
-      desc: 'Relative path to the project code root'
-    });
+    // this.option('projectRoot', {
+    //   type: String,
+    //   required: false,
+    //   default: 'lib',
+    //   desc: 'Relative path to the project code root'
+    // });
 
     // this.option('readme', {
     //   type: String,
     //   required: false,
     //   desc: 'Content to insert in the README.md file'
     // });
+  }
+
+  _optionOrPrompt(prompts) {
+    const optPrompt = optionOrPrompt.bind(this)
+    return optPrompt(prompts)
   }
 
   initializing() {
@@ -76,30 +82,31 @@ module.exports = class extends Generator {
   }
 
   _askFor() {
+    this.log('ask for')
     const prompts = [{
       name: 'description',
       message: 'Description',
-      when: !this.props.description
+      // when: !this.props.description
     }, {
       name: 'homepage',
       message: 'Project homepage url',
-      when: !this.props.homepage
+      // when: !this.props.homepage
     }, {
       name: 'authorName',
       message: `Author's Name `,
-      when: !this.props.authorName,
+      // when: !this.props.authorName,
       default: this.user.git.name(),
       store: true
     }, {
       name: 'authorEmail',
       message: `Author's Email `,
-      when: !this.props.authorEmail,
+      // when: !this.props.authorEmail,
       default: this.user.git.email(),
       store: true
     }, {
       name: 'authorUrl',
       message: `Author's Homepage `,
-      when: !this.props.authorUrl,
+      // when: !this.props.authorUrl,
       store: true
     }, {
       name: 'keywords',
@@ -112,7 +119,7 @@ module.exports = class extends Generator {
       name: 'includeCoveralls',
       type: 'confirm',
       message: 'Send coverage reports to coveralls',
-      when: this.options.coveralls === undefined
+      when: !this.options.coveralls
     }];
 
     // Have Yeoman greet the user.
@@ -169,82 +176,21 @@ module.exports = class extends Generator {
   }
 
   default () {
-    // first we run the boilerplate
     if (this.options.boilerplate) {
       this.composeWith(require.resolve('../boilerplate'), {
         name: this.props.name
       });
     }
 
-    if (this.options.travis) {
-      const options = {
-        config: {}
-      };
-      if (this.props.includeCoveralls) {
-        options.config.after_script = 'cat ./coverage/lcov.info | coveralls'; // eslint-disable-line camelcase
-      }
-      this.composeWith(require.resolve('generator-travis/generators/app'), options);
-    }
-
-    if (this.options.editorconfig) {
-      this.composeWith(require.resolve('../editorconfig'));
-    }
-
-    this.composeWith(require.resolve('../nsp'));
-    this.composeWith(require.resolve('../eslint'));
-
-    this.composeWith(require.resolve('../git'), {
-      name: this.props.name,
-      githubAccount: this.props.githubAccount
-    });
-
-    this.composeWith(require.resolve('generator-jest/generators/app'), {
-      testEnvironment: 'node',
-      coveralls: false
-    });
-
-    if (this.options.cli) {
-      this.composeWith(require.resolve('../cli'));
-    }
-
-    if (this.options.license && !this.pkg.license) {
-      this.composeWith(require.resolve('generator-license/app'), {
-        name: this.props.authorName,
-        email: this.props.authorEmail,
-        website: this.props.authorUrl
+    // extend boilerplate, such as updating package.json, Readme etc
+    if (this.options.extend) {
+      this.composeWith(require.resolve('../extend'), {
+        name: this.props.name
       });
     }
-
-    if (!this.fs.exists(this.destinationPath('README.md'))) {
-      this.composeWith(require.resolve('../readme'), {
-        name: this.props.name,
-        description: this.props.description,
-        githubAccount: this.props.githubAccount,
-        authorName: this.props.authorName,
-        authorUrl: this.props.authorUrl,
-        coveralls: this.props.includeCoveralls,
-        content: this.options.readme
-      });
-    }
-  }
-
-  installing() {
-    this.npmInstall();
   }
 
   end() {
-    this.log('Thanks for using Yeoman.');
-
-    if (this.options.travis) {
-      const travisUrl = chalk.cyan(
-        `https://travis-ci.org/profile/${this.props.githubAccount || ''}`
-      );
-      this.log(`- Enable Travis integration at ${travisUrl}`);
-    }
-
-    if (this.props.includeCoveralls) {
-      const coverallsUrl = chalk.cyan('https://coveralls.io/repos/new');
-      this.log(`- Enable Coveralls integration at ${coverallsUrl}`);
-    }
+    this.log('Thanks for using StencilJS app generator.');
   }
 };

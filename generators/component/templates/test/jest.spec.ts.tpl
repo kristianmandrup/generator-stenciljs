@@ -1,5 +1,5 @@
 import { flush, render } from '@stencil/core/testing';
-import { <%= className %> } from './<%= componentFileName %>';
+import { <%= className %> } from '../<%= componentFileName %>';
 
 describe('<%= tagName %>', () => {
   it('should build', () => {
@@ -19,12 +19,6 @@ describe('<%= tagName %>', () => {
       expect(element.textContent).toMatch(/<%= className %>/);
     });
 
-    <% for (name of propNames) %>
-    it('should display the first <%= name %>', async () => {
-      element.<%= name %> = '<%= name %>';
-      await flush(element);
-      expect(element.textContent).toMatch(/<%= <%= name %> %>/);
-    });
-    <% } %>
+    <%= propTests %>
   });
 });

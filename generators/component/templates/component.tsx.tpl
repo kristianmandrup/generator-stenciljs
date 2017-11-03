@@ -1,21 +1,16 @@
 import { Component, Prop } from '@stencil/core'
 
-
 @Component({
   tag: '<%= tagName %>',
-  styleUrl: '<%= styleFileName %>.<%= styleExt %>'
+  styleUrl: '<%= styleFileName %>.<%= styleFileExt %>'
 })
 export class <%= className %> {
-
-  <% for (name of propNames) { %>
-  @Prop() <%= name: propMap[name]%>
-  <% }  %>
-
+  <%= declareProps %>
   render() {
     return (
-      <<%= wrapperTagName %>>
-        <%= className %><% for (name of propNames) { %>$\{this.<%= name %>\}:<% } %>
-      </<%= wrapperTagName %>>
+      <%- openTag %>
+        <%= className %><%= displayProps %>
+      <%- closeTag %>
     )
   }
 }
