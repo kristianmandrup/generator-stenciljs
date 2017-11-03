@@ -71,6 +71,12 @@ To generate a new component, use the `component` sub-generator:
 yo stenciljs:component
 ```
 
+To pass `name` as an argument:
+
+```bash
+yo stenciljs:component my-component
+```
+
 Follow the generator instructions.
 
 In particular, select a naming convention that suits you (by `name` or `type`)
@@ -83,6 +89,8 @@ For `Prop list`, you can type in multiple properties of the form:
 `name:string,age:number`
 
 The generator will then insert `@Prop()` decorated properties in the component and have skeleton tests etc. generated for them as well ;)
+
+Note: We will extend this feature further if there is community interest.
 
 ## Description
 

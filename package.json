@@ -1,12 +1,11 @@
 {
   "name": "generator-stenciljs",
-  "version": "0.0.0",
-  "description": "StencilJS generators",
+  "version": "0.0.1",
+  "description": "StencilJS generators: app and component",
   "homepage": "",
   "author": {
     "name": "Kristian Mandrup",
-    "email": "kmandrup@gmail.com",
-    "url": ""
+    "email": "kmandrup@gmail.com"
   },
   "files": [
     "generators"
@@ -41,6 +40,7 @@
     "inquirer-npm-name": "^2.0.0",
     "lodash": "^4.17.4",
     "parse-author": "^2.0.0",
+    "sao": "^0.22.9",
     "sugar": "^2.0.4",
     "yeoman-generator": "^2.0.1",
     "yeoman-option-or-prompt": "^2.0.0",

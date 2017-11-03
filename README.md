@@ -27,6 +27,11 @@ yo stenciljs
 - `app` (default) to generate a fresh StencilJS app
 - `component` to generate a fresh skeleton StencilJS component
 
+To see a list of options and arguments you can pass:
+
+`yo stenciljs --help`
+
+`yo stenciljs:component --help`
 ## Sub-generators
 
 The generator comes with the following sub-generators:
@@ -44,6 +49,13 @@ The `extend` generator composes with the following (helper) generators:
 - `readme` to populate readme
 
 Any of the generators can be used stand-alone.
+
+### Boilerplate project generator
+
+The `boilerplate` generator can currently use either [Sao](https://sao.js.org/) or [download-repo](https://www.npmjs.com/package/download-repo) to fetch/generate the boilerplate project.
+
+If you opt to use Sao, please [create a template](https://sao.js.org/#/create) to suit your specific needs.
+
 ## FAQ/Issues
 
 Beware that the generator will change project root if it finds a `.yo-rc.json` file in a parent directory. Yeoman will print this warning message:
@@ -61,7 +73,11 @@ Simply create an npm link:
 
 `generator-stenciljs $ npm link`
 
-That will install your project dependencies and symlink a global module to your local file. After npm is done, you'll be able to call `yo stenciljs`
+That will install your project dependencies and symlink a global module to your local file.
+
+After npm is done, you'll be able to call `yo stenciljs` and test in a "sandbox" location of your choice, a *quick and dirty* approach).
+
+You can also write tests in the `__tests__` folder, a more *refined* approach :)
 
 ## Getting To Know Yeoman
 

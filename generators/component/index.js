@@ -14,7 +14,7 @@ module.exports = class extends Generator {
   constructor(args, options) {
     super(args, options);
 
-    this.option('name', {
+    this.argument('name', {
       type: String,
       required: false,
       default: 'my-component',

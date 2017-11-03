@@ -1,7 +1,7 @@
 'use strict';
 const Generator = require('yeoman-generator');
 const originUrl = require('git-remote-origin-url');
-
+const fs = require('fs-extra')
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
@@ -31,13 +31,6 @@ module.exports = class extends Generator {
       this.destinationPath(this.options.generateInto, '.gitattributes')
     );
 
-    // add coverage to gitignore
-    if (this.props.includeCoveralls) {
-      const gitignore = this.fs.readFileSync('.gitignore')
-      const lines = gitignore.split('\n').concat('coverage')
-      this.fs.readWriteSync('.gitignore', lines.join('\n'))
-    }
-
     return originUrl(this.destinationPath(this.options.generateInto)).then(
       function (url) {
         this.originUrl = url;
@@ -61,6 +54,18 @@ module.exports = class extends Generator {
     }
 
     this.pkg.repository = this.pkg.repository || repository;
+
+    this.props = this.props || {}
+    this.props.includeCoveralls = this.options.includeCoveralls
+
+    // add coverage to gitignore
+    if (this.props.includeCoveralls) {
+      const gitignore = fs.readFileSync('.gitignore', 'utf-8')
+      if (typeof gitignore === 'string') {
+        const lines = gitignore.split('\n').concat('coverage')
+        fs.writeFileSync('.gitignore', lines.join('\n'))
+      }
+    }
 
     this.fs.writeJSON(
       this.destinationPath(this.options.generateInto, 'package.json'),

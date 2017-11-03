@@ -50,7 +50,7 @@ module.exports = class extends Generator {
     this.option('projectRoot', {
       type: String,
       required: false,
-      default: 'lib',
+      default: 'src',
       desc: 'Relative path to the project code root'
     });
 
@@ -65,6 +65,13 @@ module.exports = class extends Generator {
       required: false,
       default: false,
       desc: 'Include a license (requires: generator-license)'
+    });
+
+    this.option('yarn', {
+      type: Boolean,
+      required: false,
+      default: true,
+      desc: 'Use yarn or fallback to use npm'
     });
   }
 
@@ -252,7 +259,7 @@ module.exports = class extends Generator {
   }
 
   installing() {
-    this.yarnInstall();
+    this.options.yarn ? this.yarnInstall() : this.npmInstall()
   }
 
   end() {
