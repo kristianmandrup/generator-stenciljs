@@ -19,6 +19,6 @@ describe('<%= tagName %>', () => {
       expect(element.textContent).toMatch(/<%= className %>/);
     });
 
-    <%= propTests %>
+<%- propTests %>
   });
 });

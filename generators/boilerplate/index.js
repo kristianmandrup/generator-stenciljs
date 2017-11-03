@@ -67,7 +67,7 @@ module.exports = class extends Generator {
 
     fs.pathExists(targetPath).then(exists => {
       if (exists) {
-        console.log(`path: ${targetPath} already exists. Skipping download of boilerplate template`)
+        this.log(`path: ${targetPath} already exists. Skipping download of boilerplate template`)
         done()
         return
       }
@@ -76,7 +76,7 @@ module.exports = class extends Generator {
           target: targetPath
         })
         .then(() => {
-          console.log(`cd ${targetPath}`)
+          this.log(`cd ${targetPath}`)
           done()
         })
     })

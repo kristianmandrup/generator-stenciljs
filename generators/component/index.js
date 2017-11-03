@@ -66,9 +66,6 @@ module.exports = class extends Generator {
 
   _byConvention() {
     let method = `_by${capitalize(this.props.convention)}`
-    // console.log({
-    //   method
-    // })
     return this[method]()
   }
 
@@ -82,10 +79,6 @@ module.exports = class extends Generator {
       styleFileName: name,
       testFileName: name
     }
-    // console.log({
-    //   name,
-    //   nameMap
-    // })
     return nameMap
   }
 
@@ -99,10 +92,6 @@ module.exports = class extends Generator {
       styleFileName: 'styles',
       testFileName: 'unit'
     }
-    // console.log({
-    //   name,
-    //   nameMap
-    // })
     return nameMap
   }
 
@@ -179,7 +168,6 @@ module.exports = class extends Generator {
     let templatePath = path.join(__dirname, 'templates', template)
     let templateContent = fs.readFileSync(templatePath, 'utf-8')
     let result = ejsLint(templateContent, options)
-    // console.log(result)
   }
 
 
@@ -231,32 +219,15 @@ module.exports = class extends Generator {
     const componentDir = `components/${componentName}`
 
     const declareProps = propNames.map(name => {
-      return `@Prop() ${name}: ${propMap[name]}\n`
-    })
+      return `  @Prop() ${name}: ${propMap[name]};`
+    }).join('\n')
 
     const displayProps = propNames.map(name => {
-      return '{this.' + name + '}'
-    })
+      return '        {this.' + name + '}'
+    }).join('\n')
 
     // this._lintEJS('component.tsx.tpl')
     let componentDest = this.destinationPath(`${componentDir}/${componentFileName}.tsx`)
-
-    // console.log({
-    //   propList,
-    //   propMap,
-    //   componentDest,
-    //   componentDir,
-    //   componentFileName,
-    //   tagName,
-    //   className,
-    //   styleFileExt,
-    //   styleFileName,
-    //   declareProps,
-    //   displayProps,
-    //   wrapperTagName,
-    //   openTag,
-    //   closeTag
-    // })
 
     this.fs.copyTpl(
       this.templatePath('component.tsx.tpl'),
@@ -282,12 +253,8 @@ module.exports = class extends Generator {
     );
 
     const interfaceProps = propNames.map(name => {
-      return `@Prop() ${name}?: any;`
-    })
-
-    // console.log({
-    //   interfaceProps
-    // })
+      return `      ${name}?: any;`
+    }).join('\n')
 
     this.fs.copyTpl(
       this.templatePath('interface.ts.tpl'),
@@ -308,16 +275,12 @@ module.exports = class extends Generator {
     );
 
     const propTests = propNames.map(name => {
-      `it('should display the first ${name}', async () => {
-        element.${name} = '${name}';
-        await flush(element);
-        expect(element.textContent).toMatch(/${name}/);
-      });`
-    })
-
-    // console.log({
-    //   propTests
-    // })
+      return `    it('should display the first ${name}', async () => {
+      element.${name} = '${name}';
+      await flush(element);
+      expect(element.textContent).toMatch(/${name}/);
+    });`
+    }).join('\n')
 
     this.fs.copyTpl(
       this.templatePath(`test/${testLib}.spec.ts.tpl`),

@@ -3,20 +3,9 @@
 
 ## Status
 
-WIP: untested
+Works :)
 
-Please help make it better!
-
-## Tricky Behavior
-
-The generator changes project root if it find a `.yo-rc.json` file in a parent directory.
-
-```bash
-Just found a `.yo-rc.json` in a parent directory.
-Setting the project root at: /Users/kristianmandrup/repos/tecla5
-```
-
-This causes `process.cwd()` to change.
+Please help improve it!
 
 ## Installation
 
@@ -32,6 +21,39 @@ Then generate your new project:
 ```bash
 yo stenciljs
 ```
+
+## Main generators
+
+- `app` (default) to generate a fresh StencilJS app
+- `component` to generate a fresh skeleton StencilJS component
+
+## Sub-generators
+
+The generator comes with the following sub-generators:
+
+- `component` to generate a fresh skeleton component
+
+The main `app` generator composes with the following (helper) generators:
+
+- `boilerplate` to download a project boilerplate from a repo
+- `extend` to extend your project (mostly auto-filling `package.json`)
+
+The `extend` generator composes with the following (helper) generators:
+
+- `git` to add git specific details
+- `readme` to populate readme
+
+Any of the generators can be used stand-alone.
+## FAQ/Issues
+
+Beware that the generator will change project root if it finds a `.yo-rc.json` file in a parent directory. Yeoman will print this warning message:
+
+```bash
+Just found a `.yo-rc.json` in a parent directory.
+Setting the project root at: /Users/user-name/repos
+```
+
+Which causes `process.cwd()` to change.
 
 ## Development
 

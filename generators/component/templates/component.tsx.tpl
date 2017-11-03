@@ -5,11 +5,13 @@ import { Component, Prop } from '@stencil/core'
   styleUrl: '<%= styleFileName %>.<%= styleFileExt %>'
 })
 export class <%= className %> {
-  <%= declareProps %>
+<%= declareProps %>
+
   render() {
     return (
       <%- openTag %>
-        <%= className %><%= displayProps %>
+        <%= className %>
+<%= displayProps %>
       <%- closeTag %>
     )
   }

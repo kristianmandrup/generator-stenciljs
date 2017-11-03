@@ -20,7 +20,7 @@ declare global {
   }
   namespace JSXElements {
     export interface <%= className %>Attributes extends HTMLAttributes {
-      <%= interfaceProps %>
+<%= interfaceProps %>
     }
   }
 }
