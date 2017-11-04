@@ -9,8 +9,11 @@ const githubUsername = require('github-username');
 const path = require('path');
 const askName = require('inquirer-npm-name');
 const optionOrPrompt = require('yeoman-option-or-prompt');
+const {
+  BoilerplateGenerator
+} = require('../common')
 
-module.exports = class extends Generator {
+module.exports = class AppGenerator extends BoilerplateGenerator {
   constructor(args, options) {
     super(args, options);
   }

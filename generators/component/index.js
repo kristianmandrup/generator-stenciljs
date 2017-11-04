@@ -1,16 +1,28 @@
-'use strict';
-const {
-  BaseComponentGenerator,
-} = require('../common');
+export class BaseComponentGenerator extends Generator {
+  constructor(args, options) {
+    super(args, options);
+  }
 
-// extend String with sugarjs API
-Sugar.String.extend()
-module.exports = class extends BaseComponentGenerator {
-  initializing() {
-    this.welcomeMsg = `Welcome to ${chalk.red('stenciljs')} component generator`
+  // either compose with boilerplate or element
+
+  get _prompts() {
+    return [{
+      name: 'componentModule',
+      type: confirm,
+      default: false,
+      message: 'Full Component module',
+    }]
+  }
+
+  default () {
+    if (this.props.componentModule) {
+      this.composeWith(require.resolve('../boilerplate'), {});
+    } else {
+      this.composeWith(require.resolve('../element'), {});
+    }
   }
 
   end() {
-    this.success('Component created :)')
+    // this.success('Component created :)')
   }
-};
+}

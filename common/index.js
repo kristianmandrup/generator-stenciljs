@@ -6,9 +6,9 @@ from './logger'
 export {
   BaseComponentGenerator
 }
-from './base-component-generator'
+from './component'
 
 export {
-  buildPrompts
+  BoilerplateGenerator
 }
-from './build-prompts'
+from './component'

@@ -9,6 +9,9 @@ const path = require('path');
 const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
 const beautify = require('json-beautify')
+const {
+  createLogger
+} = require('../logger')
 Sugar.String.extend()
 
 const {
@@ -23,62 +26,21 @@ const {
 
 const {
   createFileCreator
-} = requie('./file-creator')
+} = require('./file-creator')
 
 export class BaseComponentGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
     createArguments(this)
     createOptions(this)
+
+    this.logger = createLogger('component')
   }
 
   _lintEJS(template, options = {}) {
     let templatePath = path.join(__dirname, 'templates', template)
     let templateContent = fs.readFileSync(templatePath, 'utf-8')
     let result = ejsLint(templateContent, options)
-  }
-
-  _error(msg) {
-    this._log(msg, {
-      label: 'register',
-      modifier: 'bold'
-    })
-  }
-
-  _success(msg) {
-    this._log(msg, {
-      label: 'success',
-      format: 'green',
-      modifier: 'bold'
-    })
-  }
-
-  _warn(msg) {
-    this._log(msg, {
-      label: 'skipped',
-      format: 'yellow',
-      modifier: 'bold'
-    })
-  }
-
-  _info(msg) {
-    this._log(msg, {
-      label: 'register',
-      modifier: 'bold'
-    })
-  }
-
-  // use: success, warn, error and info methods
-  _log(msg, opts = {}) {
-    let {
-      label = 'info',
-        format = 'white',
-        modifier
-    } = opts
-    let write = chalk[format]
-    write = modifier ? write[modifier] : write
-    let formatLabel = write(label)
-    this.log(`${formatLabel} ${msg}`)
   }
 
   _byConvention() {
@@ -136,7 +98,15 @@ export class BaseComponentGenerator extends Generator {
     return createTemplateData(this.props)
   }
 
+  _createComponentModule() {
+
+  }
+
   writing() {
+    if (this.props.componentModule) {
+      this._createComponentModule()
+    }
+
     const data = this._createTemplateData().buildAll()
 
     const propMap = data.properties.obj
@@ -229,7 +199,7 @@ export class BaseComponentGenerator extends Generator {
       return jsonStringify(json, null, 2, 80)
     }
 
-    this._info(`${tagName} with Stencil`)
+    this.logger.info(`${tagName} with Stencil`)
 
     const bundleEntry = {
       components: [tagName]
@@ -247,7 +217,7 @@ export class BaseComponentGenerator extends Generator {
           return component == tagName
         })
       })) {
-      this._warn(`${tagName} already registered in bundle.`)
+      this.logger.warn(`${tagName} already registered in bundle.`)
       return
     }
 
@@ -260,6 +230,6 @@ export class BaseComponentGenerator extends Generator {
     let content = `exports.config = ${jsonStr}`
     this.fs.write(stencilCfgFilePath, content)
 
-    this._success(`${tagName} registration complete`)
+    this.logger.success(`${tagName} registration complete`)
   }
 }

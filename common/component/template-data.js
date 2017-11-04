@@ -118,7 +118,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
     } = this.props
 
     if (eventEmitStr) {
-      emitEvents.names = eventEmitStr.split(',').filter(name => !name.isBlank())
+      emitEvents.names = this._strToList(eventEmitStr)
     }
 
     emitEvents.declarations = emitEvents.names.map(eventName => {
@@ -138,7 +138,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
     } = this.props
 
     if (eventStr) {
-      events.names = eventStr.split(',').filter(name => !name.isBlank())
+      events.names = this._strToList(eventStr)
     }
 
     events.handlers = events.names.map(eventName => {
@@ -160,7 +160,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
     } = this.props
 
     if (listenStr) {
-      listeners.names = listenStr.split(',').filter(name => !name.isBlank())
+      listeners.names = this._strToList(listenStr)
       listeners.display = listeners.names.reduce((acc, prop) => {
         let [name, type] = prop.split(':')
         let eventType = type || 'CustomEvent'
@@ -175,6 +175,11 @@ ${when}Change${propClassName}(newValue: ${type}) {
     return this
   }
 
+  _strToList(str) {
+    return str.split(',').map(txt => tx.trim()).filter(txt => !txt.isBlank())
+  }
+
+
   buildState() {
     const states = {}
     this.states = states
@@ -182,7 +187,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
       stateStr
     } = this.props
     if (stateStr) {
-      states.names = stateStr.split(',').filter(name => !name.isBlank())
+      states.names = this._strToList(stateStra)
       states.declarations = states.names.reduce((acc, prop) => {
         let [name, type] = prop.split(':')
         type = type || 'any'
@@ -206,7 +211,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
     } = this.props
 
     if (propStr) {
-      properties.list = propStr.split(',').filter(name => !name.isBlank())
+      properties.list = this._strToList(propStr)
       properties.obj = properties.list.reduce((acc, prop) => {
         let [name, type, when] = prop.split(':')
         if (when) {
