@@ -1,4 +1,4 @@
-<% if (dataServiceImports) { %><%= dataServiceImports %><% } %>import { Component, Prop } from '@stencil/core'
+<% if (dataServiceImports) { %><%= dataServiceImports %><% } %>import { <%= coreImports %> } from '@stencil/core'
 
 @Component({
   tag: '<%= tagName %>',

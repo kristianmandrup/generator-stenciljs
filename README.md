@@ -26,6 +26,7 @@ yo stenciljs
 
 - `app` (default) to generate a fresh StencilJS app
 - `component` to generate a fresh skeleton StencilJS component
+- `model` to generate a model using [mobx](https://mobx.js.org/) to also act as a reactive/observable store
 
 To see a list of options and arguments you can pass:
 
