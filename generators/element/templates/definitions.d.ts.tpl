@@ -6,5 +6,5 @@
 
 import '@stencil/router';
 
-export { HTML<%= className %>Element } from './<%= interfaceFileName %>';
+export { <%= htmlElementName %> } from './<%= fileName %>';
 

@@ -29,6 +29,7 @@ export class TemplateData {
 
   buildAll() {
     this
+      .buildPropertyTests()
       .buildComponentDataConnect()
       .buildChangeEventHandlers()
       .buildLifeCycleEventHandlers()
@@ -39,6 +40,17 @@ export class TemplateData {
       .buildProps()
       .buildInterfaceProps()
 
+    return this
+  }
+  buildPropertyTests() {
+    this.tests = {}
+    this.tests.propertySpecs = this.buildBlockList(this.properties.names, name => {
+      return `    it('should display the ${name}', async () => {
+    element.${name} = '${name}';
+    await flush(element);
+    expect(element.textContent).toMatch(/${name}/);
+  });`
+    })
     return this
   }
 

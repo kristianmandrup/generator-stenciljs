@@ -24,7 +24,8 @@ export class FileCreator {
     this.ctx.fs.copyTpl(
       this.ctx.templatePath('component.tsx.tpl'),
       this.ctx.destinationPath(`${this.ctx.componentDir}/${componentFileName}.tsx`),
-      opts
+      opts,
+      ...opts.node.component
     );
   }
 
@@ -33,7 +34,8 @@ export class FileCreator {
     this.ctx.fs.copyTpl(
       this.ctx.templatePath('definitions.d.ts.tpl'),
       this.ctx.destinationPath(`${this.ctx.componentDir}/${dtsFileName}.d.ts`),
-      opts
+      opts,
+      ...opts.node.definition
     );
   }
 
@@ -42,7 +44,8 @@ export class FileCreator {
     this.ctx.fs.copyTpl(
       this.ctx.templatePath('interface.ts.tpl'),
       this.ctx.destinationPath(`${this.ctx.componentDir}/${interfaceFileName}.ts`),
-      opts
+      opts,
+      ...opts.node.interface
     );
   }
 
@@ -50,23 +53,17 @@ export class FileCreator {
     this.ctx.fs.copyTpl(
       this.ctx.templatePath(`styles/styles.${styleFileExt}.tpl`),
       this.ctx.destinationPath(`${this.ctx.componentDir}/styles/${styleFileName}.${styleFileExt}`),
-      opts
+      opts,
+      ...opts.node.style
     );
   }
 
   _createTests(opts = {}) {
-    const propTests = opts.propNames.map(name => {
-      return `    it('should display the ${name}', async () => {
-    element.${name} = '${name}';
-    await flush(element);
-    expect(element.textContent).toMatch(/${name}/);
-  });`
-    }).join('\n')
-
     this.ctx.fs.copyTpl(
       this.ctx.templatePath(`test/${testLib}.spec.ts.tpl`),
       this.ctx.destinationPath(`${this.ctx.componentDir}/test/${testFileName}.${testFileExt}`),
-      opts
+      opts,
+      ...opts.node.test
     )
   }
 
@@ -76,7 +73,8 @@ export class FileCreator {
       this.ctx.fs.copyTpl(
         this.ctx.templatePath(`data-service.ts.tpl`),
         this.ctx.destinationPath(`${this.ctx.componentDir}/data-service.ts`),
-        opts
+        opts,
+        ...opts.node.dataService
       )
     }
   }

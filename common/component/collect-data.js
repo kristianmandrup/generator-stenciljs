@@ -1,3 +1,7 @@
+import {
+  byConvention
+} from './name-conventions'
+
 export function CollectData(props) {
   return new CollectData(props)
 }
@@ -22,10 +26,11 @@ export class CollectData {
   }
 
   get tag() {
-    tagName = this.props.wrapperTagName || 'div'
+    const containerTagName = this.props.wrapperTagName || 'div'
     return {
-      open: `<${tagName}>`,
-      close: `</${tagName}>`
+      name: this.name.dasherize(),
+      open: `<${containerTagName}>`,
+      close: `</${containerTagName}>`
     }
   }
 
@@ -37,6 +42,10 @@ export class CollectData {
       .filter(txt => {
         return txt && !txt.isBlank()
       }).join('\n')
+  }
+
+  _byConvention() {
+    return byConvention(this.props.convention, this.model)
   }
 
   get decorators() {
@@ -52,67 +61,6 @@ export class CollectData {
     return ['Component', ...this.declarationClasses].join(',')
   }
 
-  _byConvention() {
-    let method = `_by${this.props.convention.capitalize()}`
-    let model = this[method]()
-    let {
-      styleFileExt,
-      testFileExt,
-      testLib
-    } = this.props
-    model.style.ext = styleFileExt
-    model.test.ext = testFileExt
-    model.test.lib = testLib
-    return model
-  }
-
-  _byName() {
-    const name = this.tagName
-    const
-    const nameMap = {
-      component = {
-        name,
-        fileName: name
-      },
-      dts: {
-        fileName: name,
-      },
-      interface: {
-        fileName: name
-      },
-      style: {
-        fileName: name
-      },
-      test: {
-        fileName: name
-      }
-    }
-    return nameMap
-  }
-
-  _byType() {
-    const name = this.tagName
-    const nameMap = {
-      component: {
-        name: name,
-        fileName: 'component',
-      },
-      dts: {
-        fileName: 'definitions',
-      },
-      interface: {
-        fileName: 'interface'
-      },
-      style: {
-        fileName: 'styles'
-      },
-      test: {
-        fileName: 'unit'
-      }
-    }
-    return nameMap
-  }
-
   get _collectData() {
     const {
       data
@@ -121,7 +69,7 @@ export class CollectData {
     const model = {
       props: data.properties,
       name: this.props.name,
-      tagName: name.dasherize(),
+      tag: this.tag,
       className: name.camelize()
     }
     this.model = model
@@ -133,24 +81,25 @@ export class CollectData {
     // TODO: prompt for path to use
     this.componentDir = `${componentTargetDir}/${model.component.name}`
 
+    const imports = {
+      dataService: dataServiceImports,
+      core: coreImports
+    }
+
     const imports = [
-      ...dataServiceImports,
-      ...coreImports
-    ]
+      imports.dataService,
+      `import { ${imports.core} } from '@stencil/core'`
+    ].join(' ')
 
     // inside render
-    let displayBlocks = [
+    model.tag.content = [
       model.className,
       displayProps
     ].filter(txt => !txt.isBlank()).join('\n')
 
-    const tag = this.tag
-
     return {
       model,
-      tag,
       declarations,
-      displayBlocks,
       imports
     }
   }

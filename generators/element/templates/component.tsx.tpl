@@ -1,17 +1,17 @@
-<% if (dataServiceImports) { %><%= dataServiceImports %><% } %>import { <%= coreImports %> } from '@stencil/core'
+<%= imports %>
 
 @Component({
-  tag: '<%= tagName %>',
-  styleUrl: '<%= styleFileName %>.<%= styleFileExt %>'
+  tag: '<%= tag.name %>',
+  styleUrl: '<%= style.filePath %>'
 })
 export class <%= className %> {
 <%- declarations %>
 
   render() {
     return (
-      <%- openTag %>
-        <%- displayBlocks %>
-      <%- closeTag %>
+      <%- tag.open %>
+        <%- tag.content %>
+      <%- tag.close %>
     )
   }
 }
