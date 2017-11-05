@@ -24,9 +24,28 @@ yo stenciljs
 
 ## Main generators
 
-- `app` (default) to generate a fresh StencilJS app
-- `component` to generate a fresh skeleton StencilJS component
-- `model` to generate a model using [mobx](https://mobx.js.org/) to also act as a reactive/observable store
+### app
+
+`app` (default) to generate a fresh StencilJS app
+### component
+
+`component` to generate a fresh skeleton StencilJS component, either as standalone project (via `boilerplate` and `extend`) or as app component.
+
+In the future we would like an option to be able to easily export an app component into a standalone project as well ;)
+
+### model
+
+`model` to generate a model using [mobx](https://mobx.js.org/) to also act as a reactive/observable store
+
+### page
+
+`page` to generate a component with a [router](https://stenciljs.com/docs/routing)
+
+### form
+
+`form` to generate a [form](https://stenciljs.com/docs/forms) component with fields. Form should normally be backed by a model.
+
+## Help
 
 To see a list of options and arguments you can pass:
 
@@ -37,7 +56,7 @@ To see a list of options and arguments you can pass:
 
 The generator comes with the following sub-generators:
 
-- `component` to generate a fresh skeleton component
+- `element` to generate a fresh skeleton component in the current app
 
 The main `app` generator composes with the following (helper) generators:
 
