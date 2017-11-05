@@ -1,18 +1,18 @@
 import { <%= coreImports %> } from '@stencil/core'
 @Component({
-  tag: '<%= tagName %>',
-  styleUrl: '<%= styleFile %>'
+  tag: '<%= tag.name %>',
+  styleUrl: '<%= style.filePath %>'
 })
 export class <%= className %> {
 <%- declarations %>
 
   render() {
     return (
-      <%- openTag %>
+      <%- tago.open %>
         <stencil-router>
           <%- routeTags %>
         </stencil-router>
-      <%- closeTag %>
+      <%- tag.close %>
     )
   }
 }
