@@ -1,4 +1,4 @@
-export function createArguments(ctx) {
+function createArguments(ctx) {
   ctx.argument('name', {
     type: String,
     required: false,
@@ -7,7 +7,7 @@ export function createArguments(ctx) {
   });
 }
 
-export function createOptions(ctx) {
+function createOptions(ctx) {
   ctx.option('props', {
     type: String,
     required: false,
@@ -57,4 +57,8 @@ export function createOptions(ctx) {
     desc: 'Test file extension',
   });
 }
+
+module.exports = {
+  createArguments,
+  createOptions
 }

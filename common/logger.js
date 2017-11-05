@@ -1,8 +1,8 @@
-export function createLogger(label) {
+function createLogger(label) {
   return new Logger(label)
 }
 
-export class Logger {
+class Logger {
   constructor(label) {
     this.label = label
   }
@@ -50,4 +50,9 @@ export class Logger {
     let formatLabel = write(label)
     this.log(`${formatLabel} ${msg}`)
   }
+}
+
+module.exports = {
+  createLogger,
+  Logger
 }

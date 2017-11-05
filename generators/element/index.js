@@ -1,7 +1,7 @@
 'use strict';
 const {
   BaseComponentGenerator,
-} = require('../common');
+} = require('../../common');
 
 // extend String with sugarjs API
 Sugar.String.extend()

@@ -1,9 +1,9 @@
-export function createFileCreator(ctx, templateOpts) {
+function createFileCreator(ctx, templateOpts) {
   return new FileCreator(ctx, templateOpts)
 }
 
 
-export class FileCreator {
+class FileCreator {
   constructor(ctx, templateOpts = {}) {
     this.ctx = ctx
     this.templateOpts = templateOpts
@@ -63,7 +63,7 @@ export class FileCreator {
       this.ctx.templatePath(`test/${testLib}.spec.ts.tpl`),
       this.ctx.destinationPath(`${this.ctx.componentDir}/test/${testFileName}.${testFileExt}`),
       opts,
-      ...opts.node.test
+      ...opts.node.tests
     )
   }
 
@@ -78,4 +78,9 @@ export class FileCreator {
       )
     }
   }
+}
+
+module.exports = {
+  createFileCreator,
+  FileCreator
 }

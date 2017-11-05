@@ -1,7 +1,7 @@
 'use strict';
 const {
   BaseGenerator
-} = require('../common');
+} = require('../base');
 const _ = require('lodash');
 const extend = _.merge;
 const path = require('path');

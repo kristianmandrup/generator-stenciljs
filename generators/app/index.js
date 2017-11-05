@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const {
   BaseGenerator
-} = require('../common');
+} = require('../../common');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const extend = _.merge;
@@ -23,9 +23,7 @@ module.exports = class AppGenerator extends BaseGenerator {
     });
   }
 
-  initializing() {
-    this.pkg = this._pkgJson
-  }
+  initializing() {}
 
   _askFor() {
     // Have Yeoman greet the user.

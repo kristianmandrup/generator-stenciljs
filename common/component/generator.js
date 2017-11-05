@@ -17,7 +17,11 @@ Sugar.String.extend()
 const {
   createArguments,
   createOptions
-} = require('./opts-args')
+} = require('./args-opts')
+
+const {
+  BaseGenerator
+} = require('../base')
 
 const {
   createTemplateData,
@@ -28,7 +32,7 @@ const {
   createFileCreator
 } = require('./file-creator')
 
-export class BaseComponentGenerator extends BaseGenerator {
+module.exports = class BaseComponentGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
     createArguments(this)

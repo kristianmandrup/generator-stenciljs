@@ -10,17 +10,21 @@ const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
 const beautify = require('json-beautify')
 
+const {
+  BaseGenerator
+} = require('../../common');
+
 // extend String with sugarjs API
 Sugar.String.extend()
-module.exports = class extends Generator {
+module.exports = class ModelGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
 
     this.argument('name', {
       type: String,
       required: false,
-      default: 'my-component',
-      desc: 'Name of your component'
+      default: 'my-model',
+      desc: 'Name of your model'
     });
 
     this.option('props', {
@@ -41,14 +45,14 @@ module.exports = class extends Generator {
 
   prompting() {
     // Have Yeoman greet the user.
-    const msg = yosay(`Welcome to ${chalk.red('stenciljs')} component generator`);
+    const msg = yosay(`Welcome to ${chalk.red('stenciljs')} model generator`);
     this.log(msg);
 
     const prompts = [{
       name: 'name',
       type: 'input',
-      default: this.options.name || 'my-component',
-      message: 'Name of your component'
+      default: this.options.name || 'my-model',
+      message: 'Name of your model'
     }, {
       name: 'propStr',
       type: 'input',

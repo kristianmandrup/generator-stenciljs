@@ -1,19 +1,22 @@
-export {
+const {
   Logger
-}
-from './logger'
+} = require('./logger')
 
-export {
+const {
   BaseGenerator
-}
-from './base'
+} = require('./base')
 
-export {
+const {
   BaseComponentGenerator
-}
-from './component'
+} = require('./component')
 
-export {
+const {
+  BaseBoilerplateGenerator
+} = require('./boilerplate')
+
+module.exports = {
+  Logger,
+  BaseGenerator,
+  BaseComponentGenerator,
   BaseBoilerplateGenerator
 }
-from './boilerplate'

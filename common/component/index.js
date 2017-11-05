@@ -1,14 +1,7 @@
-export {
-  BoilerplateGenerator
-}
-from './boilerplate'
-
-export {
+const {
   BaseComponentGenerator
-}
-from './base-component-generator'
+} = require('./generator')
 
-export {
+const {
   buildPrompts
-}
-from './build-prompts'
+} = require('./build-prompts')

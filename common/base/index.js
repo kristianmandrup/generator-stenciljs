@@ -1,6 +1,7 @@
+const Generator = require('yeoman-generator');
 const optionOrPrompt = require('yeoman-option-or-prompt');
 
-module.exports = class BaseGenerator extends Generator {
+class BaseGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
   }
@@ -14,7 +15,7 @@ module.exports = class BaseGenerator extends Generator {
     return this._logger = this._logger || createLogger(this._genName())
   }
 
-  get _packageJson() {
+  get pkg() {
     return this.fs.readJSON(this.destinationPath('package.json'), {});
   }
 
@@ -39,4 +40,8 @@ module.exports = class BaseGenerator extends Generator {
       this.props = extend(this.props, props);
     });
   }
+}
+
+module.exports = {
+  BaseGenerator
 }

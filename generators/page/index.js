@@ -1,12 +1,12 @@
 'use strict';
 const {
-  BaseComponentGenerator,
-} = require('../common');
+  BaseGenerator
+} = require('../../common');
 const Sugar = require('sugar');
 
 // extend String with sugarjs API
 Sugar.String.extend()
-module.exports = class extends BaseComponentGenerator {
+module.exports = class PageGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
 

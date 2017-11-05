@@ -1,8 +1,8 @@
-export function TemplateData(props) {
+function createTemplateData(props) {
   return new TemplateData(props)
 }
 
-export class TemplateData {
+class TemplateData {
   constructor(props) {
     this.props = props
     this.decorators = {}
@@ -218,9 +218,8 @@ export class TemplateData {
   }
 
   buildInterfaceProps() {
-    const interface = {}
-    this.interface = interface
-    interface.props = this.properties.names.map(name => {
+    this.interface = {}
+    this.interface.props = this.properties.names.map(name => {
       return `      ${name}?: any;`
     }).join('\n')
     return this
@@ -283,4 +282,9 @@ export class TemplateData {
       return acc = buildFun(acc, item)
     }, {})
   }
+}
+
+module.exports = {
+  createTemplateData,
+  TemplateData
 }

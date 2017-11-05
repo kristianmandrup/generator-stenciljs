@@ -1,4 +1,4 @@
-export function buildPrompts(options, defaults = {}) {
+function buildPrompts(options, defaults = {}) {
   let defName = defaults['name']
 
   const prompts = [{
@@ -92,4 +92,8 @@ export function buildPrompts(options, defaults = {}) {
   }]
 
   return prompts
+}
+
+module.exports = {
+  buildPrompts
 }
