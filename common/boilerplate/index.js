@@ -1,5 +1,7 @@
 'use strict';
-const Generator = require('yeoman-generator');
+const {
+  BaseGenerator
+} = require('../common');
 const _ = require('lodash');
 const extend = _.merge;
 const path = require('path');
@@ -7,7 +9,7 @@ const optionOrPrompt = require('yeoman-option-or-prompt');
 const downloadRepo = require('download-repo')
 const sao = require('sao')
 
-module.exports = class BoilerplateGenerator extends Generator {
+module.exports = class BaseBoilerplateGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
 
@@ -46,12 +48,24 @@ module.exports = class BoilerplateGenerator extends Generator {
     this.name = this.options.name
   }
 
+  get _defaultAppSource() {
+    return 'ionic-team/stencil-app-starter'
+  }
+
+  get _defaultComponentSource() {
+    return 'ionic-team/stencil-component-starter'
+  }
+
+  get _defaultSource() {
+    this.options.type === 'component' ? this._defaultComponentSource : this._defaultAppSource
+  }
+
   prompting() {
     const prompts = [{
       name: 'projectSource',
       type: 'input',
       when: !this.options.projectSource,
-      default: 'ionic-team/stencil-app-starter',
+      default: this._defaultSource,
       message: 'Boilerplate repo',
       store: true
     }, {

@@ -11,6 +11,6 @@ module.exports = class ElementGenerator extends BaseComponentGenerator {
   }
 
   end() {
-    this.success('Component module created, ready for use :)')
+    this.success('Element created and ready for use :)')
   }
 };

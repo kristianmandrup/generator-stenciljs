@@ -1,28 +1,38 @@
-export class BaseComponentGenerator extends Generator {
+'use strict';
+const {
+  BaseGenerator
+} = require('../common');
+
+export class ComponentGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
   }
 
   // either compose with boilerplate or element
-
   get _prompts() {
     return [{
       name: 'componentModule',
       type: confirm,
       default: false,
-      message: 'Full Component module',
+      message: 'Create separate component app',
     }]
+  }
+
+  _buildPrompts() {
+    return this._prompts
   }
 
   default () {
     if (this.props.componentModule) {
-      this.composeWith(require.resolve('../boilerplate'), {});
-    } else {
-      this.composeWith(require.resolve('../element'), {});
+      this.composeWith(require.resolve('../boilerplate'), {
+        type: 'component'
+      });
+      return
     }
+    this.composeWith(require.resolve('../element'), {});
   }
 
   end() {
-    // this.success('Component created :)')
+    this.success('Component created :)')
   }
 }

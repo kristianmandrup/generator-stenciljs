@@ -28,13 +28,11 @@ const {
   createFileCreator
 } = require('./file-creator')
 
-export class BaseComponentGenerator extends Generator {
+export class BaseComponentGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
     createArguments(this)
     createOptions(this)
-
-    this.logger = createLogger('component')
   }
 
   _lintEJS(template, options = {}) {
@@ -74,111 +72,25 @@ export class BaseComponentGenerator extends Generator {
     return nameMap
   }
 
-  _buildPrompts(prompts = []) {
-    return buildPrompts(this.options).concat(prompts)
-  }
-
   initializing() {
     this._welcomeMsg = `Welcome to ${chalk.red('stenciljs')} component generator`
   }
 
-  prompting() {
-    // Have Yeoman greet the user.
-    const msg = yosay(this._welcomeMsg);
-    this.log(msg);
-
-    const prompts = this._buildPrompts()
-
-    return this.prompt(prompts).then(props => {
-      this.props = extend(this.props, props);
-    });
+  _buildPrompts(prompts = []) {
+    return buildPrompts(this.options).concat(prompts)
   }
 
-  _createTemplateData() {
-    return createTemplateData(this.props)
+  get _dataCollector() {
+    return new CollectData(this.props)
   }
 
-  _createComponentModule() {
-
+  get _collectData() {
+    return this._dataCollector().collectAll()
   }
 
   writing() {
-    if (this.props.componentModule) {
-      this._createComponentModule()
-    }
-
-    const data = this._createTemplateData().buildAll()
-
-    const propMap = data.properties.obj
-    const propNames = data.properties.names
-
-    const name = this.props.name
-    const tagName = name.dasherize();
-    const className = name.camelize();
-
-    this.name = name
-    this.tagName = tagName
-    this.className = className
-
-    let dataServiceImports
-    if (this.props.useDataService) {
-      dataServiceImports = `import { ${className}DataService, I${className}DataServiceInjector } from './data-service'\n`
-    }
-
-    const {
-      componentName,
-      componentFileName,
-      dtsFileName,
-      interfaceFileName,
-      styleFileName,
-      testFileName
-    } = this._byConvention();
-
-    let {
-      styleFileExt,
-      testFileExt,
-      wrapperTagName,
-      testLib
-    } = this.props
-
-    wrapperTagName = wrapperTagName || 'div'
-    let openTag = `<${wrapperTagName}>`
-    let closeTag = `</${wrapperTagName}>`
-
-    const htmlElementName = `HTML${className}Element`
-
-    this.componentDir = `components/${componentName}`
-
-    let coreImports = ['Component', 'Prop'].join(',')
-
-    // this._lintEJS('component.tsx.tpl')
-    let componentDest = this.destinationPath(`${this.componentDir}/${componentFileName}.tsx`)
-
-    let declarations = data.blocks
-      .map(block => {
-        return Array.isArray(block) ? block.join('\n') : block;
-      })
-      .filter(txt => {
-        console.log('filter', txt)
-        return txt && !txt.isBlank()
-      }).join('\n')
-
-    // inside render
-    let displayBlocks = [className, displayProps].filter(txt => !txt.isBlank()).join('\n')
-
-    const fileCreator = createFileCreator({
-      tagName,
-      className,
-      styleFileExt,
-      styleFileName,
-      wrapperTagName,
-      openTag,
-      closeTag,
-      declarations,
-      displayBlocks,
-      dataServiceImports,
-      coreImports
-    })
+    const data = this._collectData
+    const fileCreator = createFileCreator(data)
 
     fileCreator.createAllFiles()
 

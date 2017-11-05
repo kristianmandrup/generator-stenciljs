@@ -1,6 +1,8 @@
 'use strict';
 const _ = require('lodash');
-const Generator = require('yeoman-generator');
+const {
+  BaseGenerator
+} = require('../common');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const extend = _.merge;
@@ -8,23 +10,21 @@ const parseAuthor = require('parse-author');
 const githubUsername = require('github-username');
 const path = require('path');
 const askName = require('inquirer-npm-name');
-const optionOrPrompt = require('yeoman-option-or-prompt');
-const {
-  BoilerplateGenerator
-} = require('../common')
 
-module.exports = class AppGenerator extends BoilerplateGenerator {
+module.exports = class AppGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
+
+    this.option('type', {
+      type: String,
+      required: false,
+      default: 'app',
+      desc: 'Type of app'
+    });
   }
 
   initializing() {
-    this.pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
-  }
-
-  _optionOrPrompt(prompts) {
-    const optPrompt = optionOrPrompt.bind(this)
-    return optPrompt(prompts)
+    this.pkg = this._pkgJson
   }
 
   _askFor() {

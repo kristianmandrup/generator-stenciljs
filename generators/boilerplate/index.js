@@ -1,5 +1,4 @@
-module.exports = class BoilerplateGenerator extends Generator {
-  constructor(args, options) {
-    super(args, options);
-  }
-}
+'use strict';
+const Generator = require('yeoman-generator');
+
+module.exports = class BoilerplateGenerator extends BaseBoilerplateGenerator {}

@@ -4,11 +4,16 @@ export {
 from './logger'
 
 export {
+  BaseGenerator
+}
+from './base'
+
+export {
   BaseComponentGenerator
 }
 from './component'
 
 export {
-  BoilerplateGenerator
+  BaseBoilerplateGenerator
 }
-from './component'
+from './boilerplate'

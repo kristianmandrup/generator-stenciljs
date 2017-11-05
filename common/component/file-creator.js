@@ -41,6 +41,7 @@ export class FileCreator {
 
 
   _createComponent(opts = {}) {
+    // this._lintEJS('component.tsx.tpl')
     this.ctx.fs.copyTpl(
       this.ctx.templatePath('component.tsx.tpl'),
       this.ctx.destinationPath(`${this.ctx.componentDir}/${componentFileName}.tsx`),

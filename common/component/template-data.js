@@ -1,10 +1,11 @@
-export function createTemplatethis(props) {
-  return new Templatethis(props)
+export function TemplateData(props) {
+  return new TemplateData(props)
 }
 
-export class Templatethis {
+export class TemplateData {
   constructor(props) {
     this.props = props
+    this.decorators = {}
   }
 
   get blocks() {
@@ -49,6 +50,7 @@ export class Templatethis {
             console.log(this.dataService.getData());
         });
     }\n`
+      this.decorators['Prop'] = true
     }
   }
 
@@ -56,27 +58,27 @@ export class Templatethis {
     const changeHandlers = {}
     this.changeHandlers = changeHandlers
     const {
-      eventEmitStr
-    } = this.props
-
-    const {
       changeList
     } = this.properties
 
-    changeHandlers.declarations = changeList.map(changeObj => {
-      let {
-        name,
-        type,
-        when
-      } = changeObj
-      const propClassName = name.camelize()
-      when = when || 'did'
-      return `  @PropWillChange('${name}')
-${when}Change${propClassName}(newValue: ${type}) {
-  console.log('${propClassName} will change', newValue)
-}`
-    }).join('\n')
-
+    if (changeList) {
+      changeHandlers.declarations = this.buildBlockList(changeList, changeObj => {
+        let {
+          name,
+          type,
+          when
+        } = changeObj
+        const propClassName = name.camelize()
+        when = when || 'did'
+        const whenClass = when.camelize()
+        const decoratorClass = `Prop${whenClass}Change`
+        return `  @${decoratorClass}('${name}')
+  ${when}Change${propClassName}(newValue: ${type}) {
+    console.log('${propClassName} will change', newValue)
+  }`
+      })
+      this.decorators[decoratorClass] = true
+    }
     return this
   }
 
@@ -98,13 +100,13 @@ ${when}Change${propClassName}(newValue: ${type}) {
       lifeCycleEvents
     } = this.props
 
-    lifecycleEvents.handlers = lifeCycleEvents.map(name => {
+    lifecycleEvents.handlers = this.buildBlockList(lifeCycleEvents, name => {
       let lifecycleName = name.camelize()
       let explanation = this.lifecycleExplainMap[lifecycleName]
       return `  component${lifecycleName}() {
   console.log('The component ${explanation}');
 }`
-    }).join('\n')
+    })
     return this
   }
 
@@ -119,12 +121,12 @@ ${when}Change${propClassName}(newValue: ${type}) {
 
     if (eventEmitStr) {
       emitEvents.names = this._strToList(eventEmitStr)
+      emitEvents.declarations = this.buildBlockList(emitEvents.names, eventName => {
+        eventName = eventName.camelize();
+        return `@Event() ${eventName}: EventEmitter`
+      })
+      this.decorators['Event'] = true
     }
-
-    emitEvents.declarations = emitEvents.names.map(eventName => {
-      eventName = eventName.camelize();
-      return `@Event() ${eventName}: EventEmitter`
-    }).join('\n')
     return this
   }
 
@@ -141,14 +143,14 @@ ${when}Change${propClassName}(newValue: ${type}) {
       events.names = this._strToList(eventStr)
     }
 
-    events.handlers = events.names.map(eventName => {
+    events.handlers = this.buildBlockList(events.names, eventName => {
       eventName = eventName.camelize();
       return `  handle${eventName}(event: UIEvent) {
       console.log('Received the ${eventName}', {
         event
       });
     }`
-    }).join('\n')
+    })
     return this
   }
 
@@ -161,7 +163,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
 
     if (listenStr) {
       listeners.names = this._strToList(listenStr)
-      listeners.display = listeners.names.reduce((acc, prop) => {
+      listeners.display = this.buildBlockObj(listeners.names, (acc, prop) => {
         let [name, type] = prop.split(':')
         let eventType = type || 'CustomEvent'
         let eventName = name.camelize(false)
@@ -171,6 +173,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
       }`
         return acc
       }).join('\n')
+      this.decorators['Listen'] = true
     }
     return this
   }
@@ -178,7 +181,6 @@ ${when}Change${propClassName}(newValue: ${type}) {
   _strToList(str) {
     return str.split(',').map(txt => tx.trim()).filter(txt => !txt.isBlank())
   }
-
 
   buildState() {
     const states = {}
@@ -188,13 +190,14 @@ ${when}Change${propClassName}(newValue: ${type}) {
     } = this.props
     if (stateStr) {
       states.names = this._strToList(stateStra)
-      states.declarations = states.names.reduce((acc, prop) => {
+      states.declarations = this.buildBlockObj(states.names, (acc, prop) => {
         let [name, type] = prop.split(':')
         type = type || 'any'
         let stateName = name.camelize(false)
         acc[key] = `  @State() ${stateName}: ${type};`
         return acc
       }).join('\n')
+      this.decorators['State'] = true
     }
     return this
   }
@@ -212,7 +215,7 @@ ${when}Change${propClassName}(newValue: ${type}) {
 
     if (propStr) {
       properties.list = this._strToList(propStr)
-      properties.obj = properties.list.reduce((acc, prop) => {
+      properties.obj = this.buildBlockObj(properties.list, (acc, prop) => {
         let [name, type, when] = prop.split(':')
         if (when) {
           properties.changeList.push({
@@ -223,17 +226,30 @@ ${when}Change${propClassName}(newValue: ${type}) {
         }
         acc[name] = type || 'string'
         return acc
-      }, {})
+      })
+
+      properties.names = Object.keys(properties.obj)
+      properties.declarations = this.buildBlockList(properties.names, name => {
+        return `  @Prop() ${name}: ${properties.obj[name]};`
+      })
+
+      properties.renderValues = this.buildBlockList(properties.names, name => {
+        return '        {this.' + name + '}'
+      })
+      this.decorators['Prop'] = true
     }
-
-    properties.names = Object.keys(properties.obj)
-    properties.declarations = properties.names.map(name => {
-      return `  @Prop() ${name}: ${properties.obj[name]};`
-    }).join('\n')
-
-    properties.renderValues = properties.names.map(name => {
-      return '        {this.' + name + '}'
-    }).join('\n')
     return this
+  }
+
+  buildBlockList(list, buildFun) {
+    return list.map(item => {
+      return buildFun(item)
+    }).join('\n')
+  }
+
+  buildBlockObj(list, buildFun) {
+    return list.reduce((acc, item) => {
+      return acc = buildFun(acc, item)
+    }, {})
   }
 }
