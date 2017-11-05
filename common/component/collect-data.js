@@ -12,8 +12,8 @@ export class CollectData {
     return createTemplateData(this.props)
   }
 
-  collectAll() {
-
+  get componentTargetDir() {
+    return this.props.componentTargetDir || 'components'
   }
 
   get dataServiceImports() {
@@ -30,21 +30,87 @@ export class CollectData {
   }
 
   get declarations() {
-    return this.data.blocks
+    return this.data.declarationBlocks
       .map(block => {
         return Array.isArray(block) ? block.join('\n') : block;
       })
       .filter(txt => {
-        console.log('filter', txt)
         return txt && !txt.isBlank()
       }).join('\n')
   }
 
+  get decorators() {
+    return this.data.decorators
+  }
+
+  get declarationClasses() {
+    return Object.keys(this.decorators).map(name => name.capitalize())
+  }
+
   // TODO: build from declarations generated!!
   get coreImports() {
-    let base = 'Component'
-    let declarationClasses = Object.keys(this.decorators).map(name => name.capitalize())
-    return [base, ...declarationClasses].join(',')
+    return ['Component', ...this.declarationClasses].join(',')
+  }
+
+  _byConvention() {
+    let method = `_by${this.props.convention.capitalize()}`
+    let model = this[method]()
+    let {
+      styleFileExt,
+      testFileExt,
+      testLib
+    } = this.props
+    model.style.ext = styleFileExt
+    model.test.ext = testFileExt
+    model.test.lib = testLib
+    return model
+  }
+
+  _byName() {
+    const name = this.tagName
+    const
+    const nameMap = {
+      component = {
+        name,
+        fileName: name
+      },
+      dts: {
+        fileName: name,
+      },
+      interface: {
+        fileName: name
+      },
+      style: {
+        fileName: name
+      },
+      test: {
+        fileName: name
+      }
+    }
+    return nameMap
+  }
+
+  _byType() {
+    const name = this.tagName
+    const nameMap = {
+      component: {
+        name: name,
+        fileName: 'component',
+      },
+      dts: {
+        fileName: 'definitions',
+      },
+      interface: {
+        fileName: 'interface'
+      },
+      style: {
+        fileName: 'styles'
+      },
+      test: {
+        fileName: 'unit'
+      }
+    }
+    return nameMap
   }
 
   get _collectData() {
@@ -59,43 +125,33 @@ export class CollectData {
       className: name.camelize()
     }
     this.model = model
-    this.tagName = tagName
-    this.className = className
-
-    const {
-      componentName,
-      componentFileName,
-      dtsFileName,
-      interfaceFileName,
-      styleFileName,
-      testFileName
-    } = this._byConvention();
-
-    let {
-      styleFileExt,
-      testFileExt,
-      testLib
-    } = this.props
-
-    const htmlElementName = `HTML${className}Element`
+    model.node = {
+      ...this._byConvention()
+    }
+    model.node.interface.htmlElementName = `HTML${model.className}Element`
 
     // TODO: prompt for path to use
-    this.componentDir = `components/${componentName}`
+    this.componentDir = `${componentTargetDir}/${model.component.name}`
+
+    const imports = [
+      ...dataServiceImports,
+      ...coreImports
+    ]
 
     // inside render
-    let displayBlocks = [className, displayProps].filter(txt => !txt.isBlank()).join('\n')
+    let displayBlocks = [
+      model.className,
+      displayProps
+    ].filter(txt => !txt.isBlank()).join('\n')
+
+    const tag = this.tag
 
     return {
-      tagName,
-      className,
-      styleFileExt,
-      styleFileName,
-      wrapperTagName,
+      model,
       tag,
       declarations,
       displayBlocks,
-      dataServiceImports,
-      coreImports
+      imports
     }
   }
 }

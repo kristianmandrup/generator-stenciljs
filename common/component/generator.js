@@ -41,37 +41,6 @@ export class BaseComponentGenerator extends BaseGenerator {
     let result = ejsLint(templateContent, options)
   }
 
-  _byConvention() {
-    let method = `_by${this.props.convention.capitalize()}`
-    return this[method]()
-  }
-
-  _byName() {
-    const name = this.tagName
-    const nameMap = {
-      componentName: name,
-      componentFileName: name,
-      dtsFileName: name,
-      interfaceFileName: name,
-      styleFileName: name,
-      testFileName: name
-    }
-    return nameMap
-  }
-
-  _byType() {
-    const name = this.tagName
-    const nameMap = {
-      componentName: name,
-      componentFileName: 'component',
-      dtsFileName: 'definition',
-      interfaceFileName: 'interface',
-      styleFileName: 'styles',
-      testFileName: 'unit'
-    }
-    return nameMap
-  }
-
   initializing() {
     this._welcomeMsg = `Welcome to ${chalk.red('stenciljs')} component generator`
   }
@@ -89,21 +58,58 @@ export class BaseComponentGenerator extends BaseGenerator {
   }
 
   writing() {
+    // model,
+    //  - model.className
+    //  ...
+    //  - model.node.interface.fileName
+    // tag,
+    // declarations,
+    // displayBlocks,
+    // imports
     const data = this._collectData
     const fileCreator = createFileCreator(data)
 
     fileCreator.createAllFiles()
 
-    this._registerInComponentBundle({
-      tagName
-    })
+    this._registerComponent(data.model)
   }
 
   createFileCreator(templateOpts) {
     createFileCreator(this, templateOpts)
   }
 
-  _registerInComponentBundle(opts = {}) {
+  isAlreadyRegistered(stencilCfg, tagName) {
+    return (stencilCfg.bundles.find(bundle => {
+      return bundle.components.find(component => {
+        // console.log('compare', {
+        //   component,
+        //   tagName
+        // })
+        return component == tagName
+      })
+    }))
+  }
+
+  get stencilCfgFilePath() {
+    return this.destinationPath('stencil.config.js')
+  }
+
+  get stencilCfg() {
+    return require(this.stencilCfgFilePath).config
+  }
+
+  registerInBundle() {
+    let xBundles = stencilCfg.bundles.concat(bundleEntry)
+    stencilCfg.bundles = xBundles
+
+    this.log(pretty(xBundles))
+
+    let jsonStr = pretty(stencilCfg)
+    let content = `exports.config = ${jsonStr}`
+    this.fs.write(stencilCfgFilePath.stencilCfgFilePath, content)
+  }
+
+  _registerComponent(opts = {}) {
     const jsonStringify = beautify // JSON.stringify
     const tagName = opts.tagName
 
@@ -116,32 +122,11 @@ export class BaseComponentGenerator extends BaseGenerator {
     const bundleEntry = {
       components: [tagName]
     }
-    let stencilCfgFilePath = this.destinationPath('stencil.config.js')
-
-    let stencilCfg = require(stencilCfgFilePath).config
-
-    if (stencilCfg.bundles.find(bundle => {
-        return bundle.components.find(component => {
-          // console.log('compare', {
-          //   component,
-          //   tagName
-          // })
-          return component == tagName
-        })
-      })) {
+    if (this.isAlreadyRegistered(this.stencilCfg, tagName)) {
       this.logger.warn(`${tagName} already registered in bundle.`)
       return
     }
-
-    let xBundles = stencilCfg.bundles.concat(bundleEntry)
-    stencilCfg.bundles = xBundles
-
-    this.log(pretty(xBundles))
-
-    let jsonStr = pretty(stencilCfg)
-    let content = `exports.config = ${jsonStr}`
-    this.fs.write(stencilCfgFilePath, content)
-
+    this.registerInBundle()
     this.logger.success(`${tagName} registration complete`)
   }
 }

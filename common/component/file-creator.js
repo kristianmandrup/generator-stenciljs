@@ -11,32 +11,11 @@ export class FileCreator {
 
   createAll() {
     this._createComponent()
-
-    this._createTsDefinitions({
-      className,
-      interfaceFileName
-    })
-    this._createInterface({
-      className,
-      interfaceFileName,
-      htmlElementName,
-      interfaceProps,
-      componentFileName
-    })
-    this._createStyles({
-      tagName
-    })
-    this._createTests({
-      tagName,
-      className,
-      propMap,
-      propNames,
-      propTests,
-      componentFileName
-    })
-    this._createDataService({
-      className
-    })
+    this._createTsDefinitions(templateOpts)
+    this._createInterface(templateOpts)
+    this._createStyles(templateOpts)
+    this._createTests(templateOpts)
+    this._createDataService(templateOpts)
   }
 
 
@@ -60,10 +39,6 @@ export class FileCreator {
 
 
   _createInterface(opts = {}) {
-    const interfaceProps = propNames.map(name => {
-      return `      ${name}?: any;`
-    }).join('\n')
-
     this.ctx.fs.copyTpl(
       this.ctx.templatePath('interface.ts.tpl'),
       this.ctx.destinationPath(`${this.ctx.componentDir}/${interfaceFileName}.ts`),
@@ -100,9 +75,9 @@ export class FileCreator {
     if (this.ctx.props.useDataService) {
       this.ctx.fs.copyTpl(
         this.ctx.templatePath(`data-service.ts.tpl`),
-        this.ctx.destinationPath(`${this.ctx.componentDir}/data-service.ts`), {
-          className
-        })
+        this.ctx.destinationPath(`${this.ctx.componentDir}/data-service.ts`),
+        opts
+      )
     }
   }
 }

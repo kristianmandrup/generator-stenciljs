@@ -8,19 +8,24 @@ export class TemplateData {
     this.decorators = {}
   }
 
-  get blocks() {
+  get declarationNames() {
     return [
-      this.states.declarations,
-      this.properties.declarations,
-      this.eventHandlers.declarations,
-      this.changeHandlers.declarations,
-      this.lifecycleEventHandlers.declarations,
-      this.eventEmitters.declarations,
-      this.listeners.declarations,
-      this.componentDataConnect.declarations
+      'states',
+      'properties',
+      'eventHandlers',
+      'changeHandlers',
+      'lifecycleEventHandlers',
+      'eventEmitters',
+      'listeners',
+      'componentDataConnect'
     ]
   }
 
+  get declarationBlocks() {
+    return this.declarationNames.map(name => {
+      return this[name].declarations
+    })
+  }
 
   buildAll() {
     this
@@ -32,6 +37,7 @@ export class TemplateData {
       .buildState()
       .buildListeners()
       .buildProps()
+      .buildInterfaceProps()
 
     return this
   }
@@ -52,6 +58,7 @@ export class TemplateData {
     }\n`
       this.decorators['Prop'] = true
     }
+    return this
   }
 
   buildChangeEventHandlers() {
@@ -178,10 +185,6 @@ export class TemplateData {
     return this
   }
 
-  _strToList(str) {
-    return str.split(',').map(txt => tx.trim()).filter(txt => !txt.isBlank())
-  }
-
   buildState() {
     const states = {}
     this.states = states
@@ -199,6 +202,15 @@ export class TemplateData {
       }).join('\n')
       this.decorators['State'] = true
     }
+    return this
+  }
+
+  buildInterfaceProps() {
+    const interface = {}
+    this.interface = interface
+    interface.props = this.properties.names.map(name => {
+      return `      ${name}?: any;`
+    }).join('\n')
     return this
   }
 
@@ -229,16 +241,23 @@ export class TemplateData {
       })
 
       properties.names = Object.keys(properties.obj)
+
+      // Prop declarations
       properties.declarations = this.buildBlockList(properties.names, name => {
         return `  @Prop() ${name}: ${properties.obj[name]};`
       })
 
-      properties.renderValues = this.buildBlockList(properties.names, name => {
+      // goes in the render method of component
+      properties.renderProps = this.buildBlockList(properties.names, name => {
         return '        {this.' + name + '}'
       })
       this.decorators['Prop'] = true
     }
     return this
+  }
+
+  _strToList(str) {
+    return str.split(',').map(txt => tx.trim()).filter(txt => !txt.isBlank())
   }
 
   buildBlockList(list, buildFun) {
