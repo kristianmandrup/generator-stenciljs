@@ -7,7 +7,7 @@ import {
 
 class <%= className %> {
   // props
-  <%= declareProps %>
+  <%= declaredProps %>
 
   constructor() {
     // add observable props and action handlers

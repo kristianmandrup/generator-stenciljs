@@ -31,14 +31,21 @@ module.exports = class ModelGenerator extends BaseGenerator {
       type: String,
       required: false,
       default: '',
-      desc: 'Comma separated Props',
+      desc: 'Comma separated props',
     });
 
-    this.option('events', {
+    this.option('obsProps', {
       type: String,
       required: false,
       default: '',
-      desc: 'Comma separated Event handlers',
+      desc: 'Comma separated observable props',
+    });
+
+    this.option('actions', {
+      type: String,
+      required: false,
+      default: '',
+      desc: 'Comma separated action handlers',
     });
   }
 
@@ -59,11 +66,16 @@ module.exports = class ModelGenerator extends BaseGenerator {
       default: this.options.props,
       message: 'Props (name:string,age:number ...)',
     }, {
-      name: 'eventStr',
+      name: 'obsPropsStr',
       type: 'input',
-      default: this.options.events,
-      message: 'Event handlers (activate,execute, ...)',
-    }, {}]
+      default: this.options.obsProps,
+      message: 'Observable props (name:string,age:number ...)',
+    }, {
+      name: 'actionStr',
+      type: 'input',
+      default: this.options.actions,
+      message: 'Action handlers (activate,execute, ...)',
+    }]
 
     return this.prompt(prompts).then(props => {
       this.props = extend(this.props, props);
@@ -76,6 +88,12 @@ module.exports = class ModelGenerator extends BaseGenerator {
     const className = name.camelize();
     const componentDir = this.props.componentDir || 'components'
 
+    const {
+      propStr,
+      obsPropsStr,
+      actionStr
+    } = this.props
+
     let propList = []
     let propMap = {}
 
@@ -83,19 +101,35 @@ module.exports = class ModelGenerator extends BaseGenerator {
       propList = propStr.split(',').filter(name => !name.isBlank()).map(name => name.camelize(false))
       propMap = propList.reduce((acc, prop) => {
         let [name, type] = prop.split(':')
-        acc[propName] = type || 'any'
+        acc[name] = type || 'any'
         return acc
       }, {})
     }
+    let propNames = Object.keys(propMap)
+
+    // TODO: avoid duplication
+    let obsPropList = []
+    let obsPropMap = {}
+
+    if (obsPropsStr) {
+      obsPropList = obsPropsStr.split(',').filter(name => !name.isBlank()).map(name => name.camelize(false))
+      obsPropMap = obsPropList.reduce((acc, prop) => {
+        let [name, type] = prop.split(':')
+        acc[name] = type || 'any'
+        return acc
+      }, {})
+    }
+    let obsPropNames = Object.keys(obsPropMap)
 
     const declaredProps = propNames.map(name => {
       return `  ${name}: ${propMap[name]};`
     }).join('\n')
 
     const observableProps = obsPropNames.map(name => {
-      return `      ${name}: ${propMap[name]};`
+      return `      ${name}: ${obsPropMap[name]};`
     }).join('\n')
 
+    const actionNames = actionStr.split(',').filter(name => !name.isBlank()).map(name => name.camelize(false))
 
     const actionsHandlers = actionNames.map(name => {
       let actionName = name.camelize(false)
@@ -113,7 +147,6 @@ module.exports = class ModelGenerator extends BaseGenerator {
     this.fs.copyTpl(
       this.templatePath('store.ts.tpl'),
       this.destinationPath(`${componentDir}/stores/${storeFileName}.ts`), {
-        tagName,
         className,
         declaredProps,
         observableProps,
