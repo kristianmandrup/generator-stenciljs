@@ -5,3 +5,8 @@ const {
 const {
   buildPrompts
 } = require('./build-prompts')
+
+module.exports = {
+  BaseComponentGenerator,
+  buildPrompts
+}

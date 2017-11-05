@@ -15,6 +15,10 @@ const {
 Sugar.String.extend()
 
 const {
+  buildPrompts
+} = require('./build-prompts')
+
+const {
   createArguments,
   createOptions
 } = require('./args-opts')
@@ -32,7 +36,7 @@ const {
   createFileCreator
 } = require('./file-creator')
 
-module.exports = class BaseComponentGenerator extends BaseGenerator {
+class BaseComponentGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
     createArguments(this)
@@ -45,12 +49,21 @@ module.exports = class BaseComponentGenerator extends BaseGenerator {
     let result = ejsLint(templateContent, options)
   }
 
+  get _defaults() {
+    return {
+      name: {
+        default: 'my-component',
+        message: 'Component name'
+      }
+    }
+  }
+
   initializing() {
     this._welcomeMsg = `Welcome to ${chalk.red('stenciljs')} component generator`
   }
 
   _buildPrompts(prompts = []) {
-    return buildPrompts(this.options).concat(prompts)
+    return buildPrompts(this.options, this._defaults).concat(prompts)
   }
 
   get _dataCollector() {
@@ -133,4 +146,8 @@ module.exports = class BaseComponentGenerator extends BaseGenerator {
     this.registerInBundle()
     this.logger.success(`${tagName} registration complete`)
   }
+}
+
+module.exports = {
+  BaseComponentGenerator
 }

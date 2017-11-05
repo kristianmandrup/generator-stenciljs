@@ -1,9 +1,12 @@
-function createLogger(label) {
-  return new Logger(label)
+const chalk = require('chalk');
+
+function createLogger(ctx, label) {
+  return new Logger(ctx, label)
 }
 
 class Logger {
-  constructor(label) {
+  constructor(ctx, label) {
+    this.ctx = ctx
     this.label = label
   }
 
@@ -48,7 +51,7 @@ class Logger {
     let write = chalk[format]
     write = modifier ? write[modifier] : write
     let formatLabel = write(label)
-    this.log(`${formatLabel} ${msg}`)
+    this.ctx.log(`${formatLabel} ${msg}`)
   }
 }
 

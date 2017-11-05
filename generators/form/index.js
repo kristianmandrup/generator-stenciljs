@@ -34,7 +34,7 @@ module.exports = class FormGenerator extends BaseGenerator {
   get _defaults() {
     return {
       name: {
-        default: 'my-Form',
+        default: 'my-form',
         message: 'Form name'
       }
     }

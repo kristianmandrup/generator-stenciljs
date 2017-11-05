@@ -9,7 +9,7 @@ const optionOrPrompt = require('yeoman-option-or-prompt');
 const downloadRepo = require('download-repo')
 const sao = require('sao')
 
-module.exports = class BaseBoilerplateGenerator extends BaseGenerator {
+class BaseBoilerplateGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
 
@@ -137,4 +137,8 @@ module.exports = class BaseBoilerplateGenerator extends BaseGenerator {
   end() {
     this.log('Boilerplate ready :)')
   }
+}
+
+module.exports = {
+  BaseBoilerplateGenerator
 }

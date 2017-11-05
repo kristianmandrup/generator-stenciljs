@@ -1,9 +1,9 @@
 'use strict';
 const {
   BaseGenerator
-} = require('../common');
+} = require('../../common');
 
-export class ComponentGenerator extends BaseGenerator {
+module.exports = class ComponentGenerator extends BaseGenerator {
   constructor(args, options) {
     super(args, options);
   }
@@ -12,7 +12,7 @@ export class ComponentGenerator extends BaseGenerator {
   get _prompts() {
     return [{
       name: 'componentModule',
-      type: confirm,
+      type: 'confirm',
       default: false,
       message: 'Create separate component app',
     }]
@@ -20,6 +20,10 @@ export class ComponentGenerator extends BaseGenerator {
 
   _buildPrompts() {
     return this._prompts
+  }
+
+  prompting() {
+    return super.prompting()
   }
 
   default () {
