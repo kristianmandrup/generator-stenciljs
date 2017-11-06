@@ -1,6 +1,10 @@
 function buildPrompts(options, defaults = {}) {
   let defName = defaults['name']
 
+  if (!defName) {
+    throw new Error('buildPrompts: Missing name defaults for prompt')
+  }
+
   const prompts = [{
     name: 'name',
     type: 'input',
@@ -97,8 +101,6 @@ function buildPrompts(options, defaults = {}) {
       return !options[prompt.name]
     })
   }
-
-
   return prompts
 }
 

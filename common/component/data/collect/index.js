@@ -1,9 +1,6 @@
 const {
-  byConvention
-} = require('./name-conventions')
-const {
   Loggable
-} = require('../../../loggable')
+} = require('../../../logger')
 const {
   Model
 } = require('./model')
@@ -18,7 +15,6 @@ const {
 } = require('./tag')
 
 module.exports = {
-  byConvention,
   Loggable,
   Model,
   Declarations,

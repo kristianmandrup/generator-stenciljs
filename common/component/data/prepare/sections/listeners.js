@@ -1,8 +1,8 @@
 const {
   BasePrepare
-} = require('./base-prepare')
+} = require('./_base')
 
-class DataConnect extends BasePrepare {
+class Listeners extends BasePrepare {
   constructor(model = {}, opts = {}) {
     super(model, opts)
     this.listenStr = props.listenStr

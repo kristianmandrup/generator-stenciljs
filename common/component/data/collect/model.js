@@ -2,6 +2,10 @@ const {
   BaseCollector
 } = require('./_base')
 
+const {
+  byConvention
+} = require('./_name-conventions')
+
 class Model extends BaseCollector {
   constructor(ctx, opts) {
     super(ctx, opts)

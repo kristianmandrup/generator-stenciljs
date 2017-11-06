@@ -1,6 +1,6 @@
 const {
   Loggable
-} = require('../logger')
+} = require('../../../logger')
 
 function createTemplator(ctx, templateOpts) {
   return new Templator(ctx, templateOpts)
@@ -23,12 +23,17 @@ class Templator extends Loggable {
     this.destinationPath = ctx.destinationPath.bind(ctx)
   }
 
-  createTemplate(templatePath, destPath, data) {
+  createTemplate(opts = {}) {
+    const {
+      templatePath,
+      destPath,
+      data
+    } = opts
     this.fs.copyTpl(
       this.templatePath(templatePath),
       this.destinationPath(destPath),
-      data,
-    );
+      data
+    )
   }
 }
 

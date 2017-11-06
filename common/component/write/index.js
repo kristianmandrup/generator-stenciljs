@@ -1,6 +1,6 @@
 const {
   Loggable
-} = require('../logger')
+} = require('../../logger')
 const {
   Templator
 } = require('./templator')
@@ -82,12 +82,11 @@ class FileCreator extends Loggable {
 
   interfaceTplArgs(opts = {}) {
     const {
-      interface,
       component
     } = this.model
     return {
       template: 'interface.ts.tpl',
-      destination: `${component.dir}/${interface.fileName}.ts`
+      destination: `${component.dir}/${this.model.interface.fileName}.ts`
     }
   }
 

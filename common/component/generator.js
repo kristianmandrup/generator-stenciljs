@@ -1,5 +1,4 @@
 'use strict';
-const Generator = require('yeoman-generator');
 const _ = require('lodash');
 const chalk = require('chalk');
 const yosay = require('yosay');
@@ -21,7 +20,7 @@ const {
   prepare,
   createArguments,
   createOptions
-} = require('.')
+} = require('./imports')
 
 class BaseComponentGenerator extends BaseGenerator {
   constructor(args, options) {

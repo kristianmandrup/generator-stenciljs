@@ -1,5 +1,6 @@
 const {
-  Logger
+  Logger,
+  Loggable
 } = require('./logger')
 
 const {
@@ -16,6 +17,7 @@ const {
 
 module.exports = {
   Logger,
+  Loggable,
   BaseGenerator,
   BaseComponentGenerator,
   BaseBoilerplateGenerator

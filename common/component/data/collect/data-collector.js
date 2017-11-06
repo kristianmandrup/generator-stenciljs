@@ -2,6 +2,10 @@ const {
   createTemplateData
 } = require('./template-data')
 
+const {
+  byConvention
+} = require('./_name-conventions')
+
 function createDataCollector(props) {
   return new DataCollector(props)
 }

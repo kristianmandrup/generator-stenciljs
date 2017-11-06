@@ -1,5 +1,6 @@
 const Generator = require('yeoman-generator');
 const optionOrPrompt = require('yeoman-option-or-prompt');
+const yosay = require('yosay');
 const _ = require('lodash');
 const extend = _.merge;
 const {

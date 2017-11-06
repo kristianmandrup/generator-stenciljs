@@ -1,6 +1,6 @@
 const {
   BasePrepare
-} = require('./base-prepare')
+} = require('./_base')
 
 class DataConnect extends BasePrepare {
   constructor(model = {}, opts = {}) {

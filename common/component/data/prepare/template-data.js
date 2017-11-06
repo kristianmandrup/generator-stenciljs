@@ -3,7 +3,7 @@ Sugar.String.extend()
 
 const {
   Loggable
-} = require('../logger')
+} = require('../../../logger')
 
 const {
   ChangeEventHandlers,

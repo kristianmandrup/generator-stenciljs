@@ -1,3 +1,7 @@
+const {
+  Loggable
+} = require('../../../logger')
+
 function createRegistrator(ctx, opts) {
   return new Registrator(ctx, opts)
 }
@@ -59,5 +63,6 @@ class Registrator extends Loggable {
 }
 
 module.exports = {
+  createRegistrator,
   Registrator
 }

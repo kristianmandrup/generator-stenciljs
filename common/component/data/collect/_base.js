@@ -1,6 +1,6 @@
 const {
   Loggable
-} = require('../../../loggable')
+} = require('../../../logger')
 
 class BaseCollector extends Loggable {
   /**
@@ -19,4 +19,8 @@ class BaseCollector extends Loggable {
     this.model = ctx.model
     this.props = ctx.props
   }
+}
+
+module.exports = {
+  BaseCollector
 }
