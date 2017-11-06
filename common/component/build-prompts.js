@@ -91,6 +91,14 @@ function buildPrompts(options, defaults = {}) {
     message: 'Connect to a data service'
   }]
 
+  if (options.skip) {
+    // filter away any prompt object whose name is found in options object
+    prompts = prompts.filter(prompt => {
+      return !options[prompt.name]
+    })
+  }
+
+
   return prompts
 }
 

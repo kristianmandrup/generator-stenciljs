@@ -1,11 +1,12 @@
-export function byConvention(convention, model) {
+function byConvention(convention, model) {
   return new NameConvention(convention, model).decideNames()
 }
 
-export class NameConvention {
+class NameConvention {
   constructor(convention, model) {
     this.convention = convention
     this.model = model
+    this.tagName = model.tag.name
   }
 
   filePath(model) {
@@ -28,12 +29,10 @@ export class NameConvention {
     return model
   }
 
-
   _byName() {
     const name = this.tagName
-    const
     const nameMap = {
-      component = {
+      component: {
         name,
         fileName: name
       },
@@ -75,4 +74,9 @@ export class NameConvention {
     }
     return nameMap
   }
+}
+
+module.exports = {
+  NameConvention,
+  byConvention
 }

@@ -8,6 +8,13 @@ function createArguments(ctx) {
 }
 
 function createOptions(ctx) {
+  ctx.option('skip', {
+    type: Boolean,
+    required: false,
+    default: false,
+    desc: 'Skip prompts for any option or argument passed',
+  });
+
   ctx.option('props', {
     type: String,
     required: false,

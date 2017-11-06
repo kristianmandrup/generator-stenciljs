@@ -3,7 +3,7 @@ const optionOrPrompt = require('yeoman-option-or-prompt');
 const _ = require('lodash');
 const extend = _.merge;
 const {
-  createLogger
+  createGenLogger
 } = require('../logger')
 
 class BaseGenerator extends Generator {
@@ -17,7 +17,7 @@ class BaseGenerator extends Generator {
   }
 
   get logger() {
-    return this._logger = this._logger || createLogger(this, this._genName)
+    return this._logger = this._logger || createGenLogger(this, this._genName)
   }
 
   get pkg() {

@@ -17,6 +17,10 @@ module.exports = class ElementGenerator extends BaseComponentGenerator {
     return super.prompting()
   }
 
+  writing() {
+    return super.writing()
+  }
+
   end() {
     this.logger.success('Element created and ready for use :)')
   }

@@ -1,12 +1,16 @@
-import {
+const {
   byConvention
-} from './name-conventions'
+} = require('./name-conventions')
 
-export function CollectData(props) {
-  return new CollectData(props)
+const {
+  createTemplateData
+} = require('./template-data')
+
+function createDataCollector(props) {
+  return new DataCollector(props)
 }
 
-export class CollectData {
+class DataCollector {
   constructor(props) {
     this.props = props
     this.data = this._createTemplateData().buildAll()
@@ -25,16 +29,20 @@ export class CollectData {
     return `import { ${model.className}DataService, I${model.className}DataServiceInjector } from './data-service'\n`
   }
 
-  get tag() {
+  buildTag() {
     const containerTagName = this.props.wrapperTagName || 'div'
     return {
-      name: this.name.dasherize(),
+      name: this.props.name.dasherize(),
       open: `<${containerTagName}>`,
       close: `</${containerTagName}>`
     }
   }
 
-  get declarations() {
+  get tag() {
+    return this._tag = this._tag || this.buildTag()
+  }
+
+  buildDeclarations() {
     return this.data.declarationBlocks
       .map(block => {
         return Array.isArray(block) ? block.join('\n') : block;
@@ -42,6 +50,10 @@ export class CollectData {
       .filter(txt => {
         return txt && !txt.isBlank()
       }).join('\n')
+  }
+
+  get declarations() {
+    return this._declarations = this._declarations || this.buildDeclarations()
   }
 
   _byConvention() {
@@ -53,7 +65,7 @@ export class CollectData {
   }
 
   get declarationClasses() {
-    return Object.keys(this.decorators).map(name => name.capitalize())
+    return this._classes = this._classes || Object.keys(this.decorators).map(name => name.capitalize())
   }
 
   // TODO: build from declarations generated!!
@@ -61,46 +73,72 @@ export class CollectData {
     return ['Component', ...this.declarationClasses].join(',')
   }
 
-  get _collectData() {
+  get imports() {
+    const importsMap = {
+      dataService: this.dataServiceImports,
+      core: this.coreImports
+    }
+
+    return [
+      importsMap.dataService,
+      `import { ${importsMap.core} } from '@stencil/core'`
+    ].join(' ')
+  }
+
+  buildModel() {
     const {
       data
     } = this
-
+    const name = this.props.name
     const model = {
       props: data.properties,
-      name: this.props.name,
-      tag: this.tag,
-      className: name.camelize()
+      component: {
+        name: name.camelize(false),
+        tag: this.tag,
+        className: name.camelize()
+      }
     }
-    this.model = model
+
+    // TODO: prompt for path to use
+    model.componentDir = `${this.componentTargetDir}/${model.component.name}`
+    return model
+  }
+
+  richModel() {
+    const model = this.model
     model.node = {
       ...this._byConvention()
     }
     model.node.interface.htmlElementName = `HTML${model.className}Element`
 
-    // TODO: prompt for path to use
-    this.componentDir = `${componentTargetDir}/${model.component.name}`
-
-    const imports = {
-      dataService: dataServiceImports,
-      core: coreImports
-    }
-
-    const imports = [
-      imports.dataService,
-      `import { ${imports.core} } from '@stencil/core'`
-    ].join(' ')
-
     // inside render
     model.tag.content = [
       model.className,
-      displayProps
+      data.properties.renderProps
     ].filter(txt => !txt.isBlank()).join('\n')
 
-    return {
+    return model
+  }
+
+  get model() {
+    return this._model = this._model || this.buildModel()
+  }
+
+  collectAll() {
+    const {
       model,
       declarations,
       imports
+    } = this
+    return {
+      imports,
+      model,
+      declarations
     }
   }
+}
+
+module.exports = {
+  createDataCollector,
+  DataCollector
 }

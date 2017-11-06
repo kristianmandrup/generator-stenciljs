@@ -2,14 +2,29 @@ function createFileCreator(ctx, templateOpts) {
   return new FileCreator(ctx, templateOpts)
 }
 
+const {
+  Loggable
+} = require('../logger')
 
-class FileCreator {
-  constructor(ctx, templateOpts = {}) {
+
+class FileCreator extends Loggable {
+  constructor(ctx, templateData, opts = {}) {
+    super(opts)
+    if (!(ctx && templateData)) {
+      this.handleError('FileCreator', 'must take a Generator (ctx) and template data (Object) arguments', {
+        ctx,
+        templateData
+      })
+    }
+
     this.ctx = ctx
-    this.templateOpts = templateOpts
+    this.templateOpts = templateData
+    this.fs = ctx.fs
+    this.templatePath = ctx.templatePath.bind(ctx)
+    this.destinationPath = ctx.destinationPath.bind(ctx)
   }
 
-  createAll() {
+  createAllFiles() {
     this._createComponent()
     this._createTsDefinitions(templateOpts)
     this._createInterface(templateOpts)
@@ -21,9 +36,9 @@ class FileCreator {
 
   _createComponent(opts = {}) {
     // this._lintEJS('component.tsx.tpl')
-    this.ctx.fs.copyTpl(
-      this.ctx.templatePath('component.tsx.tpl'),
-      this.ctx.destinationPath(`${this.ctx.componentDir}/${componentFileName}.tsx`),
+    this.fs.copyTpl(
+      this.templatePath('component.tsx.tpl'),
+      this.destinationPath(`${this.componentDir}/${componentFileName}.tsx`),
       opts,
       ...opts.node.component
     );
@@ -31,9 +46,9 @@ class FileCreator {
 
 
   _createTsDefinitions(opts = {}) {
-    this.ctx.fs.copyTpl(
-      this.ctx.templatePath('definitions.d.ts.tpl'),
-      this.ctx.destinationPath(`${this.ctx.componentDir}/${dtsFileName}.d.ts`),
+    this.fs.copyTpl(
+      this.templatePath('definitions.d.ts.tpl'),
+      this.destinationPath(`${this.componentDir}/${dtsFileName}.d.ts`),
       opts,
       ...opts.node.definition
     );
@@ -41,27 +56,27 @@ class FileCreator {
 
 
   _createInterface(opts = {}) {
-    this.ctx.fs.copyTpl(
-      this.ctx.templatePath('interface.ts.tpl'),
-      this.ctx.destinationPath(`${this.ctx.componentDir}/${interfaceFileName}.ts`),
+    this.fs.copyTpl(
+      this.templatePath('interface.ts.tpl'),
+      this.destinationPath(`${this.componentDir}/${interfaceFileName}.ts`),
       opts,
       ...opts.node.interface
     );
   }
 
   _createStyles(opts = {}) {
-    this.ctx.fs.copyTpl(
-      this.ctx.templatePath(`styles/styles.${styleFileExt}.tpl`),
-      this.ctx.destinationPath(`${this.ctx.componentDir}/styles/${styleFileName}.${styleFileExt}`),
+    this.fs.copyTpl(
+      this.templatePath(`styles/styles.${styleFileExt}.tpl`),
+      this.destinationPath(`${this.componentDir}/styles/${styleFileName}.${styleFileExt}`),
       opts,
       ...opts.node.style
     );
   }
 
   _createTests(opts = {}) {
-    this.ctx.fs.copyTpl(
-      this.ctx.templatePath(`test/${testLib}.spec.ts.tpl`),
-      this.ctx.destinationPath(`${this.ctx.componentDir}/test/${testFileName}.${testFileExt}`),
+    this.fs.copyTpl(
+      this.templatePath(`test/${testLib}.spec.ts.tpl`),
+      this.destinationPath(`${this.componentDir}/test/${testFileName}.${testFileExt}`),
       opts,
       ...opts.node.tests
     )
@@ -69,10 +84,10 @@ class FileCreator {
 
 
   _createDataService(opts = {}) {
-    if (this.ctx.props.useDataService) {
-      this.ctx.fs.copyTpl(
-        this.ctx.templatePath(`data-service.ts.tpl`),
-        this.ctx.destinationPath(`${this.ctx.componentDir}/data-service.ts`),
+    if (this.props.useDataService) {
+      this.fs.copyTpl(
+        this.templatePath(`data-service.ts.tpl`),
+        this.destinationPath(`${this.componentDir}/data-service.ts`),
         opts,
         ...opts.node.dataService
       )

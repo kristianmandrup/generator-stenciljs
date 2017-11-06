@@ -4,7 +4,6 @@ const _ = require('lodash');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const extend = _.merge;
-const Sugar = require('sugar');
 const path = require('path');
 const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
@@ -12,6 +11,7 @@ const beautify = require('json-beautify')
 const {
   createLogger
 } = require('../logger')
+const Sugar = require('sugar');
 Sugar.String.extend()
 
 const {
@@ -31,6 +31,10 @@ const {
   createTemplateData,
   TemplateData
 } = require('./template-data')
+
+const {
+  createDataCollector
+} = require('./data-collector')
 
 const {
   createFileCreator
@@ -66,15 +70,16 @@ class BaseComponentGenerator extends BaseGenerator {
     return buildPrompts(this.options, this._defaults).concat(prompts)
   }
 
-  get _dataCollector() {
-    return new CollectData(this.props)
+  get dataCollector() {
+    return createDataCollector(this.props)
   }
 
-  get _collectData() {
-    return this._dataCollector().collectAll()
+  get collectData() {
+    return this.dataCollector.collectAll()
   }
 
   writing() {
+    this.logger.info('writing files')
     // model,
     //  - model.className
     //  ...
@@ -83,8 +88,8 @@ class BaseComponentGenerator extends BaseGenerator {
     // declarations,
     // displayBlocks,
     // imports
-    const data = this._collectData
-    const fileCreator = createFileCreator(data)
+    const data = this.collectData
+    const fileCreator = createFileCreator(this, data)
 
     fileCreator.createAllFiles()
 
