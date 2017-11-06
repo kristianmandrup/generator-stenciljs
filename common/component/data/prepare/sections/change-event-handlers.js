@@ -10,7 +10,6 @@ class ChangeEventHandlers extends BasePrepare {
   prepareData({
     changeList
   }) {
-
     changeList ? build(changeList).values : {}
   }
 

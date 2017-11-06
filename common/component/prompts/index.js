@@ -11,10 +11,25 @@ function buildPrompts(options, defaults = {}) {
     default: options.name || defName.default || 'my-component',
     message: defName.message || 'Component name'
   }, {
+    name: 'useShadowDOM',
+    type: 'confirm',
+    default: options.useShadow || false,
+    message: 'Add Shadow DOM'
+  }, {
+    name: 'assetsDir',
+    type: 'input',
+    default: options.assetsDir || 'assets',
+    message: 'Assets dir'
+  }, {
     name: 'propStr',
     type: 'input',
     default: options.props,
     message: 'Props (name:string,age:number ...)',
+  }, {
+    name: 'apiMethodsStr',
+    type: 'input',
+    default: options.apiMethods,
+    message: 'API methods (showToast,addItem, ...)',
   }, {
     name: 'eventStr',
     type: 'input',

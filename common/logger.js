@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-function createLogger(ctxName, opts) {
+function createLogger(ctxName, opts = {}) {
   return new Logger(ctxName, opts)
 }
 
@@ -11,6 +11,7 @@ function createGenLogger(ctx, label) {
 class Loggable {
   constructor(opts = {}) {
     this.logger = createLogger(this, opts)
+    this.logging = opts.logging
   }
 
   log(label, ...msgs) {
@@ -25,7 +26,7 @@ class Loggable {
     }
   }
 
-  handleError(label, msg, data) {
+  handleError(msg, data) {
     this.error(msg, data)
     throw new Error(msg)
   }

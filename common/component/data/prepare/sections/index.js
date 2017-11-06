@@ -2,6 +2,9 @@ const {
   ChangeEventHandlers
 } = require('./change-event-handlers')
 const {
+  ApiMethods
+} = require('./api-methods')
+const {
   DataConnect
 } = require('./data-connect')
 const {
@@ -27,6 +30,7 @@ const {
 } = require('./state')
 
 module.exports = {
+  ApiMethods,
   ChangeEventHandlers,
   DataConnect,
   EmitEventHandlers,

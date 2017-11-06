@@ -6,6 +6,7 @@ const {
 } = require('../../../logger')
 
 const {
+  ApiMethods,
   ChangeEventHandlers,
   DataConnect,
   EmitEventHandlers,
@@ -19,6 +20,7 @@ const {
 
 
 const prepareClasses = [
+  ApiMethods,
   ChangeEventHandlers,
   DataConnect,
   EmitEventHandlers,
@@ -54,6 +56,7 @@ class TemplateData extends Loggable {
   get declarationNames() {
     return [
       'properties',
+      // 'apiMethods',
       // 'changeHandlers',
       // 'states',
       // 'eventHandlers',
@@ -73,6 +76,7 @@ class TemplateData extends Loggable {
   buildAll() {
     this
       .buildProps()
+      .buildApiMethods()
       .buildChangeEventHandlers()
       .buildComponentDataConnect()
       .buildLifeCycleEventHandlers()
@@ -88,6 +92,11 @@ class TemplateData extends Loggable {
 
   buildPropertyTests() {
     this.template.tests = propTests.prepareData()
+    return this
+  }
+
+  buildApiMethods() {
+    this.template.apiMethods = apiMethods.prepareData()
     return this
   }
 
