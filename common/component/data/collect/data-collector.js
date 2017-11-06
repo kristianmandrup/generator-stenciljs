@@ -1,10 +1,14 @@
 const {
-  createTemplateData
-} = require('./template-data')
+  Loggable
+} = require('../../../logger')
 
 const {
   byConvention
-} = require('./_name-conventions')
+} = require('./name-convention')
+
+const {
+  createModel
+} = require('./model')
 
 function createDataCollector(props) {
   return new DataCollector(props)
@@ -32,18 +36,6 @@ class DataCollector extends Loggable {
     return this._tag = this._tag || this.createTag().values
   }
 
-  // get data() {
-  //   return this._data = this._data || this.createTemplateData().buildAll()
-  // }
-
-  createTemplateData() {
-    return createTemplateData(this.props)
-  }
-
-  get decorators() {
-    return this.data.decorators
-  }
-
   get model() {
     return this._model = this._model || this.createModel().values
   }
@@ -60,7 +52,6 @@ class DataCollector extends Loggable {
   byConvention() {
     return byConvention(this.props.convention, this.model)
   }
-
 
   collectAll() {
     const vals = {

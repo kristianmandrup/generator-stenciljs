@@ -16,7 +16,7 @@ class BaseCollector extends Loggable {
   constructor(ctx, opts) {
     super(opts)
     this.data = ctx.data
-    this.model = ctx.model
+    // this.model = ctx.model
     this.props = ctx.props
   }
 }

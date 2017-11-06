@@ -22,10 +22,6 @@ const {
   createRegistrator
 } = require('./write/registrator')
 
-console.log({
-  BaseGenerator
-})
-
 module.exports = {
   createLogger,
   BaseGenerator,

@@ -5,6 +5,7 @@
   styleUrl: '<%= style.filePath %>'
 })
 export class <%= className %> {
+  @Element() $el: HTMLElement;
 <%- declarations %>
 
   render() {

@@ -54,11 +54,11 @@ class BaseComponentGenerator extends BaseGenerator {
   }
 
   buildPrompts(prompts = []) {
-    return buildPrompts(this.options, this._defaults).concat(prompts)
+    return buildPrompts(this.options, this.promptDefaults).concat(prompts)
   }
 
   get dataCollector() {
-    return createDataCollector(this.props)
+    return collect.createDataCollector(this.props)
   }
 
   get collectData() {

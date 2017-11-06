@@ -4,7 +4,11 @@ const {
 
 const {
   byConvention
-} = require('./_name-conventions')
+} = require('./name-convention')
+
+function createModel(ctx, opts) {
+  return new Model(ctx, opts)
+}
 
 class Model extends BaseCollector {
   constructor(ctx, opts) {
@@ -49,4 +53,9 @@ class Model extends BaseCollector {
 
     return model
   }
+}
+
+module.exports = {
+  createModel,
+  Model
 }
