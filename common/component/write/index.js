@@ -1,95 +1,126 @@
 const {
   Loggable
 } = require('../logger')
+const {
+  Templator
+} = require('./templator')
 
 function createFileCreator(ctx, templateOpts) {
   return new FileCreator(ctx, templateOpts)
 }
 
 class FileCreator extends Loggable {
-  constructor(ctx, templateData, opts = {}) {
+  constructor(ctx, data, opts = {}) {
     super(opts)
-    if (!(ctx && templateData)) {
-      this.handleError('FileCreator', 'must take a Generator (ctx) and template data (Object) arguments', {
-        ctx,
-        templateData
-      })
-    }
-
     this.ctx = ctx
-    this.templateOpts = templateData
-    this.fs = ctx.fs
-    this.templatePath = ctx.templatePath.bind(ctx)
-    this.destinationPath = ctx.destinationPath.bind(ctx)
+    this.generator = ctx.generator
+    this.data = data
+    this.model = data.model
+    this.component = data.model.component
+    this.templator = new Templator(generator, data, opts)
+  }
+
+  get templators() {
+    return [
+      'component',
+      'definitions',
+      'interface',
+      'styles',
+      'tests',
+      'dataService'
+    ]
   }
 
   createAllFiles() {
-    this.createComponent()
-    this.createTsDefinitions(templateOpts)
-    this.createInterface(templateOpts)
-    this.createStyles(templateOpts)
-    this.createTests(templateOpts)
-    this.createDataService(templateOpts)
+    this.eventLog = this.templators.map(name => {
+      this.createTemplate(name, this.tplArgs(name))
+    })
+    return this.eventLog
   }
 
-
-  createComponent(opts = {}) {
-    // this.lintEJS('component.tsx.tpl')
-    this.fs.copyTpl(
-      this.templatePath('component.tsx.tpl'),
-      this.destinationPath(`${this.componentDir}/${componentFileName}.tsx`),
-      opts,
-      ...opts.node.component
-    );
+  createTemplate(name, args) {
+    if (!args) {
+      return {
+        [name]: 'skipped'
+      }
+    }
+    this.templator.createTemplate(args)
+    return {
+      [name]: 'written'
+    }
   }
 
-
-  createTsDefinitions(opts = {}) {
-    this.fs.copyTpl(
-      this.templatePath('definitions.d.ts.tpl'),
-      this.destinationPath(`${this.componentDir}/${dtsFileName}.d.ts`),
-      opts,
-      ...opts.node.definition
-    );
+  tplArgs(name) {
+    const entityName = name.camelize(false)
+    const args = this[`${entityName}TplArgs`]()
+    return {
+      ...args,
+      data: this.data
+    }
   }
 
-
-  createInterface(opts = {}) {
-    this.fs.copyTpl(
-      this.templatePath('interface.ts.tpl'),
-      this.destinationPath(`${this.componentDir}/${interfaceFileName}.ts`),
-      opts,
-      ...opts.node.interface
-    );
+  componentTplArgs() {
+    const {
+      component
+    } = this
+    return {
+      template: 'component.tsx.tpl',
+      destination: `${component.dir}/${component.fileName}.tsx`
+    }
   }
 
-  createStyles(opts = {}) {
-    this.fs.copyTpl(
-      this.templatePath(`styles/styles.${styleFileExt}.tpl`),
-      this.destinationPath(`${this.componentDir}/styles/${styleFileName}.${styleFileExt}`),
-      opts,
-      ...opts.node.style
-    );
+  definitionsTplArgs(opts = {}) {
+    const {
+      definitions,
+      component
+    } = this.model
+    return {
+      template: 'definitions.d.ts.tpl',
+      destination: `${component.dir}/${definitions.fileName}.d.ts`
+    }
   }
 
-  createTests(opts = {}) {
-    this.fs.copyTpl(
-      this.templatePath(`test/${testLib}.spec.ts.tpl`),
-      this.destinationPath(`${this.componentDir}/test/${testFileName}.${testFileExt}`),
-      opts,
-      ...opts.node.tests
-    )
+  interfaceTplArgs(opts = {}) {
+    const {
+      interface,
+      component
+    } = this.model
+    return {
+      template: 'interface.ts.tpl',
+      destination: `${component.dir}/${interface.fileName}.ts`
+    }
   }
 
+  stylesTplArgs(opts = {}) {
+    const {
+      component,
+      style
+    } = this.model
+    return {
+      template: `styles/styles.${style.ext}.tpl`,
+      destination: `${component.dir}/styles/${style.fileName}.${style.ext}`
+    }
+  }
 
-  createDataService(opts = {}) {
-    if (this.props.useDataService) {
-      this.fs.copyTpl(
-        this.templatePath(`data-service.ts.tpl`),
-        this.destinationPath(`${this.componentDir}/data-service.ts`),
-        opts,
-        ...opts.node.dataService
-      )
+  testsTplArgs(opts = {}) {
+    const {
+      component,
+      test
+    } = this.model
+    return {
+      template: `test/${test.lib}.spec.ts.tpl`,
+      destination: `${component.dir}/test/${test.fileName}.${test.ext}`
+    }
+  }
+
+  testsTplArgs(opts = {}) {
+    if (!this.props.useDataService) return
+    const {
+      component
+    } = this.model
+    return {
+      template: `data-service.ts.tpl`,
+      destination: `${component.dir}/data-service.ts`
     }
   }
 }

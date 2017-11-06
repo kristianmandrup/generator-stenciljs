@@ -23,7 +23,7 @@ const {
 } = require('./write')
 const {
   createRegistrator
-} = require('./registrator')
+} = require('./write/registrator')
 
 module.exports = {
   createLogger,
