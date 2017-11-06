@@ -1,11 +1,10 @@
-function createFileCreator(ctx, templateOpts) {
-  return new FileCreator(ctx, templateOpts)
-}
-
 const {
   Loggable
 } = require('../logger')
 
+function createFileCreator(ctx, templateOpts) {
+  return new FileCreator(ctx, templateOpts)
+}
 
 class FileCreator extends Loggable {
   constructor(ctx, templateData, opts = {}) {
@@ -25,17 +24,17 @@ class FileCreator extends Loggable {
   }
 
   createAllFiles() {
-    this._createComponent()
-    this._createTsDefinitions(templateOpts)
-    this._createInterface(templateOpts)
-    this._createStyles(templateOpts)
-    this._createTests(templateOpts)
-    this._createDataService(templateOpts)
+    this.createComponent()
+    this.createTsDefinitions(templateOpts)
+    this.createInterface(templateOpts)
+    this.createStyles(templateOpts)
+    this.createTests(templateOpts)
+    this.createDataService(templateOpts)
   }
 
 
-  _createComponent(opts = {}) {
-    // this._lintEJS('component.tsx.tpl')
+  createComponent(opts = {}) {
+    // this.lintEJS('component.tsx.tpl')
     this.fs.copyTpl(
       this.templatePath('component.tsx.tpl'),
       this.destinationPath(`${this.componentDir}/${componentFileName}.tsx`),
@@ -45,7 +44,7 @@ class FileCreator extends Loggable {
   }
 
 
-  _createTsDefinitions(opts = {}) {
+  createTsDefinitions(opts = {}) {
     this.fs.copyTpl(
       this.templatePath('definitions.d.ts.tpl'),
       this.destinationPath(`${this.componentDir}/${dtsFileName}.d.ts`),
@@ -55,7 +54,7 @@ class FileCreator extends Loggable {
   }
 
 
-  _createInterface(opts = {}) {
+  createInterface(opts = {}) {
     this.fs.copyTpl(
       this.templatePath('interface.ts.tpl'),
       this.destinationPath(`${this.componentDir}/${interfaceFileName}.ts`),
@@ -64,7 +63,7 @@ class FileCreator extends Loggable {
     );
   }
 
-  _createStyles(opts = {}) {
+  createStyles(opts = {}) {
     this.fs.copyTpl(
       this.templatePath(`styles/styles.${styleFileExt}.tpl`),
       this.destinationPath(`${this.componentDir}/styles/${styleFileName}.${styleFileExt}`),
@@ -73,7 +72,7 @@ class FileCreator extends Loggable {
     );
   }
 
-  _createTests(opts = {}) {
+  createTests(opts = {}) {
     this.fs.copyTpl(
       this.templatePath(`test/${testLib}.spec.ts.tpl`),
       this.destinationPath(`${this.componentDir}/test/${testFileName}.${testFileExt}`),
@@ -83,7 +82,7 @@ class FileCreator extends Loggable {
   }
 
 
-  _createDataService(opts = {}) {
+  createDataService(opts = {}) {
     if (this.props.useDataService) {
       this.fs.copyTpl(
         this.templatePath(`data-service.ts.tpl`),

@@ -1,12 +1,3 @@
-function createArguments(ctx) {
-  ctx.argument('name', {
-    type: String,
-    required: false,
-    default: 'my-component',
-    desc: 'Name of your component'
-  });
-}
-
 function createOptions(ctx) {
   ctx.option('skip', {
     type: Boolean,
@@ -66,6 +57,5 @@ function createOptions(ctx) {
 }
 
 module.exports = {
-  createArguments,
   createOptions
 }

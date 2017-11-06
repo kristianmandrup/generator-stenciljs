@@ -11,35 +11,35 @@ class BaseGenerator extends Generator {
     super(args, options);
   }
 
-  get _genName() {
+  get generatorName() {
     let className = this.constructor.name
     return className.replace('Generator', '')
   }
 
   get logger() {
-    return this._logger = this._logger || createGenLogger(this, this._genName)
+    return this._logger = this._logger || createGenLogger(this, this.generatorName)
   }
 
   get pkg() {
     return this.fs.readJSON(this.destinationPath('package.json'), {});
   }
 
-  _optionOrPrompt(prompts) {
+  optionOrPrompt(prompts) {
     const optPrompt = optionOrPrompt.bind(this)
     return optPrompt(prompts)
   }
 
-  _buildPrompts() {
+  buildPrompts() {
     return []
   }
 
   prompting() {
     // Have Yeoman greet the user.
-    if (this._welcomeMsg) {
-      const msg = yosay(this._welcomeMsg);
+    if (this.welcomeMsg) {
+      const msg = yosay(this.welcomeMsg);
       this.log(msg);
     }
-    const prompts = this._buildPrompts() || []
+    const prompts = this.buildPrompts() || []
 
     return this.prompt(prompts).then(props => {
       this.props = extend(this.props, props);
