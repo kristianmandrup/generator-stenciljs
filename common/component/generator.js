@@ -6,7 +6,6 @@ const extend = _.merge;
 const path = require('path');
 const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
-const beautify = require('json-beautify')
 const Sugar = require('sugar');
 Sugar.String.extend()
 
@@ -15,7 +14,7 @@ const {
   BaseGenerator,
   buildPrompts,
   createRegistrator,
-  createFileCreator,
+  createTemplateWriter,
   createDataModel,
   createArguments,
   createOptions
@@ -53,7 +52,8 @@ class BaseComponentGenerator extends BaseGenerator {
   }
 
   buildPrompts(prompts = []) {
-    return buildPrompts(this.options, this.promptDefaults).concat(prompts)
+    // return buildPrompts(this.options, this.promptDefaults).concat(prompts)
+    return []
   }
 
   get dataModel() {
@@ -62,20 +62,117 @@ class BaseComponentGenerator extends BaseGenerator {
     }, this.opts)
   }
 
+  get autoRegister() {
+    // return this.props.autoRegister
+    return false
+  }
+
   registerComponent(model) {
-    registrator.register(model)
+    if (this.autoRegister) {
+      this.registrator.register(model)
+    } else {
+      this.log('Auto registration of component skipped')
+    }
+  }
+
+  get component() {
+    return {
+      name: 'my-hello',
+      className: 'MyHello',
+      containerDir: 'components',
+      fileName: 'my-hello',
+      imports: ['Component', 'Prop'],
+      declarations: `  @Prop
+name: string`,
+      style: {
+        fileName: 'my-hello',
+        ext: 'scss'
+      },
+      tag: {
+        open: '<div>',
+        close: '<div/>',
+        content: 'hello world'
+      }
+    }
+  }
+
+  get _interface() {
+    return {
+      htmlElementName: 'my-hello',
+      fileName: 'my-hello',
+      className: 'MyHello',
+      props: `name?: string`
+    }
+  }
+
+  get style() {
+    return {
+      fileName: 'my-hello',
+      // containerDir: 'components',
+      ext: 'scss',
+      tag: {
+        name: 'my-hello'
+      }
+    }
+  }
+
+  get definitions() {
+    return {
+      htmlElementName: 'my-hello',
+      fileName: 'my-hello',
+      // containerDir: 'components',
+    }
+  }
+
+  get tests() {
+    return {
+      htmlElementName: 'my-hello',
+      // containerDir: 'components',
+      fileName: 'my-hello',
+      ext: 'spec.ts',
+      lib: 'jest',
+      propertySpecs: ` // TODO: property specs`,
+      className: 'MyHello',
+      tag: {
+        name: 'my-hello'
+      },
+
+    }
+  }
+
+  // This is the data format that the DataModel
+  // should generate from the data collect and prepare
+  get mockData() {
+    return {
+      model: {
+        component: this.component,
+        definitions: this.definitions,
+        interface: this._interface,
+        styles: this.style,
+        tests: this.tests,
+        dataService: {
+          className: 'MyHello',
+          // use: false,
+          use: true
+        }
+      }
+    }
   }
 
   writing() {
     this.logger.info('writing files')
-    const data = this.dataModel.data || {}
-    const fileCreator = createFileCreator(this, data)
-    fileCreator.createAllFiles()
+    const data = this.dataModel.data || this.mockData
+    console.log('writing', {
+      data
+    })
+
+    const templateWriter = this.createTemplateWriter(data)
+    templateWriter.writeAll()
     this.registerComponent(data.model)
   }
 
-  createFileCreator(data) {
-    createFileCreator(this, data, this.opts)
+  createTemplateWriter(data) {
+    return createTemplateWriter(this, data, this.opts)
   }
 }
 

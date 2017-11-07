@@ -2,25 +2,30 @@ const {
   Loggable
 } = require('../../../logger')
 
+const {
+  createTemplateValidator
+} = require('./validator')
+
 function createTemplator(ctx, templateOpts) {
   return new Templator(ctx, templateOpts)
 }
 
 class Templator extends Loggable {
-  constructor(ctx, templateData, opts = {}) {
+  constructor(ctx, data, opts = {}) {
     super(opts)
-    if (!(ctx && templateData)) {
+    if (!(ctx && data)) {
       this.handleError('Templator', 'requires template context and data', {
         ctx,
-        templateData
+        data
       })
     }
 
     this.ctx = ctx
-    this.templateOpts = templateData
+    this.data = data
     this.fs = ctx.fs
     this.templatePath = ctx.templatePath.bind(ctx)
     this.destinationPath = ctx.destinationPath.bind(ctx)
+    this.validator = this.createValidator()
   }
 
   validatePath(name, path, opts) {
@@ -39,7 +44,18 @@ class Templator extends Loggable {
     return this
   }
 
-  createTemplate(opts = {}) {
+  createValidator() {
+    return createTemplateValidator({
+      data: this.data
+    }, this.opts)
+  }
+
+  validateData(name, data) {
+    // TODO: reuse Template data validator
+    return this.validator.validateData(data)
+  }
+
+  createTemplate(name, opts = {}) {
     const {
       template,
       destination,
@@ -55,6 +71,7 @@ class Templator extends Loggable {
     this
       .validatePath('template', template, opts)
       .validatePath('destination', destination, opts)
+      .validateData(name, data)
 
     this.fs.copyTpl(
       this.templatePath(template),

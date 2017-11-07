@@ -8,7 +8,6 @@ const Sugar = require('sugar');
 const path = require('path');
 const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
-const beautify = require('json-beautify')
 
 const {
   BaseGenerator

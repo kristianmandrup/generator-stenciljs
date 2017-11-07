@@ -46,15 +46,15 @@ class Logger {
     this.log('error', ...msgs)
   }
 
-  success(msg) {
+  success(...msgs) {
     this.log('success', ...msgs)
   }
 
-  warn(msg) {
+  warn(...msgs) {
     this.log('warning', ...msgs)
   }
 
-  info(msg) {
+  info(...msgs) {
     this.log('info', ...msgs)
   }
 }

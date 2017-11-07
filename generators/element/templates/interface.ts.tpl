@@ -1,4 +1,4 @@
-import { <%= className %> } from './<%= componentFileName %>';
+import { <%= className %> } from './<%= fileName %>';
 
 export interface <%= htmlElementName %> extends <%= className %>, HTMLElement {
 }
@@ -20,7 +20,7 @@ declare global {
   }
   namespace JSXElements {
     export interface <%= className %>Attributes extends HTMLAttributes {
-<%= interfaceProps %>
+<%= props %>
     }
   }
 }

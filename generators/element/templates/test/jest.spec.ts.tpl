@@ -1,7 +1,7 @@
 import { flush, render } from '@stencil/core/testing';
-import { <%= className %> } from '../<%= componentFileName %>';
+import { <%= className %> } from '../<%= fileName %>';
 
-describe('<%= tagName %>', () => {
+describe('<%= tag.name %>', () => {
   it('should build', () => {
     expect(new <%= className %>()).toBeTruthy();
   });
@@ -11,7 +11,7 @@ describe('<%= tagName %>', () => {
     beforeEach(async () => {
       element = await render({
         components: [<%= className %>],
-        html: '<<%= tagName %>></<%= tagName %>>'
+        html: '<<%= tag.name %>></<%= tag.name %>>'
       });
     });
 

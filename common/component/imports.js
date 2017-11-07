@@ -17,18 +17,16 @@ const {
   createDataModel
 } = require('./data')
 const {
-  createFileCreator
-} = require('./write')
-const {
+  createTemplateWriter,
   createRegistrator
-} = require('./write/registrator')
+} = require('./write')
 
 module.exports = {
   createLogger,
   BaseGenerator,
   buildPrompts,
   createRegistrator,
-  createFileCreator,
+  createTemplateWriter,
   collect,
   prepare,
   createDataModel,

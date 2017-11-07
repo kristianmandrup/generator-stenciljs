@@ -1,3 +1,4 @@
+const beautify = require('json-beautify')
 const {
   Loggable
 } = require('../../../logger')
@@ -25,12 +26,23 @@ class Registrator extends Loggable {
     return this.destinationPath('stencil.config.js')
   }
 
+  get stencilCfgFile() {
+    const filePath = this.stencilCfgFilePath
+    try {
+      return require(filePath)
+    } catch (err) {
+      this.handleError(`Could not open stencil config file: ${filePath}`, {
+        filePath
+      })
+    }
+  }
+
   get stencilCfg() {
-    return require(this.stencilCfgFilePath).config
+    return this.stencilCfgFile.config
   }
 
   registerInBundle() {
-    let xBundles = stencilCfg.bundles.concat(bundleEntry)
+    let xBundles = this.stencilCfg.bundles.concat(bundleEntry)
     stencilCfg.bundles = xBundles
 
     this.log(pretty(xBundles))
@@ -40,7 +52,7 @@ class Registrator extends Loggable {
     this.fs.write(stencilCfgFilePath.stencilCfgFilePath, content)
   }
 
-  _registerComponent(opts = {}) {
+  register(opts = {}) {
     const jsonStringify = beautify // JSON.stringify
     const tagName = opts.tagName
 
