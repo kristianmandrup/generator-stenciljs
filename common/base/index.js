@@ -4,18 +4,29 @@ const yosay = require('yosay');
 const _ = require('lodash');
 const extend = _.merge;
 const {
-  createGenLogger
+  createGenLogger,
+  createLogger
 } = require('../logger')
 
 class BaseGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
+    this.opts = options
+  }
+
+  logJson(label, json) {
+    this.qlog.logJson(label, json)
   }
 
   get generatorName() {
     let className = this.constructor.name
     return className.replace('Generator', '')
   }
+
+  get qlog() {
+    return this._qlog = this._qlog || createLogger(this, this.opts)
+  }
+
 
   get logger() {
     return this._logger = this._logger || createGenLogger(this, this.generatorName)

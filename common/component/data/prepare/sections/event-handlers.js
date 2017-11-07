@@ -31,10 +31,17 @@ class EventHandlers extends BasePrepare {
   }
 
   get values() {
-    const vals = {
+    const {
       names,
       handlers
     } = this
-    return vals
+    return {
+      names,
+      handlers
+    }
   }
+}
+
+module.exports = {
+  EventHandlers
 }

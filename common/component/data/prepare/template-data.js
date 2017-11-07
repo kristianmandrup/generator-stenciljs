@@ -19,7 +19,7 @@ const {
 } = require('./sections')
 
 
-const prepareClasses = [
+const prepareClasses = {
   ApiMethods,
   ChangeEventHandlers,
   DataConnect,
@@ -30,25 +30,35 @@ const prepareClasses = [
   Props,
   PropTests,
   State
-]
+}
 
 function createTemplateData(props) {
   return new TemplateData(props)
 }
 
 class TemplateData extends Loggable {
-  constructor(props, opts = {}) {
+  constructor(ctx, opts = {}) {
     super(opts)
-    this.props = props
+    this.ctx = ctx
+    this.props = ctx.props
+    this.model = ctx.model
     this.decorators = {}
+
     // hook-up prepare classes
-    const ctx = {
-      props,
-      model
-    }
     const prepareClassNames = Object.keys(prepareClasses)
-    prepareClasses.map(clazz => {
-      this[clazz.camelize(false)] = new clazz(ctx, opts)
+
+    console.log({
+      prepareClassNames
+    })
+    prepareClassNames.map(clazzName => {
+      const key = clazzName.camelize(false)
+      const clazz = prepareClasses[clazzName]
+      console.log({
+        clazzName,
+        prepareClasses
+      })
+
+      this[key] = new clazz(ctx, opts)
     })
     this.template = {}
   }

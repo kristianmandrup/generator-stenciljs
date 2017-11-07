@@ -1,9 +1,15 @@
 class BasePrepare {
-  constructor(model = {}) {
+  constructor(ctx) {
+    const {
+      model,
+      props
+    } = ctx
+    this.ctx = ctx
     this.model = model
+    this.props = props
     this.component = model.component
     this.properties = (model.node || {}).properties
-    this.decorators = {}
+    // this.decorators = {}
   }
 
   _strToList(str) {

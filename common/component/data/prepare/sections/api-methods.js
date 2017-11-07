@@ -36,11 +36,19 @@ class ApiMethods extends BasePrepare {
   }
 
   get values() {
-    const vals = {
+    const {
       names,
       decorators,
       declarations
     } = this
-    return vals
+    return {
+      names,
+      decorators,
+      declarations
+    }
   }
+}
+
+module.exports = {
+  ApiMethods
 }

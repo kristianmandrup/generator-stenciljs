@@ -1,6 +1,6 @@
 const {
   BasePrepare
-} = require('./base-prepare')
+} = require('./_base')
 
 class Props extends BasePrepare {
   constructor(ctx, opts = {}) {
@@ -65,7 +65,7 @@ class Props extends BasePrepare {
   }
 
   get values() {
-    const vals = {
+    const {
       obj,
       list,
       changeList,
@@ -73,7 +73,14 @@ class Props extends BasePrepare {
       renderProps,
       declarations
     } = this
-    return vals
+    return {
+      obj,
+      list,
+      changeList,
+      names,
+      renderProps,
+      declarations
+    }
   }
 }
 

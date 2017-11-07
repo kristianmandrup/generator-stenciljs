@@ -115,10 +115,7 @@ class BaseComponentGenerator extends BaseGenerator {
     })
     const data = dataModel ? dataModel.data : this.mockData
     // const model = data.model
-    console.log('writing', {
-      data,
-      // ...model
-    })
+    this.logJson('writing', data)
 
     // const templateWriter = this.createTemplateWriter(data)
     // templateWriter.writeAll()

@@ -2,7 +2,7 @@ const {
   BasePrepare
 } = require('./_base')
 
-class Props extends BasePrepare {
+class PropTests extends BasePrepare {
   constructor(model = {}, opts = {}) {
     super(model, opts)
   }
@@ -31,9 +31,15 @@ expect(element.textContent).toMatch(/${name}/);
   }
 
   get values() {
-    const vals = {
+    const {
       propertySpecs
     } = this
-    return vals
+    return {
+      propertySpecs
+    }
   }
+}
+
+module.exports = {
+  PropTests
 }

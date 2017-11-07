@@ -34,9 +34,15 @@ console.log('The component ${explanation}');
   }
 
   get values() {
-    const vals = {
+    const {
       handlers
     } = this
-    return vals
+    return {
+      handlers
+    }
   }
+}
+
+module.exports = {
+  LifecycleEventHandlers
 }

@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const beautify = require('json-beautify')
 
 function createLogger(ctxName, opts = {}) {
   return new Logger(ctxName, opts)
@@ -11,7 +12,11 @@ function createGenLogger(ctx, label) {
 class Loggable {
   constructor(opts = {}) {
     this.logger = createLogger(this, opts)
-    this.logging = opts.logging
+    this.logging = true // opts.logging
+  }
+
+  logJson(label, json) {
+    this.log(label, beautify(json, null, 2, 80))
   }
 
   log(label, ...msgs) {
@@ -36,6 +41,10 @@ class Logger {
     this.ctxName = typeof ctxName === 'string' ? ctxName : ctxName.constructor.name
     this.logging = opts.logging
     this.io = opts.io || console
+  }
+
+  logJson(label, json) {
+    this.io.log(label, beautify(json, null, 2, 80))
   }
 
   log(label, ...msgs) {

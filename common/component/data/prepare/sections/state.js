@@ -3,9 +3,9 @@ const {
 } = require('./_base')
 
 class State extends BasePrepare {
-  constructor(model = {}, opts = {}) {
-    super(model, opts)
-    this.stateStr = props.stateStr
+  constructor(ctx, opts = {}) {
+    super(ctx, opts)
+    this.stateStr = this.props.stateStr
   }
 
   prepareData() {
@@ -33,12 +33,19 @@ class State extends BasePrepare {
   }
 
   get values() {
-    const vals = {
+    const {
       names,
       decorators,
       declarations
     } = this
-    return vals
+    return {
+      names,
+      decorators,
+      declarations
+    }
   }
+}
 
+module.exports = {
+  State
 }

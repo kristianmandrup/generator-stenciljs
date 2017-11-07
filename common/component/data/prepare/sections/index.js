@@ -21,10 +21,10 @@ const {
 } = require('./listeners')
 const {
   PropTests
-} = require('./data-connect')
+} = require('./prop-tests')
 const {
   Props
-} = require('./data-connect')
+} = require('./props')
 const {
   State
 } = require('./state')

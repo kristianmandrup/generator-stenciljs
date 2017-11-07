@@ -68,14 +68,16 @@ class Model extends Loggable {
 
   get values() {
     const model = this.model
-    const namesObj = this.byConvention()
+    const conventions = this.byConvention()
     console.log({
-      namesObj
+      conventions
     })
     model.node = {
-      ...namesObj
+      ...conventions
     }
     model.node.interface.htmlElementName = `HTML${model.className}Element`
+
+    this.logJson('values: model.node', model.node)
 
     // inside render
     model.component.tag.content = [

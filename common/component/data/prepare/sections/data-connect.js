@@ -3,9 +3,9 @@ const {
 } = require('./_base')
 
 class DataConnect extends BasePrepare {
-  constructor(model = {}, opts = {}) {
-    super(model, opts)
-    this.useDataService = props.useDataService
+  constructor(ctx, opts = {}) {
+    super(ctx, opts)
+    this.useDataService = this.props.useDataService
   }
 
   prepareData() {
@@ -37,11 +37,14 @@ class DataConnect extends BasePrepare {
   }
 
   get values() {
-    const vals = {
+    const {
       decorators,
       declarations
     } = this
-    return vals
+    return {
+      decorators,
+      declarations
+    }
   }
 }
 

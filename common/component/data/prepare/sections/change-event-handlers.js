@@ -34,10 +34,17 @@ console.log('${propClassName} will change', newValue)
   }
 
   get values() {
-    const vals = {
+    const {
       decorators,
       declarations
     } = this
-    return vals
+    return {
+      decorators,
+      declarations
+    }
   }
+}
+
+module.exports = {
+  ChangeEventHandlers
 }

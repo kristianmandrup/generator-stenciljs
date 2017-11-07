@@ -2,7 +2,7 @@ const {
   BasePrepare
 } = require('./_base')
 
-class LifecycleEventHandlers extends BasePrepare {
+class EmitEventHandlers extends BasePrepare {
   constructor({
     model,
     props
@@ -32,11 +32,19 @@ class LifecycleEventHandlers extends BasePrepare {
   }
 
   get values() {
-    const vals = {
+    const {
       names,
       decorators,
       declarations
     } = this
-    return vals
+    return {
+      names,
+      decorators,
+      declarations
+    }
   }
+}
+
+module.exports = {
+  EmitEventHandlers
 }

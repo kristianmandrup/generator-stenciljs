@@ -3,9 +3,9 @@ const {
 } = require('./_base')
 
 class Listeners extends BasePrepare {
-  constructor(model = {}, opts = {}) {
-    super(model, opts)
-    this.listenStr = props.listenStr
+  constructor(ctx, opts = {}) {
+    super(ctx, opts)
+    this.listenStr = this.props.listenStr
   }
 
   prepareData() {
@@ -36,12 +36,16 @@ class Listeners extends BasePrepare {
   }
 
   get values() {
-    const vals = {
+    const {
       names,
       decorators,
       handlers
     } = this
-    return vals
+    return {
+      names,
+      decorators,
+      handlers
+    }
   }
 }
 
