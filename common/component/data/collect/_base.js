@@ -16,14 +16,18 @@ class BaseCollector extends Loggable {
   constructor(ctx, opts) {
     super(opts)
     this.ctx = ctx
-    this.data = ctx.data
+    // this.data = ctx.data
     // this.model = ctx.model
     this.props = ctx.props
     this.validate()
   }
 
   validate() {
-    ['props', 'data'].map(name => {
+    const expected = [
+      'props',
+      // 'data'
+    ]
+    expected.map(name => {
       if (typeof this.props !== 'object') {
         this.validationErr(name)
       }

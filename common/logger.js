@@ -21,9 +21,8 @@ class Loggable {
   }
 
   error(label, ...msgs) {
-    if (this.logging) {
-      this.logger.error(label, ...msgs)
-    }
+    // if (this.logging)
+    this.logger.error(label, ...msgs)
   }
 
   handleError(msg, data) {
@@ -40,23 +39,23 @@ class Logger {
   }
 
   log(label, ...msgs) {
-    this.io.log(ctxName, label, ...msgs)
+    this.io.log(this.ctxName, label, ...msgs)
   }
 
   error(...msgs) {
-    this._log('error', ...msgs)
+    this.log('error', ...msgs)
   }
 
   success(msg) {
-    this._log('success', ...msgs)
+    this.log('success', ...msgs)
   }
 
   warn(msg) {
-    this._log('warning', ...msgs)
+    this.log('warning', ...msgs)
   }
 
   info(msg) {
-    this._log('info', ...msgs)
+    this.log('info', ...msgs)
   }
 }
 

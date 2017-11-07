@@ -15,23 +15,21 @@ class Model extends BaseCollector {
     super(ctx, opts)
   }
 
-  buildModel() {
-    const {
-      data
-    } = this
+  componentModel() {
     const name = this.props.name
     const model = {
-      props: data.properties,
       component: {
         name: name.camelize(false),
         tag: this.tag,
-        className: name.camelize()
+        className: name.camelize(),
+        containerDir: `${this.componentTargetDir}/${model.component.name}`
       }
     }
-
-    // TODO: prompt for path to use
-    model.componentDir = `${this.componentTargetDir}/${model.component.name}`
     return model
+  }
+
+  get componentTargetDir() {
+    return this.props.componentTargetDir || 'components'
   }
 
   get model() {
@@ -48,7 +46,6 @@ class Model extends BaseCollector {
     // inside render
     model.tag.content = [
       model.className,
-      data.properties.renderProps
     ].filter(txt => !txt.isBlank()).join('\n')
 
     return model

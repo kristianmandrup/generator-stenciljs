@@ -13,7 +13,8 @@ const {
 } = require('./args')
 const {
   collect,
-  prepare
+  prepare,
+  createDataModel
 } = require('./data')
 const {
   createFileCreator
@@ -30,6 +31,7 @@ module.exports = {
   createFileCreator,
   collect,
   prepare,
+  createDataModel,
   createArguments,
   createOptions
 }

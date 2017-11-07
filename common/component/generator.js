@@ -16,8 +16,7 @@ const {
   buildPrompts,
   createRegistrator,
   createFileCreator,
-  collect,
-  prepare,
+  createDataModel,
   createArguments,
   createOptions
 } = require('./imports')
@@ -57,12 +56,10 @@ class BaseComponentGenerator extends BaseGenerator {
     return buildPrompts(this.options, this.promptDefaults).concat(prompts)
   }
 
-  get dataCollector() {
-    return collect.createDataCollector(this.props)
-  }
-
-  get collectData() {
-    return this.dataCollector.collectAll()
+  get dataModel() {
+    return createDataModel({
+      props: this.props
+    }, this.opts)
   }
 
   registerComponent(model) {
@@ -71,14 +68,14 @@ class BaseComponentGenerator extends BaseGenerator {
 
   writing() {
     this.logger.info('writing files')
-    const data = this.collectData
+    const data = this.dataModel.data || {}
     const fileCreator = createFileCreator(this, data)
     fileCreator.createAllFiles()
     this.registerComponent(data.model)
   }
 
-  createFileCreator(templateOpts) {
-    createFileCreator(this, templateOpts)
+  createFileCreator(data) {
+    createFileCreator(this, data, this.opts)
   }
 }
 

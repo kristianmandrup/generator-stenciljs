@@ -41,12 +41,10 @@ class DataCollector extends Loggable {
   }
 
   createModel() {
-    return createModel(this.props)
-  }
-
-
-  get componentTargetDir() {
-    return this.props.componentTargetDir || 'components'
+    const ctx = {
+      props: this.props
+    }
+    return createModel(ctx, this.opts)
   }
 
   byConvention() {

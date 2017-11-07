@@ -23,15 +23,42 @@ class Templator extends Loggable {
     this.destinationPath = ctx.destinationPath.bind(ctx)
   }
 
+  validatePath(name, path, opts) {
+    if (typeof path !== 'string') {
+      this.handleError(`createTemplate: missing or bad ${name}`, {
+        path,
+        opts
+      })
+    }
+    if (/undefined/.test(path)) {
+      this.handleError(`createTemplate: bad ${name}, contains 'undefined' from missing variable`, {
+        path,
+        opts
+      })
+    }
+    return this
+  }
+
   createTemplate(opts = {}) {
     const {
-      templatePath,
-      destPath,
+      template,
+      destination,
       data
     } = opts
+    console.log('createTemplate', {
+      template,
+      destination,
+      data,
+      opts
+    })
+
+    this
+      .validatePath('template', template, opts)
+      .validatePath('destination', destination, opts)
+
     this.fs.copyTpl(
-      this.templatePath(templatePath),
-      this.destinationPath(destPath),
+      this.templatePath(template),
+      this.destinationPath(destination),
       data
     )
   }
