@@ -21,6 +21,11 @@ const {
   createRegistrator
 } = require('./write')
 
+const {
+  MockTemplateData
+} = require('../mock/template-data')
+
+
 module.exports = {
   createLogger,
   BaseGenerator,
@@ -31,5 +36,6 @@ module.exports = {
   prepare,
   createDataModel,
   createArguments,
-  createOptions
+  createOptions,
+  MockTemplateData
 }

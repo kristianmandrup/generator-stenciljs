@@ -1,10 +1,11 @@
 const {
-  BaseCollector
-} = require('./_base')
+  Loggable
+} = require('../../../logger')
 
-class Declarations extends BaseCollector {
+class Declarations extends Loggable {
   constructor(ctx, opts) {
-    super(ctx, opts)
+    super(opts)
+    this.data = ctx.data
   }
 
   get values() {
@@ -25,6 +26,14 @@ class Declarations extends BaseCollector {
 
   get declarationClasses() {
     return this._classes = this._classes || Object.keys(this.decorators).map(name => name.capitalize())
+  }
+
+  get decorators() {
+    return this.data.decorators
+  }
+
+  get declarationBlocks() {
+    return this.data.declarationBlocks
   }
 
   buildDeclarations() {

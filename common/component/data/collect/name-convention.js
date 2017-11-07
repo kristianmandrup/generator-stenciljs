@@ -1,13 +1,49 @@
-function byConvention(convention, model) {
-  return new NameConvention(convention, model).decideNames()
+const {
+  Loggable
+} = require('../../../logger')
+
+function byConvention(ctx, convention) {
+  return new NameConvention(ctx, convention).decideNames()
 }
 
-class NameConvention {
-  constructor(convention, model) {
-    this.convention = convention
-    this.model = model
-    this.tagName = model.tag.name
+class NameConvention extends Loggable {
+  constructor(ctx, convention, opts) {
+    super(opts)
+    this.ctx = ctx
+    this.props = ctx.props
+    this.model = ctx.model
+    this.convention = convention || 'name'
+    this
+      .setModel(ctx.model)
   }
+
+  setModel(model) {
+    this.model = this.validatedModel(model)
+    return this
+  }
+
+  // TODO: move to model?
+  validatedModel(model) {
+    if (typeof model !== 'object') {
+      this.handleError('missing model', {
+        model
+      })
+    }
+
+    if (typeof model.component !== 'object') {
+      this.handleError('model missing component object', {
+        model
+      })
+    }
+
+    if (typeof model.component.tag !== 'object') {
+      this.handleError('model missing tag object', {
+        model
+      })
+    }
+    return model
+  }
+
 
   filePath(model) {
     return [model.fileName, model.ext].join('.')
@@ -30,7 +66,7 @@ class NameConvention {
   }
 
   _byName() {
-    const name = this.tagName
+    const name = this.model.component.tag.name
     const nameMap = {
       component: {
         name,

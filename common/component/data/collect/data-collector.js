@@ -15,13 +15,9 @@ function createDataCollector(props) {
 }
 
 class DataCollector extends Loggable {
-  constructor(props, opts = {}) {
+  constructor(ctx, opts = {}) {
     super(opts)
-    this.props = props
-  }
-
-  createTag() {
-    return new Tag(this.ctx, this.opts)
+    this.props = ctx.props
   }
 
   get ctx() {
@@ -32,10 +28,6 @@ class DataCollector extends Loggable {
     }
   }
 
-  get tag() {
-    return this._tag = this._tag || this.createTag().values
-  }
-
   get model() {
     return this._model = this._model || this.createModel().values
   }
@@ -44,20 +36,21 @@ class DataCollector extends Loggable {
     const ctx = {
       props: this.props
     }
+    console.log('createModel', ctx)
     return createModel(ctx, this.opts)
   }
 
-  byConvention() {
-    return byConvention(this.props.convention, this.model)
-  }
-
-  collectAll() {
-    const vals = {
+  get values() {
+    const {
       model,
       declarations,
       imports
     } = this
-    return vals
+    return {
+      model,
+      declarations,
+      imports
+    }
   }
 }
 

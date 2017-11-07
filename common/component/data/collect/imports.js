@@ -1,10 +1,11 @@
 const {
-  BaseCollector
-} = require('./_base')
+  Loggable
+} = require('../../../logger')
 
-class Imports extends BaseCollector {
+class Imports extends Loggable {
   constructor(ctx, opts) {
-    super(ctx, opts)
+    super(opts)
+    this.props = ctx.props
   }
 
   // TODO: build from declarations generated!!

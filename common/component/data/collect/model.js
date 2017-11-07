@@ -1,18 +1,32 @@
 const {
-  BaseCollector
-} = require('./_base')
+  Loggable
+} = require('../../../logger')
 
 const {
   byConvention
 } = require('./name-convention')
 
+const {
+  Tag
+} = require('./tag')
+
 function createModel(ctx, opts) {
   return new Model(ctx, opts)
 }
 
-class Model extends BaseCollector {
+class Model extends Loggable {
   constructor(ctx, opts) {
-    super(ctx, opts)
+    super(opts)
+    this.ctx = ctx
+    this.props = ctx.props
+  }
+
+  createTag() {
+    return new Tag(this.ctx, this.opts)
+  }
+
+  get tag() {
+    return this._tag = this._tag || this.createTag().values
   }
 
   componentModel() {
@@ -22,9 +36,10 @@ class Model extends BaseCollector {
         name: name.camelize(false),
         tag: this.tag,
         className: name.camelize(),
-        containerDir: `${this.componentTargetDir}/${model.component.name}`
       }
     }
+    model.component.containerDir = `${this.componentTargetDir}/${model.component.name}`
+
     return model
   }
 
@@ -33,19 +48,38 @@ class Model extends BaseCollector {
   }
 
   get model() {
-    return this._model = this._model || this.buildModel()
+    return this._model = this._model || this.componentModel()
+  }
+
+  get convention() {
+    return this.props.convention
+  }
+
+  get context() {
+    return {
+      props: this.props,
+      model: this.model
+    }
+  }
+
+  byConvention() {
+    return byConvention(this.context, this.convention)
   }
 
   get values() {
     const model = this.model
+    const namesObj = this.byConvention()
+    console.log({
+      namesObj
+    })
     model.node = {
-      ...this.byConvention()
+      ...namesObj
     }
     model.node.interface.htmlElementName = `HTML${model.className}Element`
 
     // inside render
-    model.tag.content = [
-      model.className,
+    model.component.tag.content = [
+      model.component.className,
     ].filter(txt => !txt.isBlank()).join('\n')
 
     return model

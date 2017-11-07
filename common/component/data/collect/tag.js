@@ -1,10 +1,15 @@
 const {
-  BaseCollector
-} = require('./_base')
+  Loggable
+} = require('../../../logger')
 
-class Tag extends BaseCollector {
+function createTag(ctx, opts) {
+  return new Tag(ctx, opts)
+}
+
+class Tag extends Loggable {
   constructor(ctx, opts) {
     super(ctx, opts)
+    this.props = ctx.props
   }
 
   buildTag() {
@@ -19,4 +24,9 @@ class Tag extends BaseCollector {
   get values() {
     return this._tag = this._tag || this.buildTag()
   }
+}
+
+module.exports = {
+  createTag,
+  Tag
 }

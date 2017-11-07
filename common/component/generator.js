@@ -17,7 +17,8 @@ const {
   createTemplateWriter,
   createDataModel,
   createArguments,
-  createOptions
+  createOptions,
+  MockTemplateData
 } = require('./imports')
 
 class BaseComponentGenerator extends BaseGenerator {
@@ -56,6 +57,33 @@ class BaseComponentGenerator extends BaseGenerator {
     return []
   }
 
+  // simulate user filled out props via prompts
+  get _props() {
+    return {
+      name: 'my-hello',
+      useShadowDOM: true,
+      assetsDir: 'assets',
+      propStr: 'name:string',
+      apiMethodsStr: 'addItem',
+      eventStr: 'activate',
+      eventEmitStr: 'start',
+      listenStr: 'open',
+      lifeCycleEvents: [
+        'WillLoad'
+      ],
+      wrapperFileTag: 'div',
+      convention: 'name',
+      testLib: 'jest',
+      styleFileExt: 'scss',
+      testFileExt: 'spec.ts',
+      useDataService: true
+    }
+  }
+
+  prompting() {
+    this.props = this._props
+  }
+
   get dataModel() {
     return createDataModel({
       props: this.props
@@ -75,100 +103,26 @@ class BaseComponentGenerator extends BaseGenerator {
     }
   }
 
-  get component() {
-    return {
-      name: 'my-hello',
-      className: 'MyHello',
-      containerDir: 'components',
-      fileName: 'my-hello',
-      imports: ['Component', 'Prop'],
-      declarations: `  @Prop
-name: string`,
-      style: {
-        fileName: 'my-hello',
-        ext: 'scss'
-      },
-      tag: {
-        open: '<div>',
-        close: '<div/>',
-        content: 'hello world'
-      }
-    }
-  }
-
-  get _interface() {
-    return {
-      htmlElementName: 'my-hello',
-      fileName: 'my-hello',
-      className: 'MyHello',
-      props: `name?: string`
-    }
-  }
-
-  get style() {
-    return {
-      fileName: 'my-hello',
-      // containerDir: 'components',
-      ext: 'scss',
-      tag: {
-        name: 'my-hello'
-      }
-    }
-  }
-
-  get definitions() {
-    return {
-      htmlElementName: 'my-hello',
-      fileName: 'my-hello',
-      // containerDir: 'components',
-    }
-  }
-
-  get tests() {
-    return {
-      htmlElementName: 'my-hello',
-      // containerDir: 'components',
-      fileName: 'my-hello',
-      ext: 'spec.ts',
-      lib: 'jest',
-      propertySpecs: ` // TODO: property specs`,
-      className: 'MyHello',
-      tag: {
-        name: 'my-hello'
-      },
-
-    }
-  }
-
-  // This is the data format that the DataModel
-  // should generate from the data collect and prepare
   get mockData() {
-    return {
-      model: {
-        component: this.component,
-        definitions: this.definitions,
-        interface: this._interface,
-        styles: this.style,
-        tests: this.tests,
-        dataService: {
-          className: 'MyHello',
-          // use: false,
-          use: true
-        }
-      }
-    }
+    return new MockTemplateData().data
   }
 
   writing() {
     this.logger.info('writing files')
-    const data = this.dataModel.data || this.mockData
+    const dataModel = this.dataModel
+    console.log({
+      dataModel
+    })
+    const data = dataModel ? dataModel.data : this.mockData
+    // const model = data.model
     console.log('writing', {
-      data
+      data,
+      // ...model
     })
 
-    const templateWriter = this.createTemplateWriter(data)
-    templateWriter.writeAll()
-    this.registerComponent(data.model)
+    // const templateWriter = this.createTemplateWriter(data)
+    // templateWriter.writeAll()
+    // this.registerComponent(data.model)
   }
 
   createTemplateWriter(data) {
