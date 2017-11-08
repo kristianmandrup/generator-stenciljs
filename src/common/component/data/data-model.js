@@ -10,10 +10,6 @@ const {
   createTemplateData
 } = require('./prepare')
 
-console.log({
-  createTemplateData
-})
-
 function createDataModel(ctx, opts) {
   return new DataModel(ctx, opts)
 }
@@ -23,36 +19,33 @@ class DataModel extends Loggable {
     super(opts)
     this.ctx = ctx
     this.props = ctx.props
+    this.validate()
   }
 
-  createModel() {
+  validate() {
     if (!this.props) {
       this.handleError('createModel: missing props', {
         ctx: this.ctx
       })
     }
+  }
 
+  createModel() {
     const model = createDataCollector({
       props: this.props
     }, this.opts)
 
-    this.logJson('collect data model', model)
+    // this.logJson('collect data model', model)
     return model
   }
 
   createTemplateData() {
-    if (!this.model) {
-      this.handleError('createModel: missing model', {
-        ctx: this.ctx
-      })
-    }
-
     const templateData = createTemplateData({
       model: this.model,
       props: this.props
     }, this.opts)
-    this.logJson('template data', templateData)
-    return templateData
+    // this.logJson('template data', templateData)
+    return templateData.buildAll()
   }
 
   get model() {

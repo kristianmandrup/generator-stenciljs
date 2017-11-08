@@ -1,3 +1,6 @@
+const Sugar = require('sugar');
+Sugar.String.extend()
+
 class BasePrepare {
   constructor(ctx) {
     const {
@@ -13,7 +16,7 @@ class BasePrepare {
   }
 
   _strToList(str) {
-    return str.split(',').map(txt => tx.trim()).filter(txt => !txt.isBlank())
+    return str.split(',').map(txt => txt.trim()).filter(txt => !txt.isBlank())
   }
 
   buildBlockList(list, buildFun) {

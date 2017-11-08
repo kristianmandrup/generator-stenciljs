@@ -9,7 +9,7 @@ class DataConnect extends BasePrepare {
   }
 
   prepareData() {
-    this.useDataService ? this.values : {}
+    return this.useDataService ? this.values : {}
   }
 
   get declarations() {

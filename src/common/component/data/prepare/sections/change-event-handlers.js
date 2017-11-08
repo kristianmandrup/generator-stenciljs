@@ -3,14 +3,14 @@ const {
 } = require('./_base')
 
 class ChangeEventHandlers extends BasePrepare {
-  constructor(model = {}, opts = {}) {
-    super(model, opts)
+  constructor(ctx, opts = {}) {
+    super(ctx, opts)
   }
 
   prepareData({
     changeList
   }) {
-    changeList ? build(changeList).values : {}
+    return changeList ? this.build(changeList).values : {}
   }
 
   build(changeList) {

@@ -2,14 +2,14 @@ const {
   BasePrepare
 } = require('./_base')
 
-class State extends BasePrepare {
+class States extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
     this.stateStr = this.props.stateStr
   }
 
   prepareData() {
-    this.stateStr ? this.values : {}
+    return this.stateStr ? this.values : {}
   }
 
   get names() {
@@ -47,5 +47,5 @@ class State extends BasePrepare {
 }
 
 module.exports = {
-  State
+  States
 }

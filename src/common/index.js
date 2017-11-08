@@ -21,18 +21,12 @@ const {
 
 const boilerplate = require('./boilerplate')
 
-const {
-  MockTemplateData
-} = require('./mock/template-data')
-
-
 module.exports = {
   Logger,
   Loggable,
   BaseGenerator,
   BaseComponentGenerator,
   BaseBoilerplateGenerator,
-  MockTemplateData,
   component,
   boilerplate,
   base

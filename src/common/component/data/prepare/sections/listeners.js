@@ -9,7 +9,7 @@ class Listeners extends BasePrepare {
   }
 
   prepareData() {
-    this.listenStr ? this.values : {}
+    return this.listenStr ? this.values : {}
   }
 
   get names() {

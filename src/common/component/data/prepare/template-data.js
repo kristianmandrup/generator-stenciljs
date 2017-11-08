@@ -14,8 +14,8 @@ const {
   LifecycleEventHandlers,
   Listeners,
   PropTests,
-  Props,
-  State
+  Properties,
+  States
 } = require('./sections')
 
 
@@ -27,9 +27,9 @@ const prepareClasses = {
   EventHandlers,
   LifecycleEventHandlers,
   Listeners,
-  Props,
+  Properties,
   PropTests,
-  State
+  States
 }
 
 function createTemplateData(ctx, opts) {
@@ -46,35 +46,38 @@ class TemplateData extends Loggable {
 
     // hook-up prepare classes
     const prepareClassNames = Object.keys(prepareClasses)
-
-    console.log({
-      prepareClassNames
-    })
     prepareClassNames.map(clazzName => {
       const key = clazzName.camelize(false)
       const clazz = prepareClasses[clazzName]
-      console.log({
-        clazzName,
-        prepareClasses
-      })
-
       this[key] = new clazz(ctx, opts)
     })
     this.template = {}
+
+    this.validate()
+  }
+
+  validate() {
+    if (!this.props) {
+      this.handleError('missing props (from ctx argument)')
+    }
+    if (!this.model) {
+      this.handleError('missing model (from ctx argument)')
+    }
   }
 
   get declarationNames() {
-    return [
+    const allSections = [
       'properties',
-      // 'apiMethods',
-      // 'changeHandlers',
-      // 'states',
-      // 'eventHandlers',
-      // 'lifecycleEventHandlers',
-      // 'eventEmitters',
-      // 'listeners',
-      // 'componentDataConnect'
-    ]
+      'apiMethods',
+      'changeEventHandlers',
+      'states',
+      'eventHandlers',
+      'lifecycleEventHandlers',
+      'emitEventHandlers',
+      'listeners',
+      'propTests',
+      'dataConnect'
+    ] // .map(name => name.camelize())
   }
 
   get declarationBlocks() {
@@ -101,17 +104,17 @@ class TemplateData extends Loggable {
   }
 
   buildPropertyTests() {
-    this.template.tests = propTests.prepareData()
+    this.template.tests = this.propTests.prepareData()
     return this
   }
 
   buildApiMethods() {
-    this.template.apiMethods = apiMethods.prepareData()
+    this.template.apiMethods = this.apiMethods.prepareData()
     return this
   }
 
   buildComponentDataConnect() {
-    this.template.componentDataConnect = dataConnect.prepareData()
+    this.template.componentDataConnect = this.dataConnect.prepareData()
     return this
   }
 
@@ -120,7 +123,7 @@ class TemplateData extends Loggable {
       this.handleError('buildChangeEventHandlers: ChangeEventHandlers requires first preparing template.properties')
     }
 
-    this.template.changeHandlers = changeHandlers.prepareData({
+    this.template.changeHandlers = this.changeHandlers.prepareData({
       changeList: this.template.properties.changeList
     })
     return this
@@ -159,7 +162,7 @@ class TemplateData extends Loggable {
   }
 
   buildProps() {
-    this.template.properties = props.build()
+    this.template.properties = this.props.prepareData()
     return this
   }
 }

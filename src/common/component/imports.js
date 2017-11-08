@@ -23,7 +23,7 @@ const {
 
 const {
   mock
-} = require('../_mock')
+} = require('./_mock')
 
 
 module.exports = {

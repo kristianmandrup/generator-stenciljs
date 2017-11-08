@@ -110,9 +110,6 @@ class BaseComponentGenerator extends BaseGenerator {
   writing() {
     this.logger.info('writing files')
     const dataModel = this.dataModel
-    console.log({
-      dataModel
-    })
     // use mocked template data for now
     const data = dataModel ? dataModel.data : this.mocked.write.templateData
     // const model = data.model

@@ -36,7 +36,7 @@ class DataCollector extends Loggable {
     const ctx = {
       props: this.props
     }
-    console.log('createModel', ctx)
+    // console.log('createModel', ctx)
     return createModel(ctx, this.opts)
   }
 

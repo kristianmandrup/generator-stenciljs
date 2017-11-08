@@ -3,12 +3,9 @@ const {
 } = require('./_base')
 
 class EventHandlers extends BasePrepare {
-  constructor({
-    model,
-    props
-  }, opts = {}) {
-    super(model, opts)
-    this.eventStr = props
+  constructor(ctx, opts = {}) {
+    super(ctx, opts)
+    this.eventStr = this.props.eventStr
   }
 
   prepareData() {

@@ -23,11 +23,11 @@ const {
   PropTests
 } = require('./prop-tests')
 const {
-  Props
-} = require('./props')
+  Properties
+} = require('./properties')
 const {
-  State
-} = require('./state')
+  States
+} = require('./states')
 
 module.exports = {
   ApiMethods,
@@ -38,6 +38,6 @@ module.exports = {
   LifecycleEventHandlers,
   Listeners,
   PropTests,
-  Props,
-  State
+  Properties,
+  States
 }

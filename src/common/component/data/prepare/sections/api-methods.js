@@ -3,12 +3,9 @@ const {
 } = require('./_base')
 
 class ApiMethods extends BasePrepare {
-  constructor({
-    model,
-    props
-  }, opts = {}) {
-    super(model, opts)
-    this.apiMethodsStr = props
+  constructor(ctx, opts = {}) {
+    super(ctx, opts)
+    this.apiMethodsStr = this.props.apiMethodsStr
   }
 
   prepareData() {

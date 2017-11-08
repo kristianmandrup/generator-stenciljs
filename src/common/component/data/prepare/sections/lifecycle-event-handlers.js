@@ -5,7 +5,7 @@ const {
 class LifecycleEventHandlers extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.lifeCycleEvents = ctx.props.lifeCycleEvents
+    this.lifeCycleEvents = this.props.lifeCycleEvents
   }
 
   get explainMap() {
@@ -20,7 +20,7 @@ class LifecycleEventHandlers extends BasePrepare {
 
 
   prepareData() {
-    this.lifeCycleEvents ? this.values : {}
+    return this.lifeCycleEvents ? this.values : {}
   }
 
   get handlers() {

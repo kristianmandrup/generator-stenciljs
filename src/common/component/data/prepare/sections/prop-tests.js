@@ -3,8 +3,8 @@ const {
 } = require('./_base')
 
 class PropTests extends BasePrepare {
-  constructor(model = {}, opts = {}) {
-    super(model, opts)
+  constructor(ctx, opts = {}) {
+    super(ctx, opts)
   }
 
   /**
@@ -17,7 +17,7 @@ class PropTests extends BasePrepare {
    * - decorators
    */
   prepareData() {
-    this.properties.names ? this.value : {}
+    return this.properties.names ? this.value : {}
   }
 
   get propertySpecs() {

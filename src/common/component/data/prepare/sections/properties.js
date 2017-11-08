@@ -2,10 +2,10 @@ const {
   BasePrepare
 } = require('./_base')
 
-class Props extends BasePrepare {
+class Properties extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.propStr = ctx.props.propStr
+    this.propStr = this.props.propStr
   }
   /**
    * - list
@@ -17,7 +17,7 @@ class Props extends BasePrepare {
    * - decorators
    */
   prepareData() {
-    this.propStr ? this.values : {}
+    return this.propStr ? this.values : {}
   }
 
   get list() {
@@ -45,8 +45,9 @@ class Props extends BasePrepare {
 
   // Prop declarations
   get declarations() {
+    const properties = this.ctx.properties
     return this.buildBlockList(this.names, name => {
-      return `  @Prop() ${name}: ${properties.obj[name]};`
+      return `  @Prop() ${name}: ${this.obj[name]};`
     })
   }
 
@@ -85,5 +86,5 @@ class Props extends BasePrepare {
 }
 
 module.exports = {
-  Props
+  Properties
 }
