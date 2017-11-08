@@ -2,6 +2,10 @@
 
 The `/component` folder provides the `BaseComponentGenerator` that can be used to quickly and efficiently design a `ComponentGenerator` which consists of one or more files.
 
+For a complex generator, we highly recommend following a very structured approach as outlined here. Design your mock data at each stage, until you have it assembled and ready for the templates.
+
+The mock data becomes an essential part of your documentation, as it also demonstrates the "flow", how the data is enriched at each step and what data is the source being enriched.
+
 ## mock
 
 The `/_mock` folder contains mock data. Mock data is useful to try out and test a part of a generator under construction, without being dependent on a fully working "engine" to provide all that data.
