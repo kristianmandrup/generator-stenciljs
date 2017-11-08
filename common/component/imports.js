@@ -22,8 +22,8 @@ const {
 } = require('./write')
 
 const {
-  MockTemplateData
-} = require('../mock/template-data')
+  mock
+} = require('../_mock')
 
 
 module.exports = {
@@ -37,5 +37,5 @@ module.exports = {
   createDataModel,
   createArguments,
   createOptions,
-  MockTemplateData
+  mock
 }

@@ -18,7 +18,7 @@ const {
   createDataModel,
   createArguments,
   createOptions,
-  MockTemplateData
+  mock
 } = require('./imports')
 
 class BaseComponentGenerator extends BaseGenerator {
@@ -103,8 +103,8 @@ class BaseComponentGenerator extends BaseGenerator {
     }
   }
 
-  get mockData() {
-    return new MockTemplateData().data
+  get mocked() {
+    return mock
   }
 
   writing() {
@@ -113,7 +113,8 @@ class BaseComponentGenerator extends BaseGenerator {
     console.log({
       dataModel
     })
-    const data = dataModel ? dataModel.data : this.mockData
+    // use mocked template data for now
+    const data = dataModel ? dataModel.data : this.mocked.write.templateData
     // const model = data.model
     this.logJson('writing', data)
 
