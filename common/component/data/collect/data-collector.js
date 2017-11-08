@@ -10,8 +10,8 @@ const {
   createModel
 } = require('./model')
 
-function createDataCollector(props) {
-  return new DataCollector(props)
+function createDataCollector(ctx, opts) {
+  return new DataCollector(ctx, opts)
 }
 
 class DataCollector extends Loggable {

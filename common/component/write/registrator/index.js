@@ -3,15 +3,15 @@ const {
   Loggable
 } = require('../../../logger')
 
-function createRegistrator(ctx, opts) {
-  return new Registrator(ctx, opts)
+function createRegistrator(generator, opts) {
+  return new Registrator(generator, opts)
 }
 
 class Registrator extends Loggable {
-  constructor(ctx, opts) {
+  constructor(generator, opts) {
     super(opts)
-    this.ctx = ctx
-    this.destinationPath = ctx.destinationPath.bind(ctx)
+    this.generator = generator
+    this.destinationPath = generator.destinationPath.bind(generator)
   }
 
   isAlreadyRegistered(stencilCfg, tagName) {

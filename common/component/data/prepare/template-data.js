@@ -32,8 +32,8 @@ const prepareClasses = {
   State
 }
 
-function createTemplateData(props) {
-  return new TemplateData(props)
+function createTemplateData(ctx, opts) {
+  return new TemplateData(ctx, opts)
 }
 
 class TemplateData extends Loggable {

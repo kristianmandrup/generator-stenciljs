@@ -29,9 +29,14 @@ The `/args` folder configures the available `arguments` and `options` on the gen
 
 The `/prompts` folder is used to build the prompts to be used to ask the user for data.
 
-`buildPrompts(options, defaults = {})`
+`buildPrompts(options, defaults = {}, filter)`
 
 The `options` argument consists of all the `argument` and `options` received by the generator from the command line (or from composition via another generator).
+
+The `defaults` contains a map of defaults to be used for the prompts. The `name` entry is (normally) required.
+
+The `filter` is optional and can contain a list of names of prompts to be used.
+This is useful if/when you want to test/play with a subset of prompts/data for your generator.
 
 ## data
 
@@ -59,7 +64,7 @@ Don't worry about duplication. Much easier and safer to follow this approach.
 
 The `DataModel` will first "collect" the data received from the prompts and do some initial data formatting and structuring. This is the job of the `DataCollector`.
 
-## collect
+### collect
 
 The collect phase should build the intitial data structure `model` as outlined above.
 
@@ -67,7 +72,7 @@ The `DataModel` will then use the `props` and initial data `model` to "prepare" 
 
 The collect phase itself can consists of multiple parts or phases.
 
-## prepare
+### prepare
 
 The `prepare` phase will return a new data structure which is used to decorate the model to complete it.
 
@@ -77,7 +82,14 @@ At this point the data model should look like the mock data model and be ready t
 
 The `/write` folder contains the logic to write the files to the target location.
 
-## template
+- `createTemplateWriter(generator, data, opts)`
+- `createRegistrator(generator, opts)`
+
+The reason the `generator` is passed, is so that the buil-in generator function such as `destinationPath` or `fs.copyTpl` are available within.
+
+Note: Would perhaps be nice to pass in a minimal context only with these essential methods.
+
+### template
 
 A `Templator` is used to write each template with the data entry object for that template.
 
@@ -97,6 +109,6 @@ So for a template `component` it will feed `data['component]` to the template:
 
 The `containerDir` and `fileName` are used to calculate the `templatePath` and `destinationPath` for the template generation.
 
-## registrator
+### registrator
 
 The `Registrator` is used to register the componet. For stencil, this means updating a `stencil.config.js` file.

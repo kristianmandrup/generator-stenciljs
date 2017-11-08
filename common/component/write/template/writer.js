@@ -9,8 +9,8 @@ const {
   createTemplateValidator
 } = require('./validator')
 
-function createTemplateWriter(ctx, templateOpts) {
-  return new TemplateWriter(ctx, templateOpts)
+function createTemplateWriter(generator, data, opts) {
+  return new TemplateWriter(generator, data, opts)
 }
 
 class TemplateWriter extends Loggable {
