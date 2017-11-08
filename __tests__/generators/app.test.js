@@ -5,8 +5,10 @@ const helpers = require('yeoman-test');
 
 describe('generator-stenciljs:app', () => {
   beforeAll(() => {
-    return helpers.run(path.join(__dirname, '../generators/app'))
-      .withPrompts({someAnswer: true});
+    return helpers.run(path.join(__dirname, '../../src/generators/app'))
+      .withPrompts({
+        someAnswer: true
+      });
   });
 
   it('creates files', () => {

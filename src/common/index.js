@@ -7,13 +7,19 @@ const {
   BaseGenerator
 } = require('./base')
 
+const base = require('./base')
+
 const {
   BaseComponentGenerator
 } = require('./component')
 
+const component = require('./component')
+
 const {
   BaseBoilerplateGenerator
 } = require('./boilerplate')
+
+const boilerplate = require('./boilerplate')
 
 const {
   MockTemplateData
@@ -26,5 +32,8 @@ module.exports = {
   BaseGenerator,
   BaseComponentGenerator,
   BaseBoilerplateGenerator,
-  MockTemplateData
+  MockTemplateData,
+  component,
+  boilerplate,
+  base
 }
