@@ -11,7 +11,7 @@ const {
 } = require('./prepare')
 
 // Add to final data after prepare!
-const extra = require('./extra')
+const enrich = require('./enrich')
 
 function createDataModel(ctx, opts) {
   return new DataModel(ctx, opts)

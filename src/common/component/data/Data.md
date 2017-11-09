@@ -56,3 +56,7 @@ The `prepare` phase will return a new data structure which is used to decorate t
 The `DataPreparer` will use the `props` and initial data `model` collected, in order to "prepare" the data for template writing. This includes ready-made "code blocks" to be inserted in the template placeholders.
 
 At this point the data model should look like the mock data model and be ready to be used in the templates.
+
+## enrich
+
+Extra data enrichment at the end.
