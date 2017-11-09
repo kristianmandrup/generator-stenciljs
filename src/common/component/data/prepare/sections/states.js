@@ -30,9 +30,9 @@ class States extends BasePrepare {
   }
 
   get decorators() {
-    return {
+    return this.hasNames ? {
       State: true
-    }
+    } : {}
   }
 
   get values() {

@@ -13,7 +13,7 @@ class ApiMethods extends BasePrepare {
   }
 
   prepareData() {
-    return this.apiMethodsStr ? {} : this.values
+    return this.apiMethodsStr ? this.values : {}
   }
 
   get declarations() {
@@ -27,9 +27,9 @@ class ApiMethods extends BasePrepare {
   }
 
   get decorators() {
-    return {
+    return this.hasNames ? {
       Event: true
-    }
+    } : {}
   }
 
   get names() {

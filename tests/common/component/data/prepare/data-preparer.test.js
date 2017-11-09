@@ -61,8 +61,51 @@ test('DataPreparer: when valid creates object', t => {
 
 test('DataPreparer: declarationBlocks', t => {
   let blocks = dp.declarationBlocks
-  log({
-    blocks
-  })
   t.is(typeof blocks, 'string')
+  t.regex(blocks, /DataServiceInjector/)
+})
+
+test('DataPreparer: buildPropertyTests', t => {
+  dp.buildPropertyTests()
+  const {
+    tests
+  } = dp.template
+  const {
+    propertySpecs
+  } = tests
+  t.is(typeof propertySpecs, 'string')
+  t.regex(propertySpecs, /it/)
+})
+
+test('DataPreparer: buildApiMethods', t => {
+  dp.apiMethods.apiMethodsStr = 'activate'
+
+  dp.buildApiMethods()
+  const {
+    apiMethods
+  } = dp.template
+  const {
+    declarations
+  } = apiMethods
+  t.is(typeof declarations, 'string')
+  t.regex(declarations, /Event/)
+})
+
+
+test('DataPreparer: buildComponentDataConnect', t => {
+  dp.dataConnect.useDataService = true
+
+  dp.buildComponentDataConnect()
+  const {
+    componentDataConnect
+  } = dp.template
+  const {
+    declarations
+  } = componentDataConnect
+  log({
+    componentDataConnect,
+    declarations
+  })
+  t.is(typeof declarations, 'string')
+  t.regex(declarations, /dataService/)
 })

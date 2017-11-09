@@ -117,6 +117,9 @@ class DataPreparer extends Loggable {
   }
 
   buildPropertyTests() {
+    if (!this.template.properties) {
+      this.buildProps()
+    }
     this.template.tests = this.propTests.prepareData(this.template.properties)
     return this
   }

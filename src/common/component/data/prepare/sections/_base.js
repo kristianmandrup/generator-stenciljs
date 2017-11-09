@@ -28,6 +28,10 @@ class BasePrepare extends Loggable {
     this.component = this.extract('component')
   }
 
+  get hasNames() {
+    return this.names && this.names.length > 0
+  }
+
   extract(name) {
     return this.ctx[name] || this.ctx.model.collected[name]
   }

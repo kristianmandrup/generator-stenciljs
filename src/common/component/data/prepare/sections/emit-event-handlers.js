@@ -23,9 +23,9 @@ class EmitEventHandlers extends BasePrepare {
   }
 
   get decorators() {
-    return {
+    return this.hasNames ? {
       Event: true
-    }
+    } : {}
   }
 
   get names() {

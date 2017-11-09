@@ -65,9 +65,9 @@ class Properties extends BasePrepare {
 
 
   get decorators() {
-    return {
+    return this.hasNames ? {
       Prop: true
-    }
+    } : {}
   }
 
   get values() {

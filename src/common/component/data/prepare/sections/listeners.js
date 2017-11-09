@@ -33,9 +33,9 @@ class Listeners extends BasePrepare {
   }
 
   get decorators() {
-    return {
+    return this.hasNames ? {
       Listen: true
-    }
+    } : {}
   }
 
   get values() {
