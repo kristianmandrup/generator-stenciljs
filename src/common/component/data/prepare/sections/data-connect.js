@@ -2,17 +2,35 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createDataConnect(ctx, opts) {
+  return new DataConnect(ctx, opts)
+}
+
 class DataConnect extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
     this.useDataService = this.props.useDataService
   }
 
-  prepareData() {
+  prepareData(component) {
+    if (component) {
+      this.component = component
+    }
     return this.useDataService ? this.values : {}
   }
 
   get declarations() {
+    const {
+      component
+    } = this
+    if (typeof component !== 'object') {
+      this.handleError('DataConnect must have component info available', {
+        ctx: this.ctx,
+        component,
+        model: this.model,
+        collected: this.model.collected
+      })
+    }
     const {
       tag,
       className
@@ -49,5 +67,6 @@ class DataConnect extends BasePrepare {
 }
 
 module.exports = {
-  DataConnect
+  DataConnect,
+  createDataConnect
 }

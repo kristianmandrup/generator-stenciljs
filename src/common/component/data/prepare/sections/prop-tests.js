@@ -9,13 +9,18 @@ function createPropTests(ctx, opts) {
 class PropTests extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.checkHas('properties')
   }
 
   /**
    * - propertySpecs
    */
-  prepareData() {
+  prepareData(properties) {
+    if (!(properties && properties.names)) {
+      this.handleError('PropTests: must be prepared using propeties with .names', {
+        properties
+      })
+    }
+    this.properties = properties
     return this.names ? this.values : {}
   }
 

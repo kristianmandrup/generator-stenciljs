@@ -7,7 +7,7 @@ const {
 } = require('./collect')
 
 const {
-  createTemplateData
+  createDataPreparer
 } = require('./prepare')
 
 function createDataModel(ctx, opts) {
@@ -39,13 +39,12 @@ class DataModel extends Loggable {
     return model
   }
 
-  createTemplateData() {
-    const templateData = createTemplateData({
+  createDataPreparer() {
+    const dataPreparer = createDataPreparer({
       model: this.model,
       props: this.props
     }, this.opts)
-    // this.logJson('template data', templateData)
-    return templateData.buildAll()
+    return dataPreparer.buildAll()
   }
 
   get model() {
@@ -53,7 +52,7 @@ class DataModel extends Loggable {
   }
 
   get data() {
-    return this.createTemplateData().values
+    return this.createDataPreparer().values
   }
 }
 

@@ -7,7 +7,8 @@ const {
   createApiMethods
 } = require('./api-methods')
 const {
-  DataConnect
+  DataConnect,
+  createDataConnect
 } = require('./data-connect')
 const {
   EmitEventHandlers,
@@ -47,7 +48,8 @@ const factories = {
   createLifecycleEventHandlers,
   createListeners,
   createPropTests,
-  createStates
+  createStates,
+  createDataConnect
 }
 
 module.exports = {

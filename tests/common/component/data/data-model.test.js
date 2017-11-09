@@ -43,15 +43,15 @@ test('data: createModel', t => {
   t.pass('ok')
 })
 
-test('data: createTemplateData also creates model', t => {
-  dm.createTemplateData()
+test('data: createDataPreparer also creates model', t => {
+  dm.createDataPreparer()
   t.is(typeof dm.model, 'object')
 })
 
-test('data: createTemplateData has template data', t => {
+test('data: createDataPreparer has template data', t => {
   try {
     dm.createModel()
-    const data = dm.createTemplateData()
+    const data = dm.createDataPreparer()
     log({
       data
     })

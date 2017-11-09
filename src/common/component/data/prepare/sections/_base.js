@@ -24,11 +24,12 @@ class BasePrepare extends Loggable {
       model
     } = this
     this.component = (model || {}).component
-    this.properties = this.extractProperties()
+    this.properties = this.extract('properties')
+    this.component = this.extract('component')
   }
 
-  extractProperties() {
-    return this.ctx.properties || (this.ctx.model || {}).properties
+  extract(name) {
+    return this.ctx[name] || this.ctx.model.collected[name]
   }
 
   checkHas(name) {

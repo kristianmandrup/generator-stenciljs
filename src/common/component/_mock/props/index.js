@@ -4,6 +4,7 @@ module.exports = {
   useShadowDOM: 'false',
   assetsDir: 'components',
   propStr: 'name:string',
+  stateStr: '',
   apiMethodsStr: '',
   eventStr: '',
   eventEmitStr: '',

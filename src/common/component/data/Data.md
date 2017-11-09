@@ -30,9 +30,9 @@ The `DataModel` will first "collect" the data received from the prompts and do s
 
 Currently only the `props` is used (and required) from the `ctx`
 
-### createTemplateData
+### createDataPreparer
 
-`createTemplateData(ctx, opts)`
+`createDataPreparer(ctx, opts)`
 
 Currently the `props` and `model` is used (and required) from the `ctx`
 The `model` is the data previously collected/assembled via the `DataCollector`
@@ -53,6 +53,6 @@ The collect phase itself can consists of multiple parts or phases.
 
 The `prepare` phase will return a new data structure which is used to decorate the model to complete it.
 
-The `TemplateData` will use the `props` and initial data `model` collected, in order to "prepare" the data for template writing. This includes ready-made "code blocks" to be inserted in the template placeholders.
+The `DataPreparer` will use the `props` and initial data `model` collected, in order to "prepare" the data for template writing. This includes ready-made "code blocks" to be inserted in the template placeholders.
 
 At this point the data model should look like the mock data model and be ready to be used in the templates.

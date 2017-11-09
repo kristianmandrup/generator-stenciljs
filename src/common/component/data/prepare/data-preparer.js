@@ -32,17 +32,21 @@ const prepareClasses = {
   States
 }
 
-function createTemplateData(ctx, opts) {
-  return new TemplateData(ctx, opts)
+function createDataPreparer(ctx, opts) {
+  return new DataPreparer(ctx, opts)
 }
 
-class TemplateData extends Loggable {
+class DataPreparer extends Loggable {
   constructor(ctx, opts = {}) {
     super(opts)
     this.ctx = ctx
     this.props = ctx.props
     this.model = ctx.model
     this.decorators = {}
+
+    // console.log('TemplateData', {
+    //   ctx
+    // })
 
     // hook-up prepare classes
     const prepareClassNames = Object.keys(prepareClasses)
@@ -57,11 +61,15 @@ class TemplateData extends Loggable {
   }
 
   validate() {
-    if (!this.props) {
-      this.handleError('missing props (from ctx argument)')
+    if (typeof this.props !== 'object') {
+      this.handleError('bad props in ctx', {
+        props: this.props
+      })
     }
-    if (!this.model) {
-      this.handleError('missing model (from ctx argument)')
+    if (typeof this.model !== 'object') {
+      this.handleError('bad model in ctx', {
+        model: this.model
+      })
     }
   }
 
@@ -78,12 +86,17 @@ class TemplateData extends Loggable {
       'propTests',
       'dataConnect'
     ] // .map(name => name.camelize())
+    return allSections
   }
 
   get declarationBlocks() {
     return this.declarationNames.map(name => {
-      return this[name].declarations
-    })
+      let container = this[name] || {}
+      let {
+        declarations
+      } = container
+      return declarations || ''
+    }).filter(txt => !txt.isBlank()).join('\n')
   }
 
   buildAll() {
@@ -104,7 +117,7 @@ class TemplateData extends Loggable {
   }
 
   buildPropertyTests() {
-    this.template.tests = this.propTests.prepareData()
+    this.template.tests = this.propTests.prepareData(this.template.properties)
     return this
   }
 
@@ -162,12 +175,12 @@ class TemplateData extends Loggable {
   }
 
   buildProps() {
-    this.template.properties = this.props.prepareData()
+    this.template.properties = this.properties.prepareData()
     return this
   }
 }
 
 module.exports = {
-  createTemplateData,
-  TemplateData
+  createDataPreparer,
+  DataPreparer
 }

@@ -34,7 +34,7 @@ test.before(done => {
   dp = createDataPreparer(ctx)
 })
 
-test('data: prepare createDataPreparer - fails w no props', t => {
+test('data: create DataPreparer - fails w no props', t => {
   try {
     createDataPreparer({
       model: {}
@@ -44,7 +44,7 @@ test('data: prepare createDataPreparer - fails w no props', t => {
   }
 })
 
-test('data: prepare createDataPreparer - fails w no model', t => {
+test('data: create DataPreparer - fails w no model', t => {
   try {
     createDataPreparer({
       props: {}
@@ -55,6 +55,14 @@ test('data: prepare createDataPreparer - fails w no model', t => {
 })
 
 
-test('data: prepare createDataPreparer creates object', t => {
+test('DataPreparer: when valid creates object', t => {
   t.is(typeof dp, 'object')
+})
+
+test('DataPreparer: declarationBlocks', t => {
+  let blocks = dp.declarationBlocks
+  log({
+    blocks
+  })
+  t.is(typeof blocks, 'string')
 })
