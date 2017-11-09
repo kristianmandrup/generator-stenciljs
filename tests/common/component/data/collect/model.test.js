@@ -32,41 +32,58 @@ test.before(done => {
 })
 
 test('data: collect Model', t => {
-  t.fail('todo')
+  t.is(typeof mdl, 'object')
 })
 
-test('Model: createTag', t => {
-  t.fail('todo')
+test('Model: createTag creates a tag object', t => {
+  let tag = mdl.createTag()
+  t.is(typeof tag, 'object')
 })
 
-test('Model: tag', t => {
-  t.fail('todo')
+test('Model: tag is an object', t => {
+  let tag = mdl.tag
+  t.is(typeof tag, 'object')
 })
 
 test('Model: componentModel', t => {
-  t.fail('todo')
+  let model = mdl.componentModel
+  t.is(typeof model, 'object')
 })
 
 test('Model: componentTargetDir', t => {
-  t.fail('todo')
+  let dir = mdl.componentTargetDir
+  t.is(typeof dir, 'string')
 })
 
 test('Model: model', t => {
-  t.fail('todo')
+  let model = mdl.model
+  t.is(typeof model, 'object')
 })
 
 test('Model: convention', t => {
-  t.fail('todo')
+  let convName = mdl.convention
+  t.is(typeof convName, 'string')
+  t.is(convName, 'type')
 })
 
 test('Model: context', t => {
-  t.fail('todo')
+  let ctx = mdl.context
+  t.is(typeof ctx.props, 'object')
+  t.is(typeof ctx.model, 'object')
 })
 
 test('Model: byConvention', t => {
-  t.fail('todo')
+  let convention = mdl.byConvention()
+  log({
+    convention
+  })
+  t.is(typeof convention, 'object')
 })
 
 test('Model: values', t => {
-  t.fail('todo')
+  let values = mdl.values
+  log({
+    values
+  })
+  t.is(typeof values, 'object')
 })

@@ -9,19 +9,19 @@ const {
 } = require('../')
 
 const {
-  collect
+  enrich
 } = data
 
 const {
   Imports,
   createImports
-} = collect
+} = enrich
 
 const {
   props
 } = mock
 
-const model = mock.data.collected
+const model = mock.data.enriched
 
 let ctx = {
   props,

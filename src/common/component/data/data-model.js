@@ -10,6 +10,10 @@ const {
   createDataPreparer
 } = require('./prepare')
 
+const {
+  createEnricher
+} = require('./enrich')
+
 // Add to final data after prepare!
 const enrich = require('./enrich')
 

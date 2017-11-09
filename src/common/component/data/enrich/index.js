@@ -6,10 +6,23 @@ const {
   Imports,
   createImports
 } = require('./imports')
+const {
+  RenderFun,
+  createRenderFun
+} = require('./render-fun')
+const {
+  Enricher,
+  createEnricher
+} = require('./enricher')
+
 
 module.exports = {
   Declarations,
   createDeclarations,
   Imports,
-  createImports
+  createImports,
+  RenderFun,
+  createRenderFun,
+  Enricher,
+  createEnricher
 }

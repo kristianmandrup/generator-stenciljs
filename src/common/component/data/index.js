@@ -1,5 +1,6 @@
 const collect = require('./collect')
 const prepare = require('./prepare')
+const enrich = require('./enrich')
 const {
   DataModel,
   createDataModel
@@ -8,6 +9,7 @@ const {
 module.exports = {
   collect,
   prepare,
+  enrich,
   DataModel,
   createDataModel
 }

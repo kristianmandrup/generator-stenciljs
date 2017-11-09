@@ -29,7 +29,7 @@ class Model extends Loggable {
     return this._tag = this._tag || this.createTag().values
   }
 
-  componentModel() {
+  get componentModel() {
     const name = this.props.name
     const model = {
       component: {
@@ -48,7 +48,7 @@ class Model extends Loggable {
   }
 
   get model() {
-    return this._model = this._model || this.componentModel()
+    return this._model = this._model || this.componentModel
   }
 
   get convention() {
@@ -68,19 +68,7 @@ class Model extends Loggable {
 
   get values() {
     const model = this.model
-    const conventions = this.byConvention()
-    model.node = {
-      ...conventions
-    }
-    model.node.interface.htmlElementName = `HTML${model.className}Element`
-
-    // this.logJson('values: model.node', model.node)
-
-    // inside render
-    model.component.tag.content = [
-      model.component.className,
-    ].filter(txt => !txt.isBlank()).join('\n')
-
+    // const conventions = this.byConvention()
     return model
   }
 }

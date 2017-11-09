@@ -12,28 +12,8 @@ class Declarations extends Loggable {
     this.data = ctx.data
   }
 
-  get values() {
-    const vals = {
-      allClassNames,
-      declarationCode
-    } = this
-    return vals
-  }
-
-  get declarationCode() {
+  get code() {
     return this._declarations = this._declarations || this.buildDeclarations()
-  }
-
-  get allClassNames() {
-    return ['Component', ...this.declarationClasses].join(',')
-  }
-
-  get declarationClasses() {
-    return this._classes = this._classes || Object.keys(this.decorators).map(name => name.capitalize())
-  }
-
-  get decorators() {
-    return this.data.decorators
   }
 
   get declarationBlocks() {
@@ -41,7 +21,7 @@ class Declarations extends Loggable {
   }
 
   buildDeclarations() {
-    return this.data.declarationBlocks
+    return this.declarationBlocks
       .map(block => {
         return Array.isArray(block) ? block.join('\n') : block;
       })

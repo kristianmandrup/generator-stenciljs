@@ -9,21 +9,22 @@ function createImports(ctx, opts) {
 class Imports extends Loggable {
   constructor(ctx, opts) {
     super(opts)
+    this.ctx = ctx
     this.props = ctx.props
-    this.model = ctx.model
+    this.data = ctx.data
   }
 
-  get declarations() {
-    return this.model.declarations
+  get decorators() {
+    return this.data.decorators || {}
   }
 
-  get allClassNames() {
-    return this.declarations.allClassNames
+  get decoratorNames() {
+    return Object.keys(this.decorators)
   }
 
   // TODO: build from declarations generated!!
   get coreImports() {
-    return [this.allClassNames].join(',')
+    return [this.decoratorNames].join(',')
   }
 
   get dataServiceImports() {
@@ -31,7 +32,7 @@ class Imports extends Loggable {
     return `import { ${model.className}DataService, I${model.className}DataServiceInjector } from './data-service'\n`
   }
 
-  get all() {
+  get code() {
     const importsMap = {
       dataService: this.dataServiceImports,
       core: this.coreImports

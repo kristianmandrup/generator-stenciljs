@@ -9,23 +9,25 @@ const {
 } = require('../')
 
 const {
-  collect
+  enrich
 } = data
 
 const {
   Declarations,
   createDeclarations
-} = collect
+} = enrich
 
 const {
   props
 } = mock
 
+const model = mock.data.enriched
+
 // const model = mock.data.collected
 
 let ctx = {
   props,
-  // model
+  data: model
 }
 
 let declarations
