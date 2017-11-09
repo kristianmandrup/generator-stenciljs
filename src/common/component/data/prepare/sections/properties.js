@@ -30,7 +30,7 @@ class Properties extends BasePrepare {
   }
 
   get obj() {
-    return this.buildBlockObj(this.list, (acc, prop) => {
+    return this._obj = this._obj || this.buildBlockObj(this.list, (acc, prop) => {
       let [name, type, when] = prop.split(':')
       if (when) {
         this.changeList.push({

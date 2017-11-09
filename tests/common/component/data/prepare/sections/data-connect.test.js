@@ -87,4 +87,6 @@ test('data:prepare DataConnect - values', t => {
 test('data:prepare DataConnect - prepareData', t => {
   const data = dataConnect.prepareData()
   t.is(typeof data, 'object')
+  let keys = Object.keys(data)
+  t.true(keys.length > 0)
 })

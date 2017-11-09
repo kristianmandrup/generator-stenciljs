@@ -13,7 +13,7 @@ class EmitEventHandlers extends BasePrepare {
   }
 
   prepareData() {
-    return this.eventEmitStr ? {} : this.values
+    return this.eventEmitStr ? this.values : {}
   }
 
   get declarations() {

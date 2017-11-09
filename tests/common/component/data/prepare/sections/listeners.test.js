@@ -95,4 +95,6 @@ test('data:prepare Listeners - values', t => {
 test('data:prepare Listeners - prepareData', t => {
   const data = listeners.prepareData()
   t.is(typeof data, 'object')
+  let keys = Object.keys(data)
+  t.true(keys.length > 0)
 })

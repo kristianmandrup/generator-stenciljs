@@ -101,14 +101,14 @@ class DataPreparer extends Loggable {
 
   buildAll() {
     this
-      .buildProps()
+      .buildProperties()
       .buildApiMethods()
       .buildChangeEventHandlers()
       .buildComponentDataConnect()
       .buildLifeCycleEventHandlers()
       .buildEmitEventHandlers()
       .buildEventHandlers()
-      .buildState()
+      .buildStates()
       .buildListeners()
       .buildInterfaceProps()
       .buildPropertyTests()
@@ -117,8 +117,14 @@ class DataPreparer extends Loggable {
   }
 
   buildPropertyTests() {
-    if (!this.template.properties) {
-      this.buildProps()
+    const {
+      properties
+    } = this.template
+    if (!properties) {
+      this.error('buildPropertyTests: requires properties', {
+        properties
+      })
+      this.buildProperties()
     }
     this.template.tests = this.propTests.prepareData(this.template.properties)
     return this
@@ -130,18 +136,22 @@ class DataPreparer extends Loggable {
   }
 
   buildComponentDataConnect() {
-    this.template.componentDataConnect = this.dataConnect.prepareData()
+    this.template.dataConnect = this.dataConnect.prepareData()
     return this
   }
 
   buildChangeEventHandlers() {
-    if (!this.template.properties.changeList) {
-      this.handleError('buildChangeEventHandlers: ChangeEventHandlers requires first preparing template.properties')
+    const properties = this.template.properties
+    if (!properties) {
+      this.error('buildChangeEventHandlers: requires properties', {
+        properties
+      })
+      this.buildProperties()
     }
-
-    this.template.changeHandlers = this.changeHandlers.prepareData({
-      changeList: this.template.properties.changeList
-    })
+    const changeList = this.template.properties.changeList || []
+    this.template.changeEventHandlers = this.changeEventHandlers.prepareData(
+      changeList
+    )
     return this
   }
 
@@ -165,7 +175,7 @@ class DataPreparer extends Loggable {
     return this
   }
 
-  buildState() {
+  buildStates() {
     this.template.states = this.states.prepareData()
     return this
   }
@@ -177,7 +187,7 @@ class DataPreparer extends Loggable {
     return this
   }
 
-  buildProps() {
+  buildProperties() {
     this.template.properties = this.properties.prepareData()
     return this
   }

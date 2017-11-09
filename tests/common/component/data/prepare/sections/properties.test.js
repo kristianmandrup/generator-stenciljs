@@ -114,4 +114,6 @@ test('data:prepare Properties - values', t => {
 test('data:prepare Properties - prepareData', t => {
   const data = properties.prepareData()
   t.is(typeof data, 'object')
+  let keys = Object.keys(data)
+  t.true(keys.length > 0)
 })

@@ -95,4 +95,6 @@ test('data:prepare ApiMethods - values', t => {
 test('data:prepare ApiMethods - prepareData', t => {
   const data = apiMethods.prepareData()
   t.is(typeof data, 'object')
+  let keys = Object.keys(data)
+  t.true(keys.length > 0)
 })

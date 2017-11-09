@@ -88,4 +88,6 @@ test('data:prepare EventHandlers - values', t => {
 test('data:prepare EventHandlers - prepareData', t => {
   const data = eventHandlers.prepareData()
   t.is(typeof data, 'object')
+  let keys = Object.keys(data)
+  t.true(keys.length > 0)
 })

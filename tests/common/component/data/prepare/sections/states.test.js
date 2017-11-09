@@ -95,4 +95,6 @@ test('data:prepare States - values', t => {
 test('data:prepare States - prepareData', t => {
   const data = states.prepareData()
   t.is(typeof data, 'object')
+  let keys = Object.keys(data)
+  t.true(keys.length > 0)
 })

@@ -13,7 +13,7 @@ class EventHandlers extends BasePrepare {
   }
 
   prepareData() {
-    return this.eventStr ? {} : this.values
+    return this.eventStr ? this.values : {}
   }
 
   get names() {

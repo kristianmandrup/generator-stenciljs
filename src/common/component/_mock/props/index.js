@@ -3,7 +3,7 @@ module.exports = {
   name: 'my-component',
   useShadowDOM: 'false',
   assetsDir: 'components',
-  propStr: 'name:string',
+  propStr: 'name:string:did',
   stateStr: '',
   apiMethodsStr: '',
   eventStr: '',

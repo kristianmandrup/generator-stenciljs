@@ -92,4 +92,6 @@ test('data:prepare PropTests - values', t => {
 test('data:prepare PropTests - prepareData', t => {
   const data = propTests.prepareData()
   t.is(typeof data, 'object')
+  let keys = Object.keys(data)
+  t.true(keys.length > 0)
 })

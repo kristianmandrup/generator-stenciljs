@@ -12,15 +12,14 @@ class ChangeEventHandlers extends BasePrepare {
     this.decorators = {}
   }
 
-  prepareData(
-    changeList
-  ) {
-    return changeList ? this.build(changeList).values : {}
+  prepareData(changeList = []) {
+    this.changeList = changeList
+    return changeList ? this.values : {}
   }
 
-  build(changeList) {
-    let decoratorClass
-    this.declarations = this.buildBlockList(changeList, changeObj => {
+  get declarations() {
+    if (!this.changeList) return ''
+    return this.buildBlockList(this.changeList, changeObj => {
       let {
         name,
         type,
@@ -29,14 +28,13 @@ class ChangeEventHandlers extends BasePrepare {
       const propClassName = name.camelize()
       when = when || 'did'
       const whenClass = when.camelize()
-      decoratorClass = `Prop${whenClass}Change`
+      let decoratorClass = `Prop${whenClass}Change`
+      this.decorators[decoratorClass] = true
       return `  @${decoratorClass}('${name}')
 ${when}Change${propClassName}(newValue: ${type}) {
 console.log('${propClassName} will change', newValue)
 }`
     })
-    this.decorators[decoratorClass] = true
-    return this
   }
 
   get values() {
