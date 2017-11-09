@@ -2,15 +2,28 @@ const {
   Loggable
 } = require('../../../logger')
 
+function createImports(ctx, opts) {
+  return new Imports(ctx, opts)
+}
+
 class Imports extends Loggable {
   constructor(ctx, opts) {
     super(opts)
     this.props = ctx.props
+    this.model = ctx.model
+  }
+
+  get declarations() {
+    return this.model.declarations
+  }
+
+  get allClassNames() {
+    return this.declarations.allClassNames
   }
 
   // TODO: build from declarations generated!!
   get coreImports() {
-    return [this.declarations.allClassNames].join(',')
+    return [this.allClassNames].join(',')
   }
 
   get dataServiceImports() {
@@ -18,7 +31,7 @@ class Imports extends Loggable {
     return `import { ${model.className}DataService, I${model.className}DataServiceInjector } from './data-service'\n`
   }
 
-  get imports() {
+  get all() {
     const importsMap = {
       dataService: this.dataServiceImports,
       core: this.coreImports
@@ -29,4 +42,9 @@ class Imports extends Loggable {
       `import { ${importsMap.core} } from '@stencil/core'`
     ].join(' ')
   }
+}
+
+module.exports = {
+  Imports,
+  createImports
 }

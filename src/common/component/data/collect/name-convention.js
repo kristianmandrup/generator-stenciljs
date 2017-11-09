@@ -3,7 +3,7 @@ const {
 } = require('../../../logger')
 
 function byConvention(ctx, convention) {
-  return new NameConvention(ctx, convention).decideNames()
+  return new NameConvention(ctx, convention)
 }
 
 class NameConvention extends Loggable {
@@ -49,8 +49,12 @@ class NameConvention extends Loggable {
     return [model.fileName, model.ext].join('.')
   }
 
+  get tag() {
+    return this.model.component.tag
+  }
+
   decideNames() {
-    let method = `_by${this.convention.capitalize()}`
+    let method = `by${this.convention.capitalize()}`
     let model = this[method]()
     let {
       styleFileExt,
@@ -65,8 +69,8 @@ class NameConvention extends Loggable {
     return model
   }
 
-  _byName() {
-    const name = this.model.component.tag.name
+  byName() {
+    const name = this.tag.name
     const nameMap = {
       component: {
         name,
@@ -88,8 +92,8 @@ class NameConvention extends Loggable {
     return nameMap
   }
 
-  _byType() {
-    const name = this.tagName
+  byType() {
+    const name = this.tag.name
     const nameMap = {
       component: {
         name: name,

@@ -1,7 +1,11 @@
 const test = require('ava')
 const {
-  collect
+  data
 } = require('../')
+
+const {
+  collect
+} = data
 
 const {
   createDataCollector

@@ -69,15 +69,12 @@ class Model extends Loggable {
   get values() {
     const model = this.model
     const conventions = this.byConvention()
-    console.log({
-      conventions
-    })
     model.node = {
       ...conventions
     }
     model.node.interface.htmlElementName = `HTML${model.className}Element`
 
-    this.logJson('values: model.node', model.node)
+    // this.logJson('values: model.node', model.node)
 
     // inside render
     model.component.tag.content = [

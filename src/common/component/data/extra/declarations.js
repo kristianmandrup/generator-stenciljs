@@ -2,6 +2,10 @@ const {
   Loggable
 } = require('../../../logger')
 
+function createDeclarations(ctx, opts) {
+  return new Declarations(ctx, opts)
+}
+
 class Declarations extends Loggable {
   constructor(ctx, opts) {
     super(opts)
@@ -48,5 +52,6 @@ class Declarations extends Loggable {
 }
 
 module.exports = {
-  Declarations
+  Declarations,
+  createDeclarations
 }

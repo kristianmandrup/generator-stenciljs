@@ -10,6 +10,9 @@ const {
   createDataPreparer
 } = require('./prepare')
 
+// Add to final data after prepare!
+const extra = require('./extra')
+
 function createDataModel(ctx, opts) {
   return new DataModel(ctx, opts)
 }

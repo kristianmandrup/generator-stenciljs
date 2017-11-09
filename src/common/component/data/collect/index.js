@@ -10,13 +10,8 @@ const {
   byConvention
 } = require('./name-convention')
 const {
-  Declarations
-} = require('./declarations')
-const {
-  Imports
-} = require('./imports')
-const {
-  Tag
+  Tag,
+  createTag
 } = require('./tag')
 const {
   createDataCollector
@@ -26,9 +21,8 @@ module.exports = {
   Loggable,
   createModel,
   Model,
-  Declarations,
-  Imports,
   Tag,
+  createTag,
   NameConvention,
   byConvention,
   createDataCollector

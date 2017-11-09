@@ -2,9 +2,7 @@
 
 ## Refactor
 
-Refactor `component` generator to be more modular.
-
-Use utilities for generators (such as logger instance)
+We need a more generic mechanism for different phases, such as public subscribe events and triggers. This will enable loose coupling and more composability.
 
 ## More fine grained sub-generators
 

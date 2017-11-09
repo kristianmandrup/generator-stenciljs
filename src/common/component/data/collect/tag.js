@@ -10,11 +10,12 @@ class Tag extends Loggable {
   constructor(ctx, opts) {
     super(ctx, opts)
     this.props = ctx.props
+    this.buildTag()
   }
 
   buildTag() {
     const containerTagName = this.props.wrapperTagName || 'div'
-    return {
+    return this._tag = {
       name: this.props.name.dasherize(),
       open: `<${containerTagName}>`,
       close: `</${containerTagName}>`
