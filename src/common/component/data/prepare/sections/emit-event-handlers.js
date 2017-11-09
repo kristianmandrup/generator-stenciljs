@@ -5,7 +5,7 @@ const {
 class EmitEventHandlers extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.eventEmitStr = this.props.eventEmitStr
+    this.eventEmitStr = this.valid('eventEmitStr')
   }
 
   prepareData() {

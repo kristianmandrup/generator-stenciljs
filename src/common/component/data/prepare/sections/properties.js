@@ -2,10 +2,15 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createProperties(ctx, opts) {
+  return new Properties(ctx, opts)
+}
+
 class Properties extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.propStr = this.props.propStr
+    this.propStr = this.valid('propStr')
+    this.changeList = []
   }
   /**
    * - list
@@ -53,7 +58,7 @@ class Properties extends BasePrepare {
 
   // goes in the render method of component
   get renderProps() {
-    this.buildBlockList(this.names, name => {
+    return this.buildBlockList(this.names, name => {
       return '        {this.' + name + '}'
     })
   }
@@ -72,7 +77,8 @@ class Properties extends BasePrepare {
       changeList,
       names,
       renderProps,
-      declarations
+      declarations,
+      decorators,
     } = this
     return {
       obj,
@@ -80,11 +86,13 @@ class Properties extends BasePrepare {
       changeList,
       names,
       renderProps,
-      declarations
+      declarations,
+      decorators,
     }
   }
 }
 
 module.exports = {
-  Properties
+  Properties,
+  createProperties
 }

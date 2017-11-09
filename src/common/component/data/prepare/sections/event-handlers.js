@@ -5,7 +5,7 @@ const {
 class EventHandlers extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.eventStr = this.props.eventStr
+    this.eventStr = this.valid('eventStr')
   }
 
   prepareData() {

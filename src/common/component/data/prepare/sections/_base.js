@@ -1,8 +1,13 @@
+const {
+  Loggable
+} = require('../../../../logger')
+
 const Sugar = require('sugar');
 Sugar.String.extend()
 
-class BasePrepare {
-  constructor(ctx) {
+class BasePrepare extends Loggable {
+  constructor(ctx, opts) {
+    super(opts)
     const {
       model,
       props
@@ -12,7 +17,18 @@ class BasePrepare {
     this.props = props
     this.component = model.component
     this.properties = (model.node || {}).properties
-    // this.decorators = {}
+    this.decorators = {}
+  }
+
+  valid(name, type = 'string') {
+    const value = this.props[name]
+    if (typeof value !== type) {
+      this.handleError('Invalid property ${name} in props. Must be a ${type}', {
+        props: this.props,
+        name
+      })
+    }
+    return value
   }
 
   _strToList(str) {

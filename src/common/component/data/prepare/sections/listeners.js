@@ -5,7 +5,7 @@ const {
 class Listeners extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.listenStr = this.props.listenStr
+    this.listenStr = this.valid('listenStr')
   }
 
   prepareData() {

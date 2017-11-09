@@ -1,8 +1,10 @@
 const {
-  ChangeEventHandlers
+  ChangeEventHandlers,
+  createChangeEventHandlers
 } = require('./change-event-handlers')
 const {
-  ApiMethods
+  ApiMethods,
+  createApiMethods
 } = require('./api-methods')
 const {
   DataConnect
@@ -23,11 +25,18 @@ const {
   PropTests
 } = require('./prop-tests')
 const {
-  Properties
+  Properties,
+  createProperties
 } = require('./properties')
 const {
   States
 } = require('./states')
+
+const factories = {
+  createProperties,
+  createApiMethods,
+  createChangeEventHandlers
+}
 
 module.exports = {
   ApiMethods,
@@ -39,5 +48,6 @@ module.exports = {
   Listeners,
   PropTests,
   Properties,
-  States
+  States,
+  factories
 }

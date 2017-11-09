@@ -38,10 +38,6 @@ test('data: createDataModel - must pass props', t => {
   }
 })
 
-test('data: DataModel', t => {
-  t.pass('ok')
-})
-
 test('data: createModel', t => {
   const model = dm.createModel()
   t.pass('ok')

@@ -5,7 +5,7 @@ const {
 class States extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.stateStr = this.props.stateStr
+    this.stateStr = this.valid('stateStr')
   }
 
   prepareData() {

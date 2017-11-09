@@ -2,10 +2,14 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createApiMethods(ctx, opts) {
+  return new ApiMethods(ctx, opts)
+}
+
 class ApiMethods extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.apiMethodsStr = this.props.apiMethodsStr
+    this.apiMethodsStr = this.valid('apiMethodsStr')
   }
 
   prepareData() {
@@ -47,5 +51,6 @@ class ApiMethods extends BasePrepare {
 }
 
 module.exports = {
-  ApiMethods
+  ApiMethods,
+  createApiMethods
 }
