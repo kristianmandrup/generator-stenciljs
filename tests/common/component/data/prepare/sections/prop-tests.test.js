@@ -90,7 +90,8 @@ test('data:prepare PropTests - values', t => {
 })
 
 test('data:prepare PropTests - prepareData', t => {
-  const data = propTests.prepareData()
+  const properties = ctx.properties
+  const data = propTests.prepareData(properties)
   t.is(typeof data, 'object')
   let keys = Object.keys(data)
   t.true(keys.length > 0)

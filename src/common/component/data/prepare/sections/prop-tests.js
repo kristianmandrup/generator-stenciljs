@@ -16,7 +16,7 @@ class PropTests extends BasePrepare {
    */
   prepareData(properties) {
     if (!(properties && properties.names)) {
-      this.handleError('PropTests: must be prepared using propeties with .names', {
+      this.handleError('PropTests: must be prepared using properties with .names', {
         properties
       })
     }

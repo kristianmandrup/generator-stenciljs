@@ -49,8 +49,8 @@ const changeList = [{
   when: 'did'
 }]
 
-test('data:prepare ChangeEventHandlers - build', t => {
-  changeEventHandlers.build(changeList)
+test('data:prepare ChangeEventHandlers - prepareData', t => {
+  changeEventHandlers.prepareData(changeList)
   const declarations = changeEventHandlers.declarations
   t.is(typeof declarations, 'string')
   t.regex(declarations, /@PropDidChange/)
@@ -61,6 +61,7 @@ test('data:prepare ChangeEventHandlers - build', t => {
 })
 
 test('data:prepare ChangeEventHandlers - values', t => {
+  changeEventHandlers.prepareData(changeList)
   const values = changeEventHandlers.values
   t.is(typeof values, 'object')
 
@@ -68,6 +69,9 @@ test('data:prepare ChangeEventHandlers - values', t => {
     'decorators',
     'declarations'
   ]
+  log({
+    values
+  })
 
   keys.map(key => {
     t.truthy(values[key])

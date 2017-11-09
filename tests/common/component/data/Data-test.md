@@ -23,3 +23,21 @@ Finally, enrich takes the results of all previous steps and further enriches dat
 
 In order to not limit ourselves to a specific number of linear phases, we should
 instead use a publish/subscribe model, where data enrichers can subscribe to when specific data is made available. Loose coupling for better composability
+
+## Status
+
+```bash
+  94 passed
+  8 failed
+  2 exceptions
+```
+
+sections
+
+```bash
+  50 passed
+  5 failed
+```
+
+- `prop-tests.test`
+- `properties.test`

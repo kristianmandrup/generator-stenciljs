@@ -53,12 +53,12 @@ test('data:prepare createProperties - fails w no props', t => {
   }
 })
 
-test('data:prepare Properties - list', t => {
+test.only('data:prepare Properties - list', t => {
   const list = properties.list
   t.true(Array.isArray(list))
   t.is(list.length, 1)
   const obj = list[0]
-  t.is(obj, 'name:string')
+  t.is(obj, 'name:string:did')
 })
 
 test('data:prepare Properties - obj', t => {
