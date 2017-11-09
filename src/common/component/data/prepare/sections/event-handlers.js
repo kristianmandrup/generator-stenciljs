@@ -2,6 +2,10 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createEventHandlers(ctx, opts) {
+  return new EventHandlers(ctx, opts)
+}
+
 class EventHandlers extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
@@ -13,11 +17,11 @@ class EventHandlers extends BasePrepare {
   }
 
   get names() {
-    return this._strToList(eventStr)
+    return this._strToList(this.eventStr)
   }
 
-  get handlers() {
-    return this.buildBlockList(events.names, eventName => {
+  get declarations() {
+    return this.buildBlockList(this.names, eventName => {
       eventName = eventName.camelize();
       return `  handle${eventName}(event: UIEvent) {
   console.log('Received the ${eventName}', {
@@ -30,15 +34,16 @@ class EventHandlers extends BasePrepare {
   get values() {
     const {
       names,
-      handlers
+      declarations
     } = this
     return {
       names,
-      handlers
+      declarations
     }
   }
 }
 
 module.exports = {
-  EventHandlers
+  EventHandlers,
+  createEventHandlers
 }

@@ -2,6 +2,10 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createEmitEventHandlers(ctx, opts) {
+  return new EmitEventHandlers(ctx, opts)
+}
+
 class EmitEventHandlers extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
@@ -43,5 +47,6 @@ class EmitEventHandlers extends BasePrepare {
 }
 
 module.exports = {
-  EmitEventHandlers
+  EmitEventHandlers,
+  createEmitEventHandlers
 }

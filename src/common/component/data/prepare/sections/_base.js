@@ -17,13 +17,13 @@ class BasePrepare extends Loggable {
     this.props = props
     this.component = model.component
     this.properties = (model.node || {}).properties
-    this.decorators = {}
+    // this.decorators = {}
   }
 
   valid(name, type = 'string') {
     const value = this.props[name]
     if (typeof value !== type) {
-      this.handleError('Invalid property ${name} in props. Must be a ${type}', {
+      this.handleError(`Invalid property ${name} in props. Must be a ${type}`, {
         props: this.props,
         name
       })

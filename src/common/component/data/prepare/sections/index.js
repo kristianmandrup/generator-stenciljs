@@ -11,9 +11,11 @@ const {
 } = require('./data-connect')
 const {
   EmitEventHandlers,
+  createEmitEventHandlers
 } = require('./emit-event-handlers')
 const {
-  EventHandlers
+  EventHandlers,
+  createEventHandlers
 } = require('./event-handlers')
 const {
   LifecycleEventHandlers,
@@ -35,7 +37,9 @@ const {
 const factories = {
   createProperties,
   createApiMethods,
-  createChangeEventHandlers
+  createChangeEventHandlers,
+  createEmitEventHandlers,
+  createEventHandlers
 }
 
 module.exports = {

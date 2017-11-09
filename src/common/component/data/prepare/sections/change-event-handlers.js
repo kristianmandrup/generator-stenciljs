@@ -9,6 +9,7 @@ function createChangeEventHandlers(ctx, opts) {
 class ChangeEventHandlers extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
+    this.decorators = {}
   }
 
   prepareData(
