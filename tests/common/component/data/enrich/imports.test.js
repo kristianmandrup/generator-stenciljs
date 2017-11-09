@@ -21,15 +21,19 @@ const {
   props
 } = mock
 
-const model = mock.data.enriched
-
 let ctx = {
   props,
-  model
+  data: mock.data.collected
 }
+
+// log({
+//   collected: mock.data.collected,
+//   prepared: mock.data.prepared
+// })
 
 let imports
 test.before(done => {
+  ctx.data.decorators = mock.data.prepared.decorators
   imports = createImports(ctx, 'name')
 })
 
@@ -45,9 +49,6 @@ test('data:collect imports is an object with stuff', t => {
 // TODO: imports must know all the decorators that were used
 // so can only be used after prepare phase!!
 test('Imports: coreImports has Component and Prop', t => {
-  log({
-    imports
-  })
   const core = imports.coreImports
   t.is(typeof core, 'string')
   t.regex(core, /Component/)
@@ -55,6 +56,7 @@ test('Imports: coreImports has Component and Prop', t => {
 })
 
 test('Imports: dataServiceImports has Component and Prop', t => {
+  imports.props.useDataService = true
   const ds = imports.dataServiceImports
   t.is(typeof ds, 'string')
   t.regex(ds, /DataService/)
@@ -63,8 +65,8 @@ test('Imports: dataServiceImports has Component and Prop', t => {
 
 
 test('Imports: imports has core and dataService imports', t => {
-  const all = imports.all
-  t.is(typeof all, 'string')
-  t.regex(all, /Component/)
-  t.regex(all, /DataServiceInjector/)
+  const code = imports.code
+  t.is(typeof code, 'string')
+  t.regex(code, /Component/)
+  t.regex(code, /DataServiceInjector/)
 })

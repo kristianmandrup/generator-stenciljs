@@ -30,23 +30,29 @@ let ctx = {
   data: model
 }
 
-let declarations
+let decl
 test.before(done => {
-  declarations = createDeclarations(ctx, 'name')
+  decl = createDeclarations(ctx, 'name')
 })
 
 test('data:collect Declarations is a class', t => {
   t.is(typeof Declarations, 'function')
 })
 
-test('data:collect declarations is an object with stuff', t => {
-  t.is(typeof declarations, 'object')
-  t.is(typeof declarations.props, 'object')
+test('data:collect decl is an object with stuff', t => {
+  t.is(typeof decl, 'object')
+  t.is(typeof decl.data, 'object')
 })
 
-test('Declarations: values returns object w allClassNames and declarationCode', t => {
-  const values = declarations.values
-  t.is(typeof values, 'object')
-  t.regex(typeof values.allClassNames, 'object')
-  t.regex(typeof values.declarationCode, 'string')
+test('data:collect decl has declarations', t => {
+  t.is(typeof decl.declarations, 'object')
+})
+
+test.only('Declarations: code returns decl as code', t => {
+  // log({
+  //   data: decl.data
+  // })
+  const code = decl.code
+  t.is(typeof code, 'string')
+  t.regex(code, /Prop/)
 })

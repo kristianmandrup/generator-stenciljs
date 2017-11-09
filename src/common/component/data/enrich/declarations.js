@@ -16,12 +16,12 @@ class Declarations extends Loggable {
     return this._declarations = this._declarations || this.buildDeclarations()
   }
 
-  get declarationBlocks() {
-    return this.data.declarationBlocks
+  get declarations() {
+    return this.data.declarations
   }
 
   buildDeclarations() {
-    return this.declarationBlocks
+    return this.declarations
       .map(block => {
         return Array.isArray(block) ? block.join('\n') : block;
       })

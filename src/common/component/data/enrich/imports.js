@@ -14,6 +14,10 @@ class Imports extends Loggable {
     this.data = ctx.data
   }
 
+  get component() {
+    return this.data.component
+  }
+
   get decorators() {
     return this.data.decorators || {}
   }
@@ -29,7 +33,10 @@ class Imports extends Loggable {
 
   get dataServiceImports() {
     if (!this.props.useDataService) return
-    return `import { ${model.className}DataService, I${model.className}DataServiceInjector } from './data-service'\n`
+    const {
+      className
+    } = this.component
+    return `import { ${className}DataService, I${className}DataServiceInjector } from './data-service'\n`
   }
 
   get code() {
