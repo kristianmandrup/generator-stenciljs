@@ -2,6 +2,10 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createListeners(ctx, opts) {
+  return new Listeners(ctx, opts)
+}
+
 class Listeners extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
@@ -13,20 +17,19 @@ class Listeners extends BasePrepare {
   }
 
   get names() {
-    return this._strToList(listenStr)
+    return this._strToList(this.listenStr)
   }
 
-  get handlers() {
-    return this.buildBlockObj(listeners.names, (acc, prop) => {
+  get declarations() {
+    return this.buildBlockList(this.names, prop => {
       let [name, type] = prop.split(':')
       let eventType = type || 'CustomEvent'
       let eventName = name.camelize(false)
-      acc[key] = `      @Listen('${eventName}')
+      return `      @Listen('${eventName}')
   ${eventName}Handler(event: ${eventType}) {
     console.log('Received the custom ${eventName} event: ', event.detail);
   }`
-      return acc
-    }).join('\n')
+    })
   }
 
   get decorators() {
@@ -39,16 +42,17 @@ class Listeners extends BasePrepare {
     const {
       names,
       decorators,
-      handlers
+      declarations
     } = this
     return {
       names,
       decorators,
-      handlers
+      declarations
     }
   }
 }
 
 module.exports = {
-  Listeners
+  Listeners,
+  createListeners
 }

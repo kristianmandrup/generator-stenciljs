@@ -2,6 +2,10 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createStates(ctx, opts) {
+  return new States(ctx, opts)
+}
+
 class States extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
@@ -17,13 +21,12 @@ class States extends BasePrepare {
   }
 
   get declarations() {
-    return this.buildBlockObj(states.names, (acc, prop) => {
+    return this.buildBlockList(this.names, prop => {
       let [name, type] = prop.split(':')
       type = type || 'any'
       let stateName = name.camelize(false)
-      acc[key] = `  @State() ${stateName}: ${type};`
-      return acc
-    }).join('\n')
+      return `  @State() ${stateName}: ${type};`
+    })
   }
 
   get decorators() {
@@ -47,5 +50,6 @@ class States extends BasePrepare {
 }
 
 module.exports = {
-  States
+  States,
+  createStates
 }

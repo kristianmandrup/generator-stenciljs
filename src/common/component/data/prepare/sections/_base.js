@@ -15,9 +15,28 @@ class BasePrepare extends Loggable {
     this.ctx = ctx
     this.model = model
     this.props = props
-    this.component = model.component
-    this.properties = (model.node || {}).properties
+    this.configure()
     // this.decorators = {}
+  }
+
+  configure() {
+    const {
+      model
+    } = this
+    this.component = (model || {}).component
+    this.properties = this.extractProperties()
+  }
+
+  extractProperties() {
+    return this.ctx.properties || (this.ctx.model || {}).properties
+  }
+
+  checkHas(name) {
+    if (!this[name]) {
+      this.handleError(`Missing ${name} on creation`, {
+        ctx: this.ctx
+      })
+    }
   }
 
   valid(name, type = 'string') {

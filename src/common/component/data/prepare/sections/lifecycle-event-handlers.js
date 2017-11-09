@@ -2,10 +2,14 @@ const {
   BasePrepare
 } = require('./_base')
 
+function createLifecycleEventHandlers(ctx, opts) {
+  return new LifecycleEventHandlers(ctx, opts)
+}
+
 class LifecycleEventHandlers extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
-    this.lifeCycleEvents = this.props.lifeCycleEvents
+    this.lifeCycleEvents = this.props.lifeCycleEvents || []
   }
 
   get explainMap() {
@@ -18,13 +22,12 @@ class LifecycleEventHandlers extends BasePrepare {
     }
   }
 
-
   prepareData() {
     return this.lifeCycleEvents ? this.values : {}
   }
 
-  get handlers() {
-    return this.buildBlockList(lifeCycleEvents, name => {
+  get declarations() {
+    return this.buildBlockList(this.lifeCycleEvents, name => {
       let lifecycleName = name.camelize()
       let explanation = this.explainMap[lifecycleName]
       return `  component${lifecycleName}() {
@@ -35,14 +38,15 @@ console.log('The component ${explanation}');
 
   get values() {
     const {
-      handlers
+      declarations
     } = this
     return {
-      handlers
+      declarations
     }
   }
 }
 
 module.exports = {
-  LifecycleEventHandlers
+  LifecycleEventHandlers,
+  createLifecycleEventHandlers
 }

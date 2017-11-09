@@ -22,7 +22,7 @@ const {
 } = prepare
 
 const {
-  EventHandlers,
+  States,
   factories
 } = sections
 
@@ -35,21 +35,21 @@ log({
 })
 
 const {
-  createEventHandlers
+  createStates
 } = factories
 
 ctx.props = {
-  eventStr: 'activate'
+  stateStr: 'activate'
 }
 
-let eventHandlers
+let states
 test.before(done => {
-  eventHandlers = createEventHandlers(ctx)
+  states = createStates(ctx)
 })
 
-test('data:prepare createEventHandlers - fails w no props', t => {
+test('data:prepare createStates - fails w no props', t => {
   try {
-    createEventHandlers({
+    createStates({
       model: {}
     })
   } catch (err) {
@@ -57,26 +57,33 @@ test('data:prepare createEventHandlers - fails w no props', t => {
   }
 })
 
-test('data:prepare EventHandlers - names', t => {
-  const names = eventHandlers.names
+test('data:prepare States - names', t => {
+  const names = states.names
   t.true(Array.isArray(names))
   t.is(names.length, 1)
   const name = names[0]
   t.is(name, 'activate')
 })
 
-test('data:prepare EventHandlers - declarations', t => {
-  const declarations = eventHandlers.declarations
+test('data:prepare States - declarations', t => {
+  const declarations = states.declarations
   t.is(typeof declarations, 'string')
-  t.regex(declarations, /handle/)
+  t.regex(declarations, /@State/)
 })
 
-test('data:prepare EventHandlers - values', t => {
-  const values = eventHandlers.values
+test('data:prepare States - decorators', t => {
+  const decorators = states.decorators
+  t.is(typeof decorators, 'object')
+  t.true(decorators['State'])
+})
+
+test('data:prepare States - values', t => {
+  const values = states.values
   t.is(typeof values, 'object')
 
   let keys = [
     'names',
+    'decorators',
     'declarations'
   ]
 
@@ -85,7 +92,7 @@ test('data:prepare EventHandlers - values', t => {
   })
 })
 
-test('data:prepare EventHandlers - prepareData', t => {
-  const data = eventHandlers.prepareData()
+test('data:prepare States - prepareData', t => {
+  const data = states.prepareData()
   t.is(typeof data, 'object')
 })

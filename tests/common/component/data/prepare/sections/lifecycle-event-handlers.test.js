@@ -22,7 +22,7 @@ const {
 } = prepare
 
 const {
-  EventHandlers,
+  LifecycleEventHandlers,
   factories
 } = sections
 
@@ -35,21 +35,25 @@ log({
 })
 
 const {
-  createEventHandlers
+  createLifecycleEventHandlers
 } = factories
 
 ctx.props = {
-  eventStr: 'activate'
+  lifeCycleEvents: ['WillLoad', 'WillUpdate']
 }
+
+log({
+  lifeCycleEvents: props.lifeCycleEvents
+})
 
 let eventHandlers
 test.before(done => {
-  eventHandlers = createEventHandlers(ctx)
+  eventHandlers = createLifecycleEventHandlers(ctx)
 })
 
-test('data:prepare createEventHandlers - fails w no props', t => {
+test('data:prepare createLifecycleEventHandlers - fails w no props', t => {
   try {
-    createEventHandlers({
+    createLifecycleEventHandlers({
       model: {}
     })
   } catch (err) {
@@ -57,26 +61,17 @@ test('data:prepare createEventHandlers - fails w no props', t => {
   }
 })
 
-test('data:prepare EventHandlers - names', t => {
-  const names = eventHandlers.names
-  t.true(Array.isArray(names))
-  t.is(names.length, 1)
-  const name = names[0]
-  t.is(name, 'activate')
-})
-
-test('data:prepare EventHandlers - declarations', t => {
+test('data:prepare LifecycleEventHandlers - declarations', t => {
   const declarations = eventHandlers.declarations
   t.is(typeof declarations, 'string')
-  t.regex(declarations, /handle/)
+  t.regex(declarations, /component/)
 })
 
-test('data:prepare EventHandlers - values', t => {
+test('data:prepare LifecycleEventHandlers - values', t => {
   const values = eventHandlers.values
   t.is(typeof values, 'object')
 
   let keys = [
-    'names',
     'declarations'
   ]
 
@@ -85,7 +80,7 @@ test('data:prepare EventHandlers - values', t => {
   })
 })
 
-test('data:prepare EventHandlers - prepareData', t => {
+test('data:prepare LifecycleEventHandlers - prepareData', t => {
   const data = eventHandlers.prepareData()
   t.is(typeof data, 'object')
 })

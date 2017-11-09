@@ -19,19 +19,23 @@ const {
 } = require('./event-handlers')
 const {
   LifecycleEventHandlers,
+  createLifecycleEventHandlers
 } = require('./lifecycle-event-handlers')
 const {
   Listeners,
+  createListeners
 } = require('./listeners')
 const {
-  PropTests
+  PropTests,
+  createPropTests
 } = require('./prop-tests')
 const {
   Properties,
   createProperties
 } = require('./properties')
 const {
-  States
+  States,
+  createStates
 } = require('./states')
 
 const factories = {
@@ -39,7 +43,11 @@ const factories = {
   createApiMethods,
   createChangeEventHandlers,
   createEmitEventHandlers,
-  createEventHandlers
+  createEventHandlers,
+  createLifecycleEventHandlers,
+  createListeners,
+  createPropTests,
+  createStates
 }
 
 module.exports = {
