@@ -22,17 +22,13 @@ const {
 } = prepare
 
 const {
-  LifecycleEventHandlers,
+  // LifecycleEventHandlers,
   factories
 } = sections
 
-const {
-  log
-} = console
-
-log({
-  ctx
-})
+// const {
+//   log
+// } = console
 
 const {
   createLifecycleEventHandlers
@@ -41,10 +37,6 @@ const {
 ctx.props = {
   lifeCycleEvents: ['WillLoad', 'WillUpdate']
 }
-
-log({
-  lifeCycleEvents: props.lifeCycleEvents
-})
 
 let eventHandlers
 test.before(done => {
@@ -71,7 +63,7 @@ test('data:prepare LifecycleEventHandlers - values', t => {
   const values = eventHandlers.values
   t.is(typeof values, 'object')
 
-  let keys = [
+  const keys = [
     'declarations'
   ]
 

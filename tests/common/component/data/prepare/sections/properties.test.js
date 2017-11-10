@@ -30,10 +30,6 @@ const {
   log
 } = console
 
-log({
-  ctx
-})
-
 const {
   createProperties
 } = factories
@@ -53,7 +49,7 @@ test('data:prepare createProperties - fails w no props', t => {
   }
 })
 
-test.only('data:prepare Properties - list', t => {
+test('data:prepare Properties - list', t => {
   const list = properties.list
   t.true(Array.isArray(list))
   t.is(list.length, 1)

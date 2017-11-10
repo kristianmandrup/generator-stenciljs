@@ -6,6 +6,7 @@
       "named": "ignore",
       "asyncArrow": "always"
     }],
-    "ignoreInlineComments": true
+    "capitalized-comments": 0,
+    "semi": ["error", "never"]
   }
 }

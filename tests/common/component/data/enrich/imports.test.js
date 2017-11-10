@@ -26,11 +26,6 @@ let ctx = {
   data: mock.data.collected
 }
 
-// log({
-//   collected: mock.data.collected,
-//   prepared: mock.data.prepared
-// })
-
 let imports
 test.before(done => {
   ctx.data.decorators = mock.data.prepared.decorators

@@ -12,10 +12,6 @@ const {
   collect
 } = data
 
-log({
-  collect
-})
-
 const {
   NameConvention,
   byConvention
@@ -58,9 +54,6 @@ const nameKeys = [
 
 test('data: collect byName returns map, where each entry has same fileName', t => {
   let names = conv.byName()
-  // log({
-  //   names
-  // })
   t.is(typeof names, 'object')
   nameKeys.map(key => {
     let obj = names[key]
@@ -71,9 +64,6 @@ test('data: collect byName returns map, where each entry has same fileName', t =
 
 test('data: collect byType returns map, where each entry has different fileName', t => {
   let names = conv.byType()
-  // log('byType', {
-  //   names
-  // })
   t.is(typeof names, 'object')
   nameKeys.map(key => {
     let obj = names[key]

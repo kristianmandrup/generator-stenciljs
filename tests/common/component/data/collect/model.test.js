@@ -74,16 +74,10 @@ test('Model: context', t => {
 
 test('Model: byConvention', t => {
   let convention = mdl.byConvention()
-  log({
-    convention
-  })
   t.is(typeof convention, 'object')
 })
 
 test('Model: values', t => {
   let values = mdl.values
-  log({
-    values
-  })
   t.is(typeof values, 'object')
 })

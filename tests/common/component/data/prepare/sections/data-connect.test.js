@@ -30,10 +30,6 @@ const {
   log
 } = console
 
-log({
-  ctx
-})
-
 const {
   createDataConnect
 } = factories
@@ -85,6 +81,7 @@ test('data:prepare DataConnect - values', t => {
 })
 
 test('data:prepare DataConnect - prepareData', t => {
+  dataConnect.useDataService = true
   const data = dataConnect.prepareData()
   t.is(typeof data, 'object')
   let keys = Object.keys(data)

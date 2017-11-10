@@ -25,10 +25,6 @@ const {
   log
 } = console
 
-log({
-  ctx
-})
-
 let dp
 test.before(done => {
   dp = createDataPreparer(ctx)

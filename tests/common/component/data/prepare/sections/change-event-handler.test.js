@@ -12,7 +12,7 @@ const {
   props
 } = mock
 
-let ctx = {
+const ctx = {
   props,
   model: mock.data.model
 }
@@ -22,24 +22,20 @@ const {
 } = prepare
 
 const {
-  ChangeEventHandlers,
+  // ChangeEventHandlers,
   factories
 } = sections
 
-const {
-  log
-} = console
-
-log({
-  ctx
-})
+// const {
+//   log
+// } = console
 
 const {
   createChangeEventHandlers
 } = factories
 
 let changeEventHandlers
-test.before(done => {
+test.before(() => {
   changeEventHandlers = createChangeEventHandlers(ctx)
 })
 
@@ -57,7 +53,7 @@ test('data:prepare ChangeEventHandlers - prepareData', t => {
 
   const decorators = changeEventHandlers.decorators
   t.is(typeof decorators, 'object')
-  t.true(decorators['PropDidChange'])
+  t.true(decorators.PropDidChange)
 })
 
 test('data:prepare ChangeEventHandlers - values', t => {
@@ -65,14 +61,10 @@ test('data:prepare ChangeEventHandlers - values', t => {
   const values = changeEventHandlers.values
   t.is(typeof values, 'object')
 
-  let keys = [
+  const keys = [
     'decorators',
     'declarations'
   ]
-  log({
-    values
-  })
-
   keys.map(key => {
     t.truthy(values[key])
   })
@@ -81,5 +73,5 @@ test('data:prepare ChangeEventHandlers - values', t => {
 test('data:prepare ChangeEventHandlers - prepareData', t => {
   const data = changeEventHandlers.prepareData(changeList)
   t.is(typeof data, 'object')
-  t.truthy(data.decorators['PropDidChange'])
+  t.truthy(data.decorators.PropDidChange)
 })

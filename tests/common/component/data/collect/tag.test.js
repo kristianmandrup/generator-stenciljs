@@ -38,9 +38,6 @@ test('data:collect Tag is a class', t => {
 test('data:collect tag is an object', t => {
   t.is(typeof tg, 'object')
   let tag = tg.values
-  log({
-    tag
-  })
   t.is(tag.name, 'my-component')
   t.is(tag.open, '<div>')
   t.is(tag.close, '</div>')

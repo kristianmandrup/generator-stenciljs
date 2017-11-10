@@ -52,9 +52,6 @@ test('data: createDataPreparer has template data', t => {
   try {
     dm.createModel()
     const data = dm.createDataPreparer()
-    log({
-      data
-    })
     t.is(typeof data.templates, 'object')
 
     t.pass('ok since has model')

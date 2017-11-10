@@ -30,10 +30,6 @@ const {
   log
 } = console
 
-log({
-  ctx
-})
-
 const {
   createStates
 } = factories

@@ -12,7 +12,7 @@ const {
   props
 } = mock
 
-let ctx = {
+const ctx = {
   props,
   model: mock.data.model
 }
@@ -22,17 +22,13 @@ const {
 } = prepare
 
 const {
-  EventHandlers,
+  // EventHandlers,
   factories
 } = sections
 
-const {
-  log
-} = console
-
-log({
-  ctx
-})
+// const {
+//   log
+// } = console
 
 const {
   createEventHandlers

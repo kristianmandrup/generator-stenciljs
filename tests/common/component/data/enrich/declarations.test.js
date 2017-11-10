@@ -48,10 +48,7 @@ test('data:collect decl has declarations', t => {
   t.is(typeof decl.declarations, 'object')
 })
 
-test.only('Declarations: code returns decl as code', t => {
-  // log({
-  //   data: decl.data
-  // })
+test('Declarations: code returns decl as code', t => {
   const code = decl.code
   t.is(typeof code, 'string')
   t.regex(code, /Prop/)

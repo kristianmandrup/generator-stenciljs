@@ -3,20 +3,20 @@ const Sugar = require('sugar');
 Sugar.String.extend()
 
 const {
+  data
+} = require('../../')
+
+const {
   prepare
-} = require('../')
+} = data
 
 const {
   sections
 } = prepare
 
-const {
-  log
-} = console
-
-log({
-  sections
-})
+// const {
+//   log
+// } = console
 
 const allSections = [
   'properties',
@@ -31,15 +31,11 @@ const allSections = [
   'dataConnect'
 ].map(name => name.camelize())
 
-log({
-  sections,
-  allSections
-})
-
 test('data: prepare sections', t => {
   allSections.map(name => {
-    let section = sections[name]
+    const section = sections[name]
     // console.log(section)
-    t.is(typeof sections[name], 'function')
+    t.is(typeof section, 'function')
+    return true
   })
 })
