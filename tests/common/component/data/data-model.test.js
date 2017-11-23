@@ -25,7 +25,7 @@ const {
 } = console
 
 let dm
-test.beforeEach(done => {
+test.beforeEach(() => {
   dm = createDataModel(ctx)
 })
 
@@ -38,8 +38,11 @@ test('data: createDataModel - must pass props', t => {
   }
 })
 
-test('data: createModel', t => {
-  const model = dm.createModel()
+test('data: createDataCollector', t => {
+  const collector = dm.createDataCollector()
+  const {
+    model
+  } = collector
   t.is(typeof model, 'object')
 })
 
@@ -50,9 +53,32 @@ test('data: createDataPreparer also creates model', t => {
 
 test('data: createDataPreparer has template data', t => {
   try {
-    dm.createModel()
+    dm.createDataCollector()
     const data = dm.createDataPreparer()
-    t.is(typeof data.templates, 'object')
+    const {
+      template
+    } = data
+    t.is(typeof template, 'object')
+
+    const templateNames = [
+      'properties',
+      'apiMethods',
+      'changeEventHandlers',
+      'states',
+      'eventHandlers',
+      'lifecycleEventHandlers',
+      'emitEventHandlers',
+      'listeners',
+      'propTests',
+      'dataConnect'
+    ]
+
+    // log({
+    //   data
+    // })
+    templateNames.map(name => {
+      return t.is(typeof template[name], 'object')
+    })
 
     t.pass('ok since has model')
   } catch (err) {

@@ -18,7 +18,6 @@ const {
   States
 } = require('./sections')
 
-
 const prepareClasses = {
   ApiMethods,
   ChangeEventHandlers,
@@ -91,8 +90,8 @@ class DataPreparer extends Loggable {
 
   get declarationBlocks() {
     return this.declarationNames.map(name => {
-      let container = this[name] || {}
-      let {
+      const container = this[name] || {}
+      const {
         declarations
       } = container
       return declarations || ''
@@ -105,7 +104,7 @@ class DataPreparer extends Loggable {
       .buildApiMethods()
       .buildChangeEventHandlers()
       .buildComponentDataConnect()
-      .buildLifeCycleEventHandlers()
+      .buildLifecycleEventHandlers()
       .buildEmitEventHandlers()
       .buildEventHandlers()
       .buildStates()
@@ -126,7 +125,7 @@ class DataPreparer extends Loggable {
       })
       this.buildProperties()
     }
-    this.template.tests = this.propTests.prepareData(this.template.properties)
+    this.template.propTests = this.propTests.prepareData(this.template.properties)
     return this
   }
 

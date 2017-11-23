@@ -12,21 +12,30 @@ const {
   props
 } = mock
 
+const component = {
+  name: 'my-component',
+  className: 'MyComponent',
+  tag: {
+    name: 'my-component'
+  }
+}
+
 const ctx = {
   props,
-  model: mock.data.model
+  model: mock.data.model,
+  component
 }
 
 const {
   createDataPreparer
 } = prepare
 
-const {
-  log
-} = console
+// const {
+//   log
+// } = console
 
 let dp
-test.before(done => {
+test.before(() => {
   dp = createDataPreparer(ctx)
 })
 
@@ -50,7 +59,6 @@ test('data: create DataPreparer - fails w no model', t => {
   }
 })
 
-
 test('DataPreparer: when valid creates object', t => {
   t.is(typeof dp, 'object')
 })
@@ -60,7 +68,6 @@ test('DataPreparer: declarationBlocks', t => {
   t.is(typeof blocks, 'string')
   t.regex(blocks, /DataServiceInjector/)
 })
-
 
 test('DataPreparer: buildApiMethods', t => {
   dp.apiMethods.apiMethodsStr = 'activate'
@@ -75,7 +82,6 @@ test('DataPreparer: buildApiMethods', t => {
   t.is(typeof declarations, 'string')
   t.regex(declarations, /Event/)
 })
-
 
 test('DataPreparer: buildComponentDataConnect', t => {
   dp.dataConnect.useDataService = true
@@ -202,4 +208,13 @@ test('DataPreparer: buildStates', t => {
   } = states
   t.is(typeof declarations, 'string')
   t.regex(declarations, /State/)
+})
+
+test('DataPreparer: buildAll', t => {
+  try {
+    dp.buildAll()
+    t.pass('all built')
+  } catch (err) {
+    t.fail('bad fail')
+  }
 })
