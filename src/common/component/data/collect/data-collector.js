@@ -1,6 +1,6 @@
 const {
-  Loggable
-} = require('../../../logger')
+  Collector
+} = require('../collector')
 
 const {
   byConvention
@@ -14,43 +14,25 @@ function createDataCollector(ctx, opts) {
   return new DataCollector(ctx, opts)
 }
 
-class DataCollector extends Loggable {
+class DataCollector extends Collector {
   constructor(ctx, opts = {}) {
-    super(opts)
-    this.props = ctx.props
+    super(ctx, opts)
   }
 
-  get ctx() {
+  get context() {
     return {
-      data: this.data,
       model: this.model,
       props: this.props
     }
   }
 
   get model() {
-    return this._model = this._model || this.createModel().values
+    this._model = this._model || this.createModel().values
+    return this._model
   }
 
   createModel() {
-    const ctx = {
-      props: this.props
-    }
-    // console.log('createModel', ctx)
-    return createModel(ctx, this.opts)
-  }
-
-  get values() {
-    const {
-      model,
-      declarations,
-      imports
-    } = this
-    return {
-      model,
-      declarations,
-      imports
-    }
+    return createModel(this.ctx, this.opts)
   }
 }
 

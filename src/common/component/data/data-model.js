@@ -1,6 +1,6 @@
 const {
-  Loggable
-} = require('../../logger')
+  Collector
+} = require('./collector')
 
 const {
   createDataCollector
@@ -10,40 +10,21 @@ const {
   createDataPreparer
 } = require('./prepare')
 
-const {
-  createEnricher
-} = require('./enrich')
+// const {
+//   createEnricher
+// } = require('./enrich')
 
-// Add to final data after prepare!
-const enrich = require('./enrich')
+// // Add to final data after prepare!
+// const enrich = require('./enrich')
 
-function createDataModel(ctx, opts) {
-  return new DataModel(ctx, opts)
-}
-
-class DataModel extends Loggable {
-  constructor(ctx, opts) {
-    super(opts)
-    this.ctx = ctx
-    this.props = ctx.props
-    this.validate()
-  }
-
-  validate() {
-    if (!this.props) {
-      this.handleError('createModel: missing props', {
-        ctx: this.ctx
-      })
-    }
-  }
-
-  createModel() {
-    const model = createDataCollector({
+class DataModel extends Collector {
+  createDataCollector() {
+    const dataCollector = createDataCollector({
       props: this.props
     }, this.opts)
 
     // this.logJson('collect data model', model)
-    return model
+    return dataCollector
   }
 
   createDataPreparer() {
@@ -55,12 +36,16 @@ class DataModel extends Loggable {
   }
 
   get model() {
-    return this.createModel().values
+    return this.createDataCollector().model
   }
 
   get data() {
     return this.createDataPreparer().values
   }
+}
+
+function createDataModel(ctx, opts) {
+  return new DataModel(ctx, opts)
 }
 
 module.exports = {

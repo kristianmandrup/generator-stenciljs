@@ -10,6 +10,7 @@ class DataConnect extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
     this.useDataService = this.props.useDataService
+    this.component = ctx.component
   }
 
   prepareData(component) {

@@ -12,7 +12,7 @@ const {
   props
 } = mock
 
-let ctx = {
+const ctx = {
   props,
   model: mock.data.model
 }
@@ -22,13 +22,13 @@ const {
 } = prepare
 
 const {
-  ApiMethods,
+  // ApiMethods,
   factories
 } = sections
 
-const {
-  log
-} = console
+// const {
+//   log
+// } = console
 
 const {
   createApiMethods
@@ -39,7 +39,7 @@ ctx.props = {
 }
 
 let apiMethods
-test.before(done => {
+test.before(() => {
   apiMethods = createApiMethods(ctx)
 })
 

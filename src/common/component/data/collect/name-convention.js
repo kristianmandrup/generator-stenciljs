@@ -1,16 +1,10 @@
 const {
-  Loggable
-} = require('../../../logger')
+  Collector
+} = require('../collector')
 
-function byConvention(ctx, convention) {
-  return new NameConvention(ctx, convention)
-}
-
-class NameConvention extends Loggable {
+class NameConvention extends Collector {
   constructor(ctx, convention, opts) {
-    super(opts)
-    this.ctx = ctx
-    this.props = ctx.props
+    super(ctx, opts)
     this.model = ctx.model
     this.convention = convention || 'name'
     this
@@ -114,6 +108,10 @@ class NameConvention extends Loggable {
     }
     return nameMap
   }
+}
+
+function byConvention(ctx, convention) {
+  return new NameConvention(ctx, convention)
 }
 
 module.exports = {

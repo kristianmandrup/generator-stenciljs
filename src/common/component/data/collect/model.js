@@ -1,6 +1,6 @@
 const {
-  Loggable
-} = require('../../../logger')
+  Collector
+} = require('../collector')
 
 const {
   byConvention
@@ -14,19 +14,14 @@ function createModel(ctx, opts) {
   return new Model(ctx, opts)
 }
 
-class Model extends Loggable {
-  constructor(ctx, opts) {
-    super(opts)
-    this.ctx = ctx
-    this.props = ctx.props
-  }
-
+class Model extends Collector {
   createTag() {
     return new Tag(this.ctx, this.opts)
   }
 
   get tag() {
-    return this._tag = this._tag || this.createTag().values
+    this._tag = this._tag || this.createTag().values
+    return this._tag
   }
 
   get componentModel() {
@@ -35,10 +30,10 @@ class Model extends Loggable {
       component: {
         name: name.camelize(false),
         tag: this.tag,
-        className: name.camelize(),
+        className: name.camelize()
       }
     }
-    model.component.containerDir = `${this.componentTargetDir}/${model.component.name}`
+    model.component.containerDir = `${this.componentTargetDir}/${model.component.tag.name}`
 
     return model
   }

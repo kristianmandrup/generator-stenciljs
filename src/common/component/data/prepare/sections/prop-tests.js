@@ -9,6 +9,7 @@ function createPropTests(ctx, opts) {
 class PropTests extends BasePrepare {
   constructor(ctx, opts = {}) {
     super(ctx, opts)
+    this.properties = ctx.properties
   }
 
   /**

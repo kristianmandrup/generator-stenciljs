@@ -38,6 +38,14 @@ ctx.props = {
   listenStr: 'activated'
 }
 
+ctx.component = {
+  name: 'my-component',
+  className: 'MyComponent',
+  tag: {
+    name: 'my-component'
+  }
+}
+
 let dataConnect
 test.before(done => {
   dataConnect = createDataConnect(ctx)

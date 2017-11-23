@@ -40,7 +40,7 @@ test('data: createDataModel - must pass props', t => {
 
 test('data: createModel', t => {
   const model = dm.createModel()
-  t.pass('ok')
+  t.is(typeof model, 'object')
 })
 
 test('data: createDataPreparer also creates model', t => {

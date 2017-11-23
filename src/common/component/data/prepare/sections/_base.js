@@ -1,24 +1,24 @@
 const {
-  Loggable
-} = require('../../../../logger')
+  Collector
+} = require('../../collector')
 
-const Sugar = require('sugar');
+const Sugar = require('sugar')
 Sugar.String.extend()
 
-class BasePrepare extends Loggable {
+class BasePrepare extends Collector {
   constructor(ctx, opts) {
-    super(opts)
+    super(ctx, opts)
     const {
-      model,
-      props
+      model
     } = ctx
-    this.ctx = ctx
     this.model = model
-    this.props = props
-    this.configure()
+    // this.configure()
     // this.decorators = {}
   }
 
+  // For some section, such as propTests we need to
+  // first have prepared properties or at least the property names
+  // DataConnect and some others needs the component data
   configure() {
     const {
       model
@@ -33,7 +33,13 @@ class BasePrepare extends Loggable {
   }
 
   extract(name) {
-    return this.ctx[name] || this.ctx.model.collected[name]
+    const val = this.ctx[name] || this.ctx.model[name]
+    if (val) {
+      return val
+    }
+    this.handleError(`no value to extract for ${name}`, {
+      ctx: this.ctx
+    })
   }
 
   checkHas(name) {
@@ -73,10 +79,10 @@ class BasePrepare extends Loggable {
 
   buildBlockObj(list, buildFun) {
     return list.reduce((acc, item) => {
-      return acc = buildFun(acc, item)
+      acc = buildFun(acc, item)
+      return acc
     }, {})
   }
-
 }
 
 module.exports = {
