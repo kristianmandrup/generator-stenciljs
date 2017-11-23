@@ -1,21 +1,8 @@
 const beautify = require('json-beautify')
 const {
-  Loggable
-} = require('../../../logger')
-
-class Registrator extends Loggable {
-  constructor(generator, opts) {
-    super(opts)
-    this.generator = ['fs', 'destinationPath'].map(name => {
-      const delegate = generator[name]
-      this[name] = delegate
-      if (typeof delegate === 'function') {
-        this[name] = this[name].bind(generator)
-      }
-      return this
-    })
-  }
-
+  FileWriter
+} = require('../file-writer')
+class Registrator extends FileWriter {
   isAlreadyRegistered(tagName) {
     if (!this.stencilCfg.bundles) {
       this.handleError('Missing bundles entry in stencil.config.js', {

@@ -1,26 +1,21 @@
 const {
-  Loggable
-} = require('../../../logger')
+  FileWriter
+} = require('../file-writer')
 
 const {
   createTemplateValidator
 } = require('./validator')
 
-class Templator extends Loggable {
+class Templator extends FileWriter {
   constructor(ctx, data, opts = {}) {
-    super(opts)
+    super(ctx, opts)
     if (!(ctx && data)) {
       this.handleError('Templator', 'requires template context and data', {
         ctx,
         data
       })
     }
-
-    this.ctx = ctx
     this.data = data
-    this.fs = ctx.fs
-    this.templatePath = ctx.templatePath.bind(ctx)
-    this.destinationPath = ctx.destinationPath.bind(ctx)
     this.validator = this.createValidator()
   }
 
@@ -56,12 +51,12 @@ class Templator extends Loggable {
       destination,
       data
     } = opts
-    console.log('createTemplate', {
-      template,
-      destination,
-      data,
-      opts
-    })
+    // console.log('createTemplate', {
+    //   template,
+    //   destination,
+    //   data,
+    //   opts
+    // })
 
     this
       .validatePath('template', template, opts)

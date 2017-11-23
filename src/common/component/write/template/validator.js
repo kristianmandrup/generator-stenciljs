@@ -18,7 +18,8 @@ class TemplateValidator extends Loggable {
     return data
   }
 
-  validateEntity(entityName, opts = {}) {
+  validateEntity(name, opts = {}) {
+    const entityName = name.camelize(false)
     const entity = this.model[entityName]
     if (!entity) {
       this.handleError(`${entityName} is missing from model`, {
