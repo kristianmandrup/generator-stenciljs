@@ -3,75 +3,119 @@ const {
   Loggable
 } = require('../../../logger')
 
-function createRegistrator(generator, opts) {
-  return new Registrator(generator, opts)
-}
-
 class Registrator extends Loggable {
   constructor(generator, opts) {
     super(opts)
-    this.generator = generator
-    this.destinationPath = generator.destinationPath.bind(generator)
+    this.generator = ['fs', 'destinationPath'].map(name => {
+      const delegate = generator[name]
+      this[name] = delegate
+      if (typeof delegate === 'function') {
+        this[name] = this[name].bind(generator)
+      }
+      return this
+    })
   }
 
-  isAlreadyRegistered(stencilCfg, tagName) {
-    return (stencilCfg.bundles.find(bundle => {
+  isAlreadyRegistered(tagName) {
+    if (!this.stencilCfg.bundles) {
+      this.handleError('Missing bundles entry in stencil.config.js', {
+        config: this.stencilCfg
+      })
+    }
+
+    const found = (this.stencilCfg.bundles.find(bundle => {
+      if (!bundle.components) {
+        return false
+      }
       return bundle.components.find(component => {
-        return component == tagName
+        return component === tagName
       })
     }))
+    return Boolean(found)
   }
 
   get stencilCfgFilePath() {
     return this.destinationPath('stencil.config.js')
   }
 
+  loadJson(filePath) {
+    let contents = this.fs.readFileSync(filePath, 'utf8')
+    contents = contents.replace('exports.config =', '')
+    return JSON.parse(contents)
+    // return require(filePath)
+  }
+
   get stencilCfgFile() {
     const filePath = this.stencilCfgFilePath
     try {
-      return require(filePath)
+      return this.loadJson(filePath)
     } catch (err) {
       this.handleError(`Could not open stencil config file: ${filePath}`, {
-        filePath
+        filePath,
+        err
       })
     }
   }
 
   get stencilCfg() {
-    return this.stencilCfgFile.config
+    return this.stencilCfgFile
   }
 
-  registerInBundle() {
-    let xBundles = this.stencilCfg.bundles.concat(bundleEntry)
-    stencilCfg.bundles = xBundles
+  registerInBundle(tagName) {
+    const xBundles = this.stencilCfg.bundles.concat(this.bundleEntry(tagName))
+    this.stencilCfg.bundles = xBundles
 
-    this.log(pretty(xBundles))
+    const jsonStr = this.pretty(this.stencilCfg)
+    const content = `exports.config = ${jsonStr}`
+    try {
+      this.fs.writeFileSync(this.stencilCfgFilePath, content, 'utf8')
+      return {
+        registered: true
+      }
+    } catch (err) {
+      return {
+        registered: false,
+        error: err
+      }
+    }
+  }
 
-    let jsonStr = pretty(stencilCfg)
-    let content = `exports.config = ${jsonStr}`
-    this.fs.write(stencilCfgFilePath.stencilCfgFilePath, content)
+  bundleEntry(tagName) {
+    return {
+      components: [tagName]
+    }
+  }
+
+  pretty(json) {
+    return this.jsonStringify(json, null, 2, 80)
+  }
+
+  get jsonStringify() {
+    return beautify // JSON.stringify
   }
 
   register(opts = {}) {
-    const jsonStringify = beautify // JSON.stringify
     const tagName = opts.tagName
-
-    function pretty(json, opts) {
-      return jsonStringify(json, null, 2, 80)
+    if (!tagName) {
+      this.handleError('missing tagName', {
+        opts
+      })
     }
 
     this.logger.info(`${tagName} with Stencil`)
 
-    const bundleEntry = {
-      components: [tagName]
-    }
-    if (this.isAlreadyRegistered(this.stencilCfg, tagName)) {
+    if (this.isAlreadyRegistered(tagName)) {
       this.logger.warn(`${tagName} already registered in bundle.`)
       return
     }
-    this.registerInBundle()
+    const result = this.registerInBundle(tagName)
     this.logger.success(`${tagName} registration complete`)
+    return result
   }
+}
+
+function createRegistrator(generator, opts) {
+  return new Registrator(generator, opts)
 }
 
 module.exports = {

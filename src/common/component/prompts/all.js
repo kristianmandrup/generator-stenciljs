@@ -1,5 +1,5 @@
-function allPrompts(options, defaults = {}) {
-  let defName = defaults['name']
+module.exports = function (options, defaults = {}) {
+  const defName = defaults.name
   return [{
     name: 'name',
     type: 'input',
@@ -104,8 +104,4 @@ function allPrompts(options, defaults = {}) {
     default: false,
     message: 'Connect to a data service'
   }]
-}
-
-module.exports = {
-  all
 }

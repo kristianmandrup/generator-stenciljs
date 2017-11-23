@@ -1,5 +1,7 @@
+const all = require('./all')
+
 function buildPrompts(options, defaults = {}, filter) {
-  let defName = defaults['name']
+  const defName = defaults.name
 
   if (!defName) {
     throw new Error('buildPrompts: Missing name defaults for prompt')
@@ -22,5 +24,6 @@ function buildPrompts(options, defaults = {}, filter) {
 }
 
 module.exports = {
-  buildPrompts
+  buildPrompts,
+  all
 }

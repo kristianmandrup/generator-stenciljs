@@ -175,11 +175,11 @@ test('DataPreparer: buildListeners', t => {
 test('DataPreparer: buildPropertyTests', t => {
   dp.buildPropertyTests()
   const {
-    tests
+    propTests
   } = dp.template
   const {
     propertySpecs
-  } = tests
+  } = propTests
   t.is(typeof propertySpecs, 'string')
   t.regex(propertySpecs, /it/)
 })
