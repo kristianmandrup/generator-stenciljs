@@ -9,6 +9,10 @@ const {
   createTemplator
 } = write.template
 
+fs.copyTpl = function (template, dest, data) {
+  return data
+}
+
 const ctx = {
   templatePath(filePath) {
     return './templates/' + filePath
@@ -30,8 +34,10 @@ const data = {
       style: './styles/red.scss',
       className: 'MyComponent'
     },
-    badone: {
-
+    interface: {
+      className: 'MyComponent',
+        fileName: 'component.dts.ts',
+        htmlElementName: 'my-component'
     }
   }
 }
@@ -78,7 +84,7 @@ test('Templator: validateData() - no data fails', t => {
     t.fail('should not be valid')
   } catch (err) {
     log(err)
-    t.ok('should fail')
+    t.pass('should fail')
   }
 })
 
@@ -92,14 +98,15 @@ test('Templator: validateData()', t => {
   }
 })
 
-
 test('Templator: createTemplate', t => {
-  try {
-    const name = 'properties'
-    const template = temp.createTemplate(name, opts)
-    t.truthy(template)
-  } catch (err) {
-    log(err)
-    t.fail('should not fail')
+  const name = 'properties'
+  const template = './template.tpl'
+  const destination = './dest'
+  const opts = {
+    template,
+    destination,
+    data
   }
+  const result = temp.createTemplate(name, opts)
+  t.truthy(result.created)
 })

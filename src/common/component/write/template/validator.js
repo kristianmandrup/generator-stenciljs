@@ -15,6 +15,10 @@ class TemplateValidator extends Loggable {
         data
       })
     }
+    const names = Object.keys(data)
+    names.map(name => {
+      this.validateEntityData(name)
+    })
     return data
   }
 

@@ -51,23 +51,27 @@ class Templator extends FileWriter {
       destination,
       data
     } = opts
-    // console.log('createTemplate', {
-    //   template,
-    //   destination,
-    //   data,
-    //   opts
-    // })
 
-    this
-      .validatePath('template', template, opts)
-      .validatePath('destination', destination, opts)
-      .validateData(name, data)
+    try {
+      this
+        .validatePath('template', template, opts)
+        .validatePath('destination', destination, opts)
+        .validateData(name, data)
 
-    this.fs.copyTpl(
-      this.templatePath(template),
-      this.destinationPath(destination),
-      data
-    )
+      this.fs.copyTpl(
+        this.templatePath(template),
+        this.destinationPath(destination),
+        data
+      )
+      return {
+        created: true
+      }
+    } catch (err) {
+      return {
+        created: false,
+        error: err
+      }
+    }
   }
 }
 
