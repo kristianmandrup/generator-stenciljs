@@ -2,19 +2,14 @@ const {
   Loggable
 } = require('../../../logger')
 
-function createTemplateValidator(name, model, opts) {
-  return new TemplateValidator(name, model, opts)
-}
-
 class TemplateValidator extends Loggable {
   constructor(ctx = {}, opts = {}) {
     super(opts)
     this.model = ctx.data.model || {}
   }
 
+  // call validateEntityData for all entities in object?
   validateData(data) {
-    // TODO
-    // validateEntityData for all entities?
     if (typeof data !== 'object') {
       this.handleError('data must be an Object', {
         data
@@ -93,6 +88,10 @@ class TemplateValidator extends Loggable {
       }
     }
   }
+}
+
+function createTemplateValidator(name, model, opts) {
+  return new TemplateValidator(name, model, opts)
 }
 
 module.exports = {

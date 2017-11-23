@@ -4,9 +4,25 @@ const {
 } = require('../../')
 
 const {
-  validator
+  createTemplateValidator
 } = write.template
 
+const {
+  log
+} = console
+
+const ctx = {
+  data: {
+    model: {}
+  }
+}
+const opts = {}
+
+let validator
+test.before(() => {
+  validator = createTemplateValidator(ctx, opts)
+})
+
 test('write: validator', t => {
-  t.fail('todo')
+  t.is(typeof validator, 'object')
 })

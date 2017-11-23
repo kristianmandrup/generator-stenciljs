@@ -1,17 +1,21 @@
 const {
-  Templator
+  Templator,
+  createTemplator
 } = require('./templator')
 const {
-  TemplateValidator
+  TemplateValidator,
+  createTemplateValidator
 } = require('./validator')
 const {
   TemplateWriter,
-  createTemplateWriter,
+  createTemplateWriter
 } = require('./writer')
 
 module.exports = {
   Templator,
+  createTemplator,
   TemplateValidator,
+  createTemplateValidator,
   TemplateWriter,
   createTemplateWriter
 }

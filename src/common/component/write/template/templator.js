@@ -6,10 +6,6 @@ const {
   createTemplateValidator
 } = require('./validator')
 
-function createTemplator(ctx, templateOpts) {
-  return new Templator(ctx, templateOpts)
-}
-
 class Templator extends Loggable {
   constructor(ctx, data, opts = {}) {
     super(opts)
@@ -51,7 +47,6 @@ class Templator extends Loggable {
   }
 
   validateData(name, data) {
-    // TODO: reuse Template data validator
     return this.validator.validateData(data)
   }
 
@@ -81,6 +76,11 @@ class Templator extends Loggable {
   }
 }
 
+function createTemplator(ctx, data, opts) {
+  return new Templator(ctx, data, opts)
+}
+
 module.exports = {
-  Templator
+  Templator,
+  createTemplator
 }
