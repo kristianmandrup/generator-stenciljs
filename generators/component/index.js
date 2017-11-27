@@ -345,7 +345,7 @@ module.exports = class extends Generator {
     const propNames = Object.keys(propMap)
     const htmlElementName = `HTML${className}Element`
 
-    const componentDir = `components/${componentName}`
+    const componentDir = `src/components/${componentName}`
 
     const declareProps = propNames.map(name => {
       return `  @Prop() ${name}: ${propMap[name]};`
