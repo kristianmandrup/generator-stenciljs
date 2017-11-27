@@ -3,9 +3,9 @@
 
 ## Status
 
-Works :)
+Very much a WIP. Major refactoring underway in [page-component](https://github.com/kristianmandrup/generator-stenciljs/tree/page-component) branch
 
-Please help improve it!
+Please help improve it so we can get a good modern generator (and underlying infrastructure to make it easy to maintain and extend...)
 
 ## Installation
 
