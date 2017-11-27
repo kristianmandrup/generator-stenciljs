@@ -1,8 +1,8 @@
 {
   "name": "generator-stenciljs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "StencilJS generators: app and component",
-  "homepage": "",
+  "homepage": "https://github.com/kristianmandrup/generator-stenciljs",
   "author": {
     "name": "Kristian Mandrup",
     "email": "kmandrup@gmail.com"

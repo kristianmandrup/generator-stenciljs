@@ -9,6 +9,9 @@ const path = require('path');
 const ejsLint = require('ejs-lint')
 const fs = require('fs-extra');
 const beautify = require('json-beautify')
+const {
+  createRegistrator
+} = require('./registrator')
 
 // extend String with sugarjs API
 Sugar.String.extend()
@@ -394,7 +397,6 @@ module.exports = class extends Generator {
         return Array.isArray(block) ? block.join('\n') : block;
       })
       .filter(txt => {
-        console.log('filter', txt)
         return txt && !txt.isBlank()
       }).join('\n')
 
@@ -475,53 +477,23 @@ module.exports = class extends Generator {
         })
     }
 
-    const jsonStringify = beautify // JSON.stringify
+    // const registrator = createRegistrator(this)
 
-    function pretty(json, opts) {
-      return jsonStringify(json, null, 2, 80)
-    }
+    // this._info(`${tagName} with Stencil`, {
+    //   label: 'register',
+    //   modifier: 'bold'
+    // })
 
-    this._info(`${tagName} with Stencil`, {
-      label: 'register',
-      modifier: 'bold'
-    })
+    // registrator.register({
+    //   tagName
+    // })
 
-    const bundleEntry = {
-      components: [tagName]
-    }
-    let stencilCfgFilePath = this.destinationPath('stencil.config.js')
-
-    let stencilCfg = require(stencilCfgFilePath).config
-
-    if (stencilCfg.bundles.find(bundle => {
-        return bundle.components.find(component => {
-          // console.log('compare', {
-          //   component,
-          //   tagName
-          // })
-          return component == tagName
-        })
-      })) {
-      this._info(`${tagName} already registered in bundle.`, {
-        label: 'skipped',
-        format: 'yellow',
-        modifier: 'bold'
-      })
-      return
-    }
-
-    let xBundles = stencilCfg.bundles.concat(bundleEntry)
-    stencilCfg.bundles = xBundles
-
-    this.log(pretty(xBundles, {
-      highlight: true
-    }))
-
-    let jsonStr = pretty(stencilCfg)
-    let content = `exports.config = ${jsonStr}`
-    this.fs.write(stencilCfgFilePath, content)
-
-    this.log(`${tagName} registration complete`, {
+    // this.log(`${tagName} registration complete`, {
+    //   label: 'success',
+    //     format: 'green',
+    //     modifier: 'bold'
+    // })
+    this.log(`Please register component ${tagName} in stencil.config.js`, {
       label: 'success',
       format: 'green',
       modifier: 'bold'

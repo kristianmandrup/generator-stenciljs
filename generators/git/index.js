@@ -26,11 +26,6 @@ module.exports = class extends Generator {
   }
 
   initializing() {
-    this.fs.copy(
-      this.templatePath('gitattributes'),
-      this.destinationPath(this.options.generateInto, '.gitattributes')
-    );
-
     return originUrl(this.destinationPath(this.options.generateInto)).then(
       function (url) {
         this.originUrl = url;

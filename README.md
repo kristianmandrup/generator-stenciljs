@@ -48,7 +48,9 @@ The `extend` generator composes with the following (helper) generators:
 - `git` to add git specific details
 - `readme` to populate readme
 
-Any of the generators can be used stand-alone.
+Extend also generates a `bundles.json` file suitable for auto registration (See `component` generator - currently disabled)
+
+Any of these generators can be used stand-alone.
 
 ### Boilerplate project generator
 

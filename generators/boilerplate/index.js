@@ -63,7 +63,7 @@ module.exports = class extends Generator {
       name: 'mechanic',
       type: 'radio',
       when: !this.options.mechanic,
-      default: 'repo',
+      default: 'sao',
       choices: [
         'repo',
         'sao'
@@ -101,7 +101,7 @@ module.exports = class extends Generator {
     } = this
 
     let done = this.async()
-    return downloadRepo(repoSource, {
+    return downloadRepo(projectSource, {
         target: targetPath
       })
       .then(() => {

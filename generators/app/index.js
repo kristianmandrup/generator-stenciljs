@@ -13,6 +13,18 @@ const optionOrPrompt = require('yeoman-option-or-prompt');
 module.exports = class extends Generator {
   constructor(args, options) {
     super(args, options);
+
+    this.option('boilerplate', {
+      type: Boolean,
+      required: false,
+      desc: 'Generate boilerplate StencilJS project'
+    })
+
+    this.option('extend', {
+      type: Boolean,
+      required: false,
+      desc: 'Extend boilerplate project'
+    })
   }
 
   initializing() {
@@ -29,7 +41,23 @@ module.exports = class extends Generator {
     const msg = yosay(`Welcome to ${chalk.red('stenciljs')} app generator`);
     this.log(msg);
 
-    const prompts = []
+    this.options = this.options || {}
+
+    const extend = {
+      name: 'extend',
+      type: 'confirm',
+      default: this.options.extend,
+      message: 'Add extensions'
+    }
+
+    const prompts = [{
+        name: 'boilerplate',
+        type: 'confirm',
+        default: this.options.boilerplate,
+        message: 'Add boilerplate'
+      },
+      extend
+    ]
 
     return this.prompt(prompts).then(props => {
       this.props = extend(this.props, props);
@@ -51,30 +79,36 @@ module.exports = class extends Generator {
         return str.length > 0;
       }
     }, this).then(answer => {
+      this.props = this.props || {}
       this.props.name = answer.name;
     });
   }
 
-  prompting() {
-    return this._askForModuleName()
+  // TODO: better sth like this
+  // prompting() {
+  //   return this._askForModuleName()
+  //     .then(this._askFor.bind(this))
+  //     .then(this._askForGithubAccount.bind(this));
+  // }
+
+  prompting(done) {
+    return this._askFor().then(() => {
+      return this._askForModuleName().then(done)
+    })
   }
 
-  default () {
-    if (this.options.boilerplate) {
+  end() {
+    if (this.props.boilerplate) {
       this.composeWith(require.resolve('../boilerplate'), {
         name: this.props.name
       });
     }
 
     // extend boilerplate, such as updating package.json, Readme etc
-    if (this.options.extend) {
-      this.composeWith(require.resolve('../extend'), {
-        name: this.props.name
-      });
-    }
-  }
-
-  end() {
-    this.log('Thanks for using StencilJS app generator.');
+    // if (this.props.extend) {
+    //   this.composeWith(require.resolve('../extend'), {
+    //     name: this.props.name
+    //   });
+    // }
   }
 };

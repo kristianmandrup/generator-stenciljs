@@ -217,6 +217,11 @@ module.exports = class extends Generator {
 
     // Let's extend package.json so we're not overwriting user previous fields
     this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+
+    this.fs.copyTpl(
+      this.templatePath('bundles.json'),
+      this.destinationPath(this.options.generateInto, 'bundles.json'), {}
+    )
   }
 
   default () {
