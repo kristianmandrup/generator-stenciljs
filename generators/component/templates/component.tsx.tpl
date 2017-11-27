@@ -2,7 +2,7 @@
 
 @Component({
   tag: '<%= tagName %>',
-  styleUrl: '<%= styleFileName %>.<%= styleFileExt %>'
+  styleUrl: 'styles/<%= styleFileName %>.<%= styleFileExt %>'
 })
 export class <%= className %> {
 <%- declarations %>

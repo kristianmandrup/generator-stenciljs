@@ -8,14 +8,14 @@ declare var <%= htmlElementName %>: {
 };
 declare global {
   interface <%= htmlElementName %>Map {
-    "my-name": <%= htmlElementName %>;
+    "<%= tagName %>": <%= htmlElementName %>;
   }
   interface ElementTagNameMap {
-    "my-name": <%= htmlElementName %>;
+    "<%= tagName %>": <%= htmlElementName %>;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "my-name": JSXElements.<%= className %>Attributes;
+      "<%= tagName %>": JSXElements.<%= className %>Attributes;
     }
   }
   namespace JSXElements {

@@ -101,7 +101,7 @@ module.exports = class extends Generator {
       componentFileName: 'component',
       dtsFileName: 'definition',
       interfaceFileName: 'interface',
-      styleFileName: 'styles',
+      styleFileName: 'style',
       testFileName: 'unit'
     }
     return nameMap
@@ -434,6 +434,7 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('interface.ts.tpl'),
       this.destinationPath(`${componentDir}/${interfaceFileName}.ts`), {
+        tagName,
         className,
         interfaceFileName,
         htmlElementName,
