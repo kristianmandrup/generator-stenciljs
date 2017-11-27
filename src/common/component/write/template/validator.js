@@ -9,6 +9,7 @@ class TemplateValidator extends Loggable {
   }
 
   // call validateEntityData for all entities in object?
+  // TODO: must have component.containerDir
   validateData(data) {
     if (typeof data !== 'object') {
       this.handleError('data must be an Object', {

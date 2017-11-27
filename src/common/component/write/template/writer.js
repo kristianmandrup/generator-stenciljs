@@ -5,13 +5,9 @@ const {
   Templator
 } = require('./templator')
 const {
-  TemplateValidator,
+  // TemplateValidator,
   createTemplateValidator
 } = require('./validator')
-
-function createTemplateWriter(generator, data, opts) {
-  return new TemplateWriter(generator, data, opts)
-}
 
 class TemplateWriter extends Loggable {
   constructor(generator, data = {}, opts = {}) {
@@ -69,7 +65,7 @@ class TemplateWriter extends Loggable {
 
   writeAll() {
     this.eventLog = this.templators.map(name => {
-      this.createTemplate(name, this.tplArgs(name))
+      return this.createTemplate(name, this.tplArgs(name))
     })
     return this.eventLog
   }
@@ -89,13 +85,9 @@ class TemplateWriter extends Loggable {
   tplArgs(name) {
     const entityName = name.camelize(false)
     const argsFunName = `${entityName}TplArgs`
-
-    console.log('tplArgs', {
-      argsFunName,
-    })
     let argsFun = this[argsFunName]
     if (typeof argsFun !== 'function') {
-      this.handleError('tplArgs: no such template arguments function - ${argsFunName}', {
+      this.handleError(`tplArgs: no such template arguments function - ${argsFunName}`, {
         ctx: this,
         entityName,
         argsFunName
@@ -120,7 +112,7 @@ class TemplateWriter extends Loggable {
     }
   }
 
-  definitionsTplArgs(opts = {}) {
+  definitionsTplArgs() {
     const component = this.validateEntity('component', {
       props: ['containerDir']
     })
@@ -133,7 +125,7 @@ class TemplateWriter extends Loggable {
     }
   }
 
-  interfaceTplArgs(opts = {}) {
+  interfaceTplArgs() {
     const component = this.validateEntity('component', {
       props: ['containerDir']
     })
@@ -146,7 +138,7 @@ class TemplateWriter extends Loggable {
     }
   }
 
-  stylesTplArgs(opts = {}) {
+  stylesTplArgs() {
     const component = this.validateEntity('component', {
       props: ['containerDir']
     })
@@ -159,7 +151,7 @@ class TemplateWriter extends Loggable {
     }
   }
 
-  testsTplArgs(opts = {}) {
+  testsTplArgs() {
     const component = this.validateEntity('component', {
       props: ['containerDir']
     })
@@ -172,8 +164,10 @@ class TemplateWriter extends Loggable {
     }
   }
 
-  dataServiceTplArgs(opts = {}) {
-    if (!this.model.dataService.use) return
+  dataServiceTplArgs() {
+    if (!this.model.dataService.use) {
+      return
+    }
     const component = this.validateEntity('component', {
       props: ['containerDir']
     })
@@ -182,6 +176,10 @@ class TemplateWriter extends Loggable {
       destination: `${component.containerDir}/data-service.ts`
     }
   }
+}
+
+function createTemplateWriter(generator, data, opts) {
+  return new TemplateWriter(generator, data, opts)
 }
 
 module.exports = {
