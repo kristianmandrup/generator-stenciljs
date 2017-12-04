@@ -10,7 +10,7 @@ class FileWriter extends Loggable {
   }
 
   get delegates() {
-    return ['fs', 'copyTpl', 'destinationPath', 'templatePath']
+    return ['fs', 'copyTpl', 'writeJson', 'readFileSync', 'destinationPath', 'templatePath']
   }
 
   configDelegates() {

@@ -2,6 +2,8 @@ const beautify = require('json-beautify')
 const {
   FileWriter
 } = require('../file-writer')
+
+const firstBlockExpr = /^(\s|.)+?;/
 class Registrator extends FileWriter {
   isAlreadyRegistered(tagName) {
     if (!this.stencilCfg.bundles) {
@@ -25,17 +27,43 @@ class Registrator extends FileWriter {
     return this.destinationPath('stencil.config.js')
   }
 
-  loadJson(filePath) {
-    let contents = this.fs.readFileSync(filePath, 'utf8')
-    contents = contents.replace('exports.config =', '')
+  loadContent(filePath) {
+    return this.fs.readFileSync(filePath, 'utf8')
+  }
+
+  convertToJson(contents) {
+    contents = contents.replace(/'(\w+)'/, `"$1"`)
+    contents = contents.replace(/(\w+):/, `'$1'`)
     return JSON.parse(contents)
-    // return require(filePath)
+  }
+
+  // rewrite exports.config to a separate json file
+  get firstBlock() {
+    const contents = this.stencilCfgFile
+    contents.replace('exports.config =', '')
+    return contents.match(firstBlockExpr)[1]
+  }
+
+  writeJson(filePath, json) {
+    this.fs.writeJson(filePath, json)
+  }
+
+  reWriteConfig() {
+    const firstBlock = this.firstBlock
+    const jsonBlock = this.convertToJson(firstBlock)
+    this.writeJson('bundles.json', jsonBlock)
+  }
+
+  useExternalJsonReference() {
+    const blockExpr = /{(\s|.)+?};/
+    const contents = this.stencilCfgFile
+    return contents.replace(blockExpr, `require('./bundles.json')`)
   }
 
   get stencilCfgFile() {
     const filePath = this.stencilCfgFilePath
     try {
-      return this.loadJson(filePath)
+      return this.loadContent(filePath)
     } catch (err) {
       this.handleError(`Could not open stencil config file: ${filePath}`, {
         filePath,

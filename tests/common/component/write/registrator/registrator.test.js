@@ -31,6 +31,24 @@ const cfg = {
   }
 }
 
+const fileContent = `exports.config = {
+  bundles: [{
+    components: [
+      'fate-wheel',
+      'day-fate',
+      'day-spinner'
+    ]
+  }],
+  collections: [{
+    name: '@stencil/router'
+  }]
+};
+
+exports.devServer = {
+  root: 'www',
+  watchGlob: '**/**'
+}`
+
 const cfgFile = JSON.stringify(cfg.none)
 
 const mockFs = require('mock-fs')
@@ -38,7 +56,7 @@ const mockFs = require('mock-fs')
 
 function mockNoneRegistered() {
   mockFs({
-    'stencil.config.js': `exports.config = ${cfgFile}`
+    'stencil.config.js': fileContent // `exports.config = ${cfgFile}`
   })
 }
 
@@ -82,6 +100,40 @@ test('write: Registrator - destinationPath', t => {
   t.regex(filePath, stencilFile)
 })
 
+test.only('write: Registrator - loadContent', t => {
+  const filePath = reg.destinationPath('stencil.config.js')
+  const content = reg.loadContent(filePath)
+  t.is(typeof content, 'string')
+})
+
+test.only('write: Registrator - firstBlock', t => {
+  const block = reg.firstBlock
+  t.is(typeof block, 'string')
+})
+
+test('write: Registrator - convertToJson', t => {
+  const block = reg.firstBlock
+  const json = reg.convertToJson(block)
+  t.is(typeof json, 'object')
+})
+
+test('write: Registrator - writeJson', t => {
+  const block = reg.firstBlock
+  const json = reg.convertToJson(block)
+  const written = reg.writeJson('bundles.json', json)
+  t.truthy(written)
+})
+
+test('write: Registrator - reWriteConfig', t => {
+  const written = reg.reWriteConfig()
+  t.truthy(written)
+})
+
+test('write: Registrator - useExternalJsonReference', t => {
+  const rewritten = reg.useExternalJsonReference()
+  t.truthy(rewritten)
+})
+
 test('write: Registrator - stencilCfgFilePath', t => {
   t.regex(reg.stencilCfgFilePath, stencilFile)
 })
@@ -98,7 +150,7 @@ test('write: Registrator - stencilCfgFile', t => {
   compareJson(t, reg.stencilCfgFile, cfg.none)
 })
 
-test('write: Registrator - stencilCfgFile', t => {
+test('write: Registrator - stencilCfg', t => {
   compareJson(t, reg.stencilCfg, cfg.none)
 })
 
